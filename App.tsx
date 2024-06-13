@@ -5,7 +5,8 @@ import HomeScreen from "./screens/HomeScreen";
 import LoginScreen from "./screens/LoginScreen";
 import PlanScreen from "./screens/PlanScreen";
 import Navbar from "./components/Navbar";
-
+import { Provider } from 'react-redux';
+import store from "./store/store";
 
 
 export type RootStackParamList = {
@@ -22,6 +23,7 @@ export default function App() {
     const Stack = createStackNavigator<RootStackParamList>();
 
     return (
+        <Provider store={store}>
         <NavigationContainer>
             <Stack.Navigator screenOptions={{ headerShown: false }}>
                 <Stack.Screen name="Home" component={HomeScreen} />
@@ -30,5 +32,6 @@ export default function App() {
             </Stack.Navigator>
             <Navbar/>
         </NavigationContainer>
+        </Provider>
     );
 }

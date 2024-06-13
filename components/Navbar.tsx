@@ -1,4 +1,3 @@
-import {FC} from "react";
 import {TouchableOpacity, View,StyleSheet} from "react-native";
 import Entypo from '@expo/vector-icons/Entypo';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
@@ -6,7 +5,6 @@ import FontAwesome from '@expo/vector-icons/FontAwesome';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import Theme from "../Theme";
 import {useNavigation} from "@react-navigation/native";
-import {RootStackParamList} from "../App";
 
 // @ts-ignore
 const NavBar = () =>{
