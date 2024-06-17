@@ -1,8 +1,9 @@
 import React, {FC} from 'react';
-import { View, Text, Button } from 'react-native';
+import {View, Text, Button, Image} from 'react-native';
 import {StackNavigationProp} from "@react-navigation/stack";
 import {RootState} from "../store/reducers/rootReducer";
 import {useSelector} from "react-redux";
+import Navbar from "../components/Navbar";
 
 
 // @ts-ignore

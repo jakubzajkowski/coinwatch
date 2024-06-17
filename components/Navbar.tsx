@@ -4,11 +4,12 @@ import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import Theme from "../Theme";
-import {useNavigation} from "@react-navigation/native";
+import {useNavigation, useRoute} from "@react-navigation/native";
 
 // @ts-ignore
 const NavBar = () =>{
     const navigation = useNavigation();
+
     return <View style={styles.navbar}>
         <TouchableOpacity onPress={() => navigation.navigate('Home' as never)}>
             <Entypo name="home" size={24} color={Theme.secondary} />
