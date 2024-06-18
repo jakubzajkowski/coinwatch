@@ -1,8 +1,8 @@
 import { combineReducers } from 'redux';
-import counterReducer from './counterSlice';
+import appReducer from './appSlice';
 
 const rootReducer = combineReducers({
-    counter: counterReducer,
+    app: appReducer,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;
