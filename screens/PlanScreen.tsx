@@ -5,10 +5,10 @@ import { View, Text, Button } from 'react-native';
 function PlanScreen({ navigation }) {
     return (
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-            <Text>Login Screen</Text>
+            <Text>Plan Screen</Text>
             <Button
                 title="Go to Home"
-                onPress={() => navigation.navigate('Home')}
+                onPress={() => navigation.navigate('Loading')}
             />
         </View>
     );

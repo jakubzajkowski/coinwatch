@@ -14,7 +14,7 @@ function HomeScreen({ navigation }) {
             <Text>Home Screen</Text>
             <Button
                 title="Go to Login"
-                onPress={() => navigation.navigate('Login')}
+                onPress={() => navigation.navigate('PlanDMain')}
             />
             <Text>{count}</Text>
         </View>

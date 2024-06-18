@@ -6,8 +6,8 @@ import {useEffect} from "react";
 const LoadingScreen = ({ navigation }) =>{
     useEffect(() => {
         const timer = setTimeout(() => {
-            navigation.replace('Home');
-        }, 2000);
+            navigation.replace('MainTabs');
+        }, 1000);
 
         return () => clearTimeout(timer);
     }, [navigation]);
