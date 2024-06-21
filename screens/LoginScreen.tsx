@@ -40,7 +40,6 @@ function LoginScreen({ navigation }) {
                 </TouchableOpacity>
                 <Text style={styles.signin}>I don't have an account</Text>
             </LinearGradient>
-
     );
 }
 
