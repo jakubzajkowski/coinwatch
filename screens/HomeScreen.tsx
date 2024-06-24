@@ -1,13 +1,20 @@
-import React, {FC} from 'react';
+import React, {FC, useEffect} from 'react';
 import {View, Text, Button, Image, StyleSheet} from 'react-native';
 import {RootState} from "../store/reducers/rootReducer";
 import {useSelector} from "react-redux";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
+import {useSQLiteContext} from "expo-sqlite";
 
 
 // @ts-ignore
 function HomeScreen({ navigation }) {
     const state = useSelector((state: RootState) => state.app);
+    const db = useSQLiteContext();
+    const allRows = db.getAllSync('SELECT * FROM test');
+    for (const row of allRows) {
+        // @ts-ignore
+        console.log(row.id, row.value, row.intValue);
+    }
     return (
         <View style={styles.container}>
             <View style={styles.headerContainer}>
