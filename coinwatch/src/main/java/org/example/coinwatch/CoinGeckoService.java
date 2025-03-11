@@ -17,11 +17,13 @@ public class CoinGeckoService {
     @Value("${coingecko.api.url}")
     private String apiUrl;
 
+    private final String coinIds = "bicoin,ethereum,tether,xrp,solana,cardano,doge,avalanche";
+
     public CoinGeckoService(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
     }
 
-    public Map<String, CryptoPriceDTO> getCryptoPrices(String coinIds){
+    public Map<String, CryptoPriceDTO> getCryptoPrices(){
         String url = UriComponentsBuilder.fromHttpUrl(apiUrl)
                 .pathSegment("simple", "price")
                 .queryParam("ids", coinIds)

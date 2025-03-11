@@ -18,7 +18,7 @@ public class CoinwatchApplication implements CommandLineRunner {
 	}
 	@Override
 	public void run(String... args) throws Exception {
-		System.out.println(this.coinGeckoService.getCryptoPrices("bitcoin,ethereum"));
+		System.out.println(this.coinGeckoService.getCryptoPrices());
 		kafkaProducer.sendMessage("Hello from Spring Boot Kafka!");
 	}
 }
