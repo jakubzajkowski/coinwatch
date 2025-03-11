@@ -18,7 +18,7 @@ public class CryptoPrice {
     private String symbol;
 
     @Column(precision = 20, scale = 2)
-    private double price;
+    private BigDecimal price;
 
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
@@ -52,11 +52,11 @@ public class CryptoPrice {
         this.symbol = symbol;
     }
 
-    public double getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(BigDecimal price) {
         this.price = price;
     }
 

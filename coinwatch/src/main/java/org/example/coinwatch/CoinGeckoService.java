@@ -3,6 +3,8 @@ package org.example.coinwatch;
 import org.example.coinwatch.dto.CryptoPriceDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -17,7 +19,7 @@ public class CoinGeckoService {
     @Value("${coingecko.api.url}")
     private String apiUrl;
 
-    private final String coinIds = "bicoin,ethereum,tether,xrp,solana,cardano,doge,avalanche";
+    private final String coinIds = "bicoin,ethereum,tether,solana,cardano,doge,avalanche";
 
     public CoinGeckoService(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
@@ -30,7 +32,12 @@ public class CoinGeckoService {
                 .queryParam("vs_currencies", "usd")
                 .toUriString();
 
-        ResponseEntity<Map> response = restTemplate.getForEntity(url, Map.class);
+        ResponseEntity<Map<String, CryptoPriceDTO>> response = restTemplate.exchange(
+                url,
+                HttpMethod.GET,
+                null,
+                new ParameterizedTypeReference<Map<String, CryptoPriceDTO>>() {}
+        );
 
         return response.getBody();
     }
