@@ -1,5 +1,6 @@
 package org.example.coinwatch;
 
+import org.example.coinwatch.service.CoinGeckoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -18,7 +19,6 @@ public class CoinwatchApplication implements CommandLineRunner {
 	}
 	@Override
 	public void run(String... args) throws Exception {
-		this.coinGeckoService.getCryptoCurrencies().forEach(System.out::println);
 		kafkaProducer.sendMessage("Hello from Spring Boot Kafka!");
 	}
 }

@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 @Entity
 @Table(name = "crypto_currencies") // Nazwa tabeli w bazie danych
@@ -74,7 +75,7 @@ public class CryptoCurrency {
     private BigDecimal athChangePercentage; // Procentowa zmiana od ATH
 
     @Column(name = "ath_date")
-    private LocalDateTime athDate; // Data osiągnięcia ATH
+    private ZonedDateTime athDate; // Data osiągnięcia ATH
 
     @Column(precision = 20, scale = 2)
     private BigDecimal atl; // All-Time Low (najniższa cena w historii)
@@ -83,12 +84,12 @@ public class CryptoCurrency {
     private BigDecimal atlChangePercentage; // Procentowa zmiana od ATL
 
     @Column(name = "atl_date")
-    private LocalDateTime atlDate; // Data osiągnięcia ATL
+    private ZonedDateTime atlDate; // Data osiągnięcia ATL
 
     @Column(name = "last_updated")
-    private LocalDateTime lastUpdated;
+    private ZonedDateTime lastUpdated;
 
-    public CryptoCurrency(Long id, String cryptoId, String symbol, String name, String imageUrl, BigDecimal currentPrice, Long marketCap, Integer marketCapRank, Long fullyDilutedValuation, Long totalVolume, BigDecimal high24h, BigDecimal low24h, BigDecimal priceChange24h, BigDecimal priceChangePercentage24h, Long marketCapChange24h, BigDecimal marketCapChangePercentage24h, Long circulatingSupply, Long totalSupply, Long maxSupply, BigDecimal ath, BigDecimal athChangePercentage, LocalDateTime athDate, BigDecimal atl, BigDecimal atlChangePercentage, LocalDateTime atlDate, LocalDateTime lastUpdated) {
+    public CryptoCurrency(Long id, String cryptoId, String symbol, String name, String imageUrl, BigDecimal currentPrice, Long marketCap, Integer marketCapRank, Long fullyDilutedValuation, Long totalVolume, BigDecimal high24h, BigDecimal low24h, BigDecimal priceChange24h, BigDecimal priceChangePercentage24h, Long marketCapChange24h, BigDecimal marketCapChangePercentage24h, Long circulatingSupply, Long totalSupply, Long maxSupply, BigDecimal ath, BigDecimal athChangePercentage, ZonedDateTime athDate, BigDecimal atl, BigDecimal atlChangePercentage, ZonedDateTime atlDate, ZonedDateTime lastUpdated) {
         this.id = id;
         this.cryptoId = cryptoId;
         this.symbol = symbol;
@@ -289,11 +290,11 @@ public class CryptoCurrency {
         this.athChangePercentage = athChangePercentage;
     }
 
-    public LocalDateTime getAthDate() {
+    public ZonedDateTime getAthDate() {
         return athDate;
     }
 
-    public void setAthDate(LocalDateTime athDate) {
+    public void setAthDate(ZonedDateTime athDate) {
         this.athDate = athDate;
     }
 
@@ -313,19 +314,19 @@ public class CryptoCurrency {
         this.atlChangePercentage = atlChangePercentage;
     }
 
-    public LocalDateTime getAtlDate() {
+    public ZonedDateTime getAtlDate() {
         return atlDate;
     }
 
-    public void setAtlDate(LocalDateTime atlDate) {
+    public void setAtlDate(ZonedDateTime atlDate) {
         this.atlDate = atlDate;
     }
 
-    public LocalDateTime getLastUpdated() {
+    public ZonedDateTime getLastUpdated() {
         return lastUpdated;
     }
 
-    public void setLastUpdated(LocalDateTime lastUpdated) {
+    public void setLastUpdated(ZonedDateTime lastUpdated) {
         this.lastUpdated = lastUpdated;
     }
 }
