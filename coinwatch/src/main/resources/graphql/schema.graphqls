@@ -1,0 +1,33 @@
+type CryptoCurrency {
+    id: ID!
+    cryptoId: String!
+    symbol: String!
+    name: String!
+    imageUrl: String
+    currentPrice: Float
+    marketCap: Float
+    marketCapRank: Int
+    fullyDilutedValuation: Float
+    totalVolume: Float
+    high24h: Float
+    low24h: Float
+    priceChange24h: Float
+    priceChangePercentage24h: Float
+    marketCapChange24h: Float
+    marketCapChangePercentage24h: Float
+    circulatingSupply: Float
+    totalSupply: Float
+    maxSupply: Float
+    ath: Float
+    athChangePercentage: Float
+    athDate: String
+    atl: Float
+    atlChangePercentage: Float
+    atlDate: String
+    lastUpdated: String
+}
+
+type Query {
+    getCryptoCurrencyByCryptoId(cryptoId: String!): CryptoCurrency
+    getCryptoCurrencies: [CryptoCurrency]
+}

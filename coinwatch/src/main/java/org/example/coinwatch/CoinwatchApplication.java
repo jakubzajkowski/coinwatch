@@ -5,9 +5,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.web.context.WebServerApplicationContext;
+import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.scheduling.annotation.EnableScheduling;
+
 
 @SpringBootApplication
-public class CoinwatchApplication implements CommandLineRunner {
+@EnableScheduling
+@EnableAsync
+public class CoinwatchApplication{
 	@Autowired
 	private KafkaProducer kafkaProducer;
 
@@ -17,8 +23,5 @@ public class CoinwatchApplication implements CommandLineRunner {
 	public static void main(String[] args) {
 		SpringApplication.run(CoinwatchApplication.class, args);
 	}
-	@Override
-	public void run(String... args) throws Exception {
-		kafkaProducer.sendMessage("Hello from Spring Boot Kafka!");
-	}
+
 }

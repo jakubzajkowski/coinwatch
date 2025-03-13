@@ -1,9 +1,7 @@
 package org.example.coinwatch;
 
 import org.example.coinwatch.dto.CryptoCurrencyDTO;
-import org.example.coinwatch.dto.CryptoPriceDTO;
 import org.example.coinwatch.entity.CryptoPrice;
-import org.example.coinwatch.respository.CryptoPriceRepository;
 import org.example.coinwatch.service.CoinGeckoService;
 import org.example.coinwatch.service.CryptoCurrencyService;
 import org.slf4j.Logger;
@@ -18,16 +16,12 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
-@EnableScheduling
 @Component
 public class CoinGeckoScheduler {
     private static final Logger logger = LoggerFactory.getLogger(CoinGeckoScheduler.class);
 
     @Autowired
     private CoinGeckoService coinGeckoService;
-
-    @Autowired
-    private CryptoPriceRepository cryptoPriceRepository;
 
     @Autowired
     private CryptoCurrencyService cryptoCurrencyService;

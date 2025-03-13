@@ -1,8 +1,6 @@
 package org.example.coinwatch.service;
 
-import org.example.coinwatch.CoinGeckoScheduler;
 import org.example.coinwatch.dto.CryptoCurrencyDTO;
-import org.example.coinwatch.dto.CryptoPriceDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -28,28 +26,10 @@ public class CoinGeckoService {
     @Value("${coingecko.api.url}")
     private String apiUrl;
 
-    private final String coinIds = "bicoin,ethereum,tether,solana,cardano,doge,avalanche";
-
     public CoinGeckoService(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
     }
 
-    public Map<String, CryptoPriceDTO> getCryptoPrices(){
-        String url = UriComponentsBuilder.fromHttpUrl(apiUrl)
-                .pathSegment("simple", "price")
-                .queryParam("ids", coinIds)
-                .queryParam("vs_currencies", "usd")
-                .toUriString();
-
-        ResponseEntity<Map<String, CryptoPriceDTO>> response = restTemplate.exchange(
-                url,
-                HttpMethod.GET,
-                null,
-                new ParameterizedTypeReference<Map<String, CryptoPriceDTO>>() {}
-        );
-
-        return response.getBody();
-    }
     public List<CryptoCurrencyDTO> getCryptoCurrencies(){
         try {
             String url = UriComponentsBuilder.fromHttpUrl(apiUrl)
