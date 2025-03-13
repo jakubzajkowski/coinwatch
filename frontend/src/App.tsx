@@ -8,6 +8,9 @@ import {
 } from "react-router-dom";
 import About from "./pages/About.tsx";
 import Home from "./pages/Home.tsx";
+import {ApolloProvider} from "@apollo/client";
+import client from "./apollo-client.ts";
+import Dashboard from "./pages/Dashboard.tsx";
 
 function App() {
     const theme = createTheme({
@@ -32,30 +35,33 @@ function App() {
     });
 
     return (
-        <ThemeProvider theme={theme}>
-            <Router>
-                <div>
-                    <Button color="" variant="contained">Hello</Button>
-                    <nav>
-                        <ul>
-                            <li>
-                                <Link to="/">Home</Link>
-                            </li>
-                            <li>
-                                <Link to="/about">About</Link>
-                            </li>
-                            <li>
-                                <Link to="/users">Users</Link>
-                            </li>
-                        </ul>
-                    </nav>
-                    <Routes>
-                        <Route path="/about" element={<About />} />
-                        <Route path="/" element={<Home />} />
-                    </Routes>
-                </div>
-            </Router>
-        </ThemeProvider>
+        <ApolloProvider client={client}>
+            <ThemeProvider theme={theme}>
+                <Router>
+                    <div>
+                        <Button variant="contained">Hello</Button>
+                        <nav>
+                            <ul>
+                                <li>
+                                    <Link to="/">Home</Link>
+                                </li>
+                                <li>
+                                    <Link to="/about">About</Link>
+                                </li>
+                                <li>
+                                    <Link to="/dashboard">Users</Link>
+                                </li>
+                            </ul>
+                        </nav>
+                        <Routes>
+                            <Route path="/about" element={<About />} />
+                            <Route path="/" element={<Home />} />
+                            <Route path="/dashboard" element={<Dashboard />} />
+                        </Routes>
+                    </div>
+                </Router>
+            </ThemeProvider>
+        </ApolloProvider>
     )
 }
 
