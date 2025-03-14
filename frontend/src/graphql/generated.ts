@@ -54,25 +54,36 @@ export type Query = {
 };
 
 
+export type QueryGetCryptoCurrenciesArgs = {
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<Scalars['String']['input']>;
+};
+
+
 export type QueryGetCryptoCurrencyByCryptoIdArgs = {
   cryptoId: Scalars['String']['input'];
 };
 
-export type GetCryptoCurrenciesQueryVariables = Exact<{ [key: string]: never; }>;
+export type GetCryptoCurrenciesQueryVariables = Exact<{
+  limit: Scalars['Int']['input'];
+  orderBy: Scalars['String']['input'];
+}>;
 
 
-export type GetCryptoCurrenciesQuery = { __typename?: 'Query', getCryptoCurrencies?: Array<{ __typename?: 'CryptoCurrency', id: string, name: string, symbol: string, currentPrice?: number | null, marketCap?: number | null, lastUpdated?: string | null } | null> | null };
+export type GetCryptoCurrenciesQuery = { __typename?: 'Query', getCryptoCurrencies?: Array<{ __typename?: 'CryptoCurrency', id: string, name: string, symbol: string, currentPrice?: number | null, priceChangePercentage24h?: number | null, marketCap?: number | null, totalVolume?: number | null, imageUrl?: string | null } | null> | null };
 
 
 export const GetCryptoCurrenciesDocument = gql`
-    query getCryptoCurrencies {
-  getCryptoCurrencies {
+    query getCryptoCurrencies($limit: Int!, $orderBy: String!) {
+  getCryptoCurrencies(limit: $limit, orderBy: $orderBy) {
     id
     name
     symbol
     currentPrice
+    priceChangePercentage24h
     marketCap
-    lastUpdated
+    totalVolume
+    imageUrl
   }
 }
     `;
@@ -89,10 +100,12 @@ export const GetCryptoCurrenciesDocument = gql`
  * @example
  * const { data, loading, error } = useGetCryptoCurrenciesQuery({
  *   variables: {
+ *      limit: // value for 'limit'
+ *      orderBy: // value for 'orderBy'
  *   },
  * });
  */
-export function useGetCryptoCurrenciesQuery(baseOptions?: Apollo.QueryHookOptions<GetCryptoCurrenciesQuery, GetCryptoCurrenciesQueryVariables>) {
+export function useGetCryptoCurrenciesQuery(baseOptions: Apollo.QueryHookOptions<GetCryptoCurrenciesQuery, GetCryptoCurrenciesQueryVariables> & ({ variables: GetCryptoCurrenciesQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<GetCryptoCurrenciesQuery, GetCryptoCurrenciesQueryVariables>(GetCryptoCurrenciesDocument, options);
       }

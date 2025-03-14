@@ -11,7 +11,8 @@ const Nav = styled.nav`
     padding: 0.4rem 0.1rem;
     top: 0;
     backdrop-filter: blur(5px);
-    background-color: rgba(0, 0, 0, 0.92);;
+    background-color: rgba(0, 0, 0, 0.8);;
+    border-bottom: 1px solid rgba(255,255,255, 0.5);
 `
 
 const Menu = styled.ul`

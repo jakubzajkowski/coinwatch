@@ -1,10 +1,10 @@
 import {useQuery} from "@apollo/client";
 import {useEffect} from "react";
-import {GET_CURRENCIES} from "../apollo/queries.ts";
+import {GET_CURRENCIES_FOR_MARKETOVERVIEW} from "../apollo/queries.ts";
 import {GetCryptoCurrenciesQuery} from "../graphql/generated.ts";
 
 const Dashboard = () =>{
-    const { loading, error, data } = useQuery<GetCryptoCurrenciesQuery>(GET_CURRENCIES);
+    const { loading, error, data } = useQuery<GetCryptoCurrenciesQuery>(GET_CURRENCIES_FOR_MARKETOVERVIEW);
 
     useEffect(() => {
         console.log(data);
