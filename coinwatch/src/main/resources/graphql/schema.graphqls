@@ -29,5 +29,5 @@ type CryptoCurrency {
 
 type Query {
     getCryptoCurrencyByCryptoId(cryptoId: String!): CryptoCurrency
-    getCryptoCurrencies: [CryptoCurrency]
+    getCryptoCurrencies(limit: Int, orderBy: String): [CryptoCurrency]
 }
