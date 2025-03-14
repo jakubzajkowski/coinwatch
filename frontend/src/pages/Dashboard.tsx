@@ -1,21 +1,10 @@
-import {gql, useQuery} from "@apollo/client";
+import {useQuery} from "@apollo/client";
 import {useEffect} from "react";
-
-const GET_CURRENCIES = gql`
-  query getCryptoCurrencies {
-    getCryptoCurrencies {
-      id
-      name
-      symbol
-      currentPrice
-      marketCap
-      lastUpdated
-    }
-  }
-`
+import {GET_CURRENCIES} from "../apollo/queries.ts";
+import {GetCryptoCurrenciesQuery} from "../graphql/generated.ts";
 
 const Dashboard = () =>{
-    const { loading, error, data } = useQuery(GET_CURRENCIES);
+    const { loading, error, data } = useQuery<GetCryptoCurrenciesQuery>(GET_CURRENCIES);
 
     useEffect(() => {
         console.log(data);
