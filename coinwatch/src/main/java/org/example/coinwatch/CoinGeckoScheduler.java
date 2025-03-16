@@ -1,9 +1,9 @@
 package org.example.coinwatch;
 
 import org.example.coinwatch.dto.CryptoCurrencyDTO;
-import org.example.coinwatch.entity.CryptoPrice;
 import org.example.coinwatch.service.CoinGeckoService;
 import org.example.coinwatch.service.CryptoCurrencyService;
+import org.example.coinwatch.service.CryptoPriceHistoryService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +26,9 @@ public class CoinGeckoScheduler {
     @Autowired
     private CryptoCurrencyService cryptoCurrencyService;
 
+    @Autowired
+    private CryptoPriceHistoryService cryptoPriceHistoryService;
+
     @Async
     @Scheduled(fixedRateString = "${scheduler.interval}")
     public void saveUpdateGeckoCryptoCurrency(){
@@ -35,6 +38,7 @@ public class CoinGeckoScheduler {
 
             for (CryptoCurrencyDTO dto : cryptoCurrencyDTOS){
                 cryptoCurrencyService.saveOrUpdate(dto);
+                cryptoPriceHistoryService.saveCyrrencyPrice(dto);
             }
         }catch (Exception e){
             logger.error("Error in CoinGeckoScheduler: ", e);
