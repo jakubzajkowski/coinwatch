@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import {SearchInput} from "../components/styled.ts";
+import {ButtonPrimary, InputCoinWatch, SearchInput} from "../components/styled.ts";
 import MarketOverview from "../components/MarketOverview.tsx";
 
 
@@ -47,7 +47,6 @@ const FeaturesContainer = styled.div`
     height: 60vh;
     display: flex;
     justify-content: center;
-    gap: 1rem;
     align-items: center;
     flex-wrap: wrap;
     color: white;
@@ -67,6 +66,28 @@ const FeatureDescription = styled.p`
     color: #b4b4b4;
     font-size: 1.1rem;
     width: 90%;
+    margin: 0.5rem 0;
+`;
+const NewsLetterContainer = styled.div`
+    width: 100%;
+    height: 40vh;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    flex-wrap: wrap;
+    color: white;
+    background-color: #151518;
+`
+const NewsLetterTitle = styled.h1`
+    color: #ffffff;
+    font-size: 3rem;
+`;
+const NewsLetterDescription = styled.p`
+    color: #b4b4b4;
+    font-size: 1.2rem;
+    text-align: center;
+    width: 100%;
     margin: 0.5rem 0;
 `;
 
@@ -101,6 +122,14 @@ const Home = () =>{
                 <FeatureDescription>Get detailed analytics and insights to make informed investment decisions.</FeatureDescription>
             </FeatureItem>
         </FeaturesContainer>
+        <NewsLetterContainer>
+            <NewsLetterTitle>Stay Updated</NewsLetterTitle>
+            <NewsLetterDescription>Subscribe to our newsletter for the latest crypto news and market updates.</NewsLetterDescription>
+            <div style={{width:'100%',display:"flex",justifyContent:'center',alignItems:'center'}}>
+                <InputCoinWatch placeholder="Enter your email"/>
+                <ButtonPrimary>Subscribe</ButtonPrimary>
+            </div>
+        </NewsLetterContainer>
     </main>
 }
 

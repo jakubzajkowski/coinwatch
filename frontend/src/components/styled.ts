@@ -55,3 +55,17 @@ export const SearchInput = styled.input`
         width: 85%;
     }
 `;
+export const InputCoinWatch = styled.input`
+    outline: none;
+    font-size: 16px;
+    border-radius: 0.5rem;
+    border: 1px solid rgb(255,255,255,0.3);
+    padding: 0.5rem;
+    width: 25%;
+    color: white;
+    background-color: transparent;
+    
+    @media (max-width: 950px) {
+        width: 60%;
+    }
+`;
