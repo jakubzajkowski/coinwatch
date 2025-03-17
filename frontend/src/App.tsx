@@ -12,6 +12,7 @@ import client from "./apollo/apollo-client.ts";
 import Dashboard from "./pages/Dashboard.tsx";
 import NavBar from "./components/NavBar.tsx";
 import {theme} from "./theme/theme.ts";
+import Footer from "./components/Footer.tsx";
 
 function App() {
 
@@ -26,6 +27,7 @@ function App() {
                             <Route path="/" element={<Home />} />
                             <Route path="/dashboard" element={<Dashboard />} />
                         </Routes>
+                        <Footer />
                     </div>
                 </Router>
             </ThemeProvider>
