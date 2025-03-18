@@ -13,6 +13,7 @@ import Dashboard from "./pages/Dashboard.tsx";
 import NavBar from "./components/NavBar.tsx";
 import {theme} from "./theme/theme.ts";
 import Footer from "./components/Footer.tsx";
+import Notifications from "./pages/Notifications.tsx";
 
 function App() {
 
@@ -26,6 +27,7 @@ function App() {
                             <Route path="/about" element={<About />} />
                             <Route path="/" element={<Home />} />
                             <Route path="/dashboard" element={<Dashboard />} />
+                            <Route path="/notifications" element={<Notifications />} />
                         </Routes>
                         <Footer />
                     </div>
