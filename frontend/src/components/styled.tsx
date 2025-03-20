@@ -1,8 +1,8 @@
 import styled from 'styled-components'
 import {Link} from "react-router-dom";
-import {MenuItem, SelectChangeEvent} from "@mui/material";
+import {FormControlLabel, MenuItem, Radio, SelectChangeEvent, Typography} from "@mui/material";
 import Select from '@mui/material/Select';
-import {ChangeEvent, useEffect, useState} from "react";
+import {FC, useState} from "react";
 
 export const ButtonPrimary = styled.button`
     padding: 0.6rem 1.2rem;                
@@ -76,7 +76,7 @@ export const InputCoinWatch = styled.input<InputCoinWatchProps>`
     background-color: transparent;
     
     @media (max-width: 950px) {
-        width: 60%;
+        width: 100%;
     }
 `;
 interface LabelCoinWatchProps {
@@ -147,3 +147,35 @@ export const SelectCoinWatch = ({items,width,defaultValue,margin} : SelectCoinWa
         ))}
     </Select>
 }
+interface RadioCoinWatchProps {
+    value: string;
+    label: string;
+}
+export const RadioCoinWatch: FC<RadioCoinWatchProps> = ({ value, label }) => {
+    return (
+        <FormControlLabel
+            value={value}
+            control={
+                <Radio
+                    sx={{
+                        color: 'rgb(255,255,255,0.3)',
+                        '&.Mui-checked': {
+                            color: '#ffffff',
+                        },
+                    }}
+                />
+            }
+            label={<Typography
+                sx={{
+                    fontSize:'0.9rem',
+                    color: 'rgb(200,200,200)',
+                    '&.Mui-checked': {
+                        color: '#ffffff',
+                    },
+                }}
+            >
+                {label}
+            </Typography>}
+        />
+    );
+};
