@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import {ButtonPrimary, InputCoinWatch, SearchInput} from "../components/styled.ts";
+import {ButtonPrimary, InputCoinWatch, SearchInput} from "../components/styled.tsx";
 import MarketOverview from "../components/MarketOverview.tsx";
 
 

@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import {ButtonPrimary, ButtonSecondary, LinkCoinWatch} from "./styled.ts";
+import {ButtonPrimary, ButtonSecondary, LinkCoinWatch} from "./styled.tsx";
 
 const Nav = styled.nav`
     display: flex;
