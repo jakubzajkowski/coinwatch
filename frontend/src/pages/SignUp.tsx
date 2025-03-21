@@ -4,6 +4,8 @@ import {ButtonPrimary, InputCoinWatch, LabelCoinWatch, RadioCoinWatch} from "../
 import {SelectCoinWatch} from "../components/styled.tsx";
 import {RadioGroup} from "@mui/material";
 import {useState} from "react";
+import countries from "../data/countries.ts";
+import currencies from "../data/currencies.ts";
 
 interface FormDataType {
     firstName: string,
@@ -165,7 +167,7 @@ const SignUp = () =>{
                     <div style={{width: '100%', margin: '1rem 0rem'}}>
                         <LabelCoinWatch htmlFor="email">Country</LabelCoinWatch>
                         <SelectCoinWatch name="country"
-                                         onChange={handleCustomChange} items={["Poland", "USA", "Germany"]} defaultValue="Select country"
+                                         onChange={handleCustomChange} items={countries} defaultValue="Select country"
                                          margin="0.5rem 0" width="100%"/>
                     </div>
                 </div>
@@ -198,7 +200,7 @@ const SignUp = () =>{
                     <div style={{width: '100%', margin: '1rem 0rem'}}>
                         <LabelCoinWatch htmlFor="email">Preferred currency</LabelCoinWatch>
                         <SelectCoinWatch name="preferredCurrency"
-                                         onChange={handleCustomChange} items={["PLN", "EUR", "USD"]} defaultValue="Select currency" margin="0.5rem 0"
+                                         onChange={handleCustomChange} items={currencies} defaultValue="Select currency" margin="0.5rem 0"
                                          width="100%"/>
                     </div>
                 </div>
