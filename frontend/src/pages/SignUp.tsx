@@ -3,6 +3,23 @@ import BackToHome from "../components/BackToHome.tsx";
 import {ButtonPrimary, InputCoinWatch, LabelCoinWatch, RadioCoinWatch} from "../components/styled.tsx";
 import {SelectCoinWatch} from "../components/styled.tsx";
 import {RadioGroup} from "@mui/material";
+import {useState} from "react";
+
+interface FormDataType {
+    firstName: string,
+    lastName: string,
+    email: string,
+    dateOfBirth: string,
+    phoneNumber: string,
+    country: string,
+    password: string,
+    confirmPassword: string,
+    preferredCurrency: string,
+    experienceLevel: string,
+    interests: string[],
+    agreedToTerms: boolean,
+    receiveUpdates: boolean,
+}
 
 const Container = styled.div`
     display: flex;
@@ -57,41 +74,98 @@ const FormTitle = styled.h1`
 `
 
 const SignUp = () =>{
+    const [formData, setFormData] = useState<FormDataType>({
+        firstName: "",
+        lastName: "",
+        email: "",
+        dateOfBirth: "",
+        phoneNumber: "",
+        country: "",
+        password: "",
+        confirmPassword: "",
+        preferredCurrency: "",
+        experienceLevel: "",
+        interests: [],
+        agreedToTerms: false,
+        receiveUpdates: false,
+    });
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value, type, checked } = e.target;
+        setFormData({
+            ...formData,
+            [name]: type === "checkbox" ? checked : value,
+        });
+    };
+    const handleCustomChange = (value: string,name: string) => {
+        setFormData({
+            ...formData,
+            [name]: value,
+        });
+    };
+
+    const handleInterestsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { value, checked, name } = e.target;
+        let updatedInterests : string[] = [...formData.interests];
+
+        if (checked) {
+            updatedInterests.push(name);
+        } else {
+            updatedInterests = updatedInterests.filter((interest) => interest !== value);
+        }
+
+        setFormData({
+            ...formData,
+            interests: updatedInterests,
+        });
+    };
+
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        console.log(formData);
+    };
+
     return (<Container>
         <Header>
             <BackToHome />
             <Title>Create Your Account</Title>
             <Description>Join CoinWatch to track your crypto portfolio and stay updated with the market</Description>
         </Header>
-        <Form>
+        <Form onSubmit={handleSubmit}>
             <FormTitle>Personal Information</FormTitle>
             <FormSection>
                 <div style={{width: '100%'}}>
                     <div style={{width: '100%', margin: '1rem 0rem'}}>
                         <LabelCoinWatch htmlFor="email">First name</LabelCoinWatch>
-                        <InputCoinWatch margin="0.5rem 0" width="100%" placeholder="John"/>
+                        <InputCoinWatch name="firstName" value={formData.firstName}
+                                        onChange={handleChange} margin="0.5rem 0" width="100%" placeholder="John"/>
                     </div>
                     <div style={{width: '100%', margin: '1rem 0rem'}}>
                         <LabelCoinWatch htmlFor="email">Email</LabelCoinWatch>
-                        <InputCoinWatch margin="0.5rem 0" width="100%" placeholder="john@email.com"/>
+                        <InputCoinWatch name="email" value={formData.email}
+                                        onChange={handleChange} margin="0.5rem 0" width="100%" placeholder="john@email.com"/>
                     </div>
                     <div style={{width: '100%', margin: '1rem 0rem'}}>
                         <LabelCoinWatch htmlFor="email">Date of birth</LabelCoinWatch>
-                        <InputCoinWatch type="date" margin="0.5rem 0" width="100%"/>
+                        <InputCoinWatch name="dateOfBirth" value={formData.dateOfBirth}
+                                        onChange={handleChange} type="date" margin="0.5rem 0" width="100%"/>
                     </div>
                 </div>
                 <div style={{width: '100%'}}>
                     <div style={{width: '100%', margin: '1rem 0rem'}}>
                         <LabelCoinWatch htmlFor="email">Last name</LabelCoinWatch>
-                        <InputCoinWatch margin="0.5rem 0" width="100%" placeholder="Doe"/>
+                        <InputCoinWatch name="lastName" value={formData.lastName}
+                                        onChange={handleChange} margin="0.5rem 0" width="100%" placeholder="Doe"/>
                     </div>
                     <div style={{width: '100%', margin: '1rem 0rem'}}>
                         <LabelCoinWatch htmlFor="email">Phone number (optional)</LabelCoinWatch>
-                        <InputCoinWatch margin="0.5rem 0" width="100%" placeholder="+1 (555) 000-0000"/>
+                        <InputCoinWatch name="phoneNumber" value={formData.phoneNumber}
+                                        onChange={handleChange} margin="0.5rem 0" width="100%" placeholder="+1 (555) 000-0000"/>
                     </div>
                     <div style={{width: '100%', margin: '1rem 0rem'}}>
                         <LabelCoinWatch htmlFor="email">Country</LabelCoinWatch>
-                        <SelectCoinWatch items={["Poland", "USA", "Germany"]} defaultValue="Select country"
+                        <SelectCoinWatch name="country"
+                                         onChange={handleCustomChange} items={["Poland", "USA", "Germany"]} defaultValue="Select country"
                                          margin="0.5rem 0" width="100%"/>
                     </div>
                 </div>
@@ -101,7 +175,9 @@ const SignUp = () =>{
                 <div style={{width: '100%'}}>
                     <div style={{width: '100%', margin: '1rem 0rem'}}>
                         <LabelCoinWatch htmlFor="email">Password</LabelCoinWatch>
-                        <InputCoinWatch type="password" margin="0.5rem 0" width="100%"/>
+                        <InputCoinWatch name="password"
+                                        value={formData.password}
+                                        onChange={handleChange} type="password" margin="0.5rem 0" width="100%"/>
                         <p style={{color: "#b4b4b4", fontSize: '0.8rem'}}>
                             Must be at least 8 characters with a number and a special character
                         </p>
@@ -110,7 +186,9 @@ const SignUp = () =>{
                 <div style={{width: '100%'}}>
                     <div style={{width: '100%', margin: '1rem 0rem'}}>
                         <LabelCoinWatch htmlFor="email">Confirm password</LabelCoinWatch>
-                        <InputCoinWatch margin="0.5rem 0" type="password" width="100%"/>
+                        <InputCoinWatch name="confirmPassword"
+                                        value={formData.confirmPassword}
+                                        onChange={handleChange} margin="0.5rem 0" type="password" width="100%"/>
                     </div>
                 </div>
             </FormSection>
@@ -119,17 +197,18 @@ const SignUp = () =>{
                 <div style={{width: '100%'}}>
                     <div style={{width: '100%', margin: '1rem 0rem'}}>
                         <LabelCoinWatch htmlFor="email">Preferred currency</LabelCoinWatch>
-                        <SelectCoinWatch items={["PLN", "EUR", "USD"]} defaultValue="Select currency" margin="0.5rem 0"
+                        <SelectCoinWatch name="preferredCurrency"
+                                         onChange={handleCustomChange} items={["PLN", "EUR", "USD"]} defaultValue="Select currency" margin="0.5rem 0"
                                          width="100%"/>
                     </div>
                 </div>
                 <div style={{width: '100%'}}>
                     <div style={{width: '100%', margin: '1rem 0rem'}}>
                         <LabelCoinWatch htmlFor="email">Experience level</LabelCoinWatch>
-                        <RadioGroup>
-                            <RadioCoinWatch value="beginner" label="Beginner"/>
-                            <RadioCoinWatch value="intermediate" label="Intermediate"/>
-                            <RadioCoinWatch value="expert" label="Expert"/>
+                        <RadioGroup name="experienceLevel" onChange={handleChange} >
+                            <RadioCoinWatch defaultValue="beginner" label="Beginner"/>
+                            <RadioCoinWatch defaultValue="intermediate" label="Intermediate"/>
+                            <RadioCoinWatch defaultValue="expert" label="Expert"/>
                         </RadioGroup>
                     </div>
                 </div>
@@ -139,11 +218,13 @@ const SignUp = () =>{
                 <div style={{width: '100%'}}>
                     <div>
                         <div>
-                            <InputCoinWatch type="checkbox" width={"20px"} margin="1rem 0"/>
+                            <InputCoinWatch name="Bitcoin"
+                                            onChange={handleInterestsChange} type="checkbox" width={"20px"} margin="1rem 0"/>
                             <p style={{color: "white", display: "inline"}}>Bitcoin</p>
                         </div>
                         <div>
-                            <InputCoinWatch type="checkbox" width={"20px"} margin="1rem 0"/>
+                            <InputCoinWatch name="Trading"
+                                            onChange={handleInterestsChange} type="checkbox" width={"20px"} margin="1rem 0"/>
                             <p style={{color: "white", display: "inline"}}>Trading</p>
                         </div>
                     </div>
@@ -151,11 +232,13 @@ const SignUp = () =>{
                 <div style={{width: '100%'}}>
                     <div>
                         <div>
-                            <InputCoinWatch type="checkbox" width={"20px"} margin="1rem 0"/>
+                            <InputCoinWatch name="Ethereum"
+                                            onChange={handleInterestsChange} type="checkbox" width={"20px"} margin="1rem 0"/>
                             <p style={{color: "white", display: "inline"}}>Ethereum</p>
                         </div>
                         <div>
-                            <InputCoinWatch type="checkbox" width={"20px"} margin="1rem 0"/>
+                            <InputCoinWatch name="Mining"
+                                            onChange={handleInterestsChange} type="checkbox" width={"20px"} margin="1rem 0"/>
                             <p style={{color: "white", display: "inline"}}>Mining</p>
                         </div>
                     </div>
@@ -163,11 +246,13 @@ const SignUp = () =>{
                 <div style={{width: '100%'}}>
                     <div>
                         <div>
-                            <InputCoinWatch type="checkbox" width={"20px"} margin="1rem 0"/>
+                            <InputCoinWatch name="DeFi"
+                                            onChange={handleInterestsChange} type="checkbox" width={"20px"} margin="1rem 0"/>
                             <p style={{color: "white", display: "inline"}}>DeFi</p>
                         </div>
                         <div>
-                            <InputCoinWatch type="checkbox" width={"20px"} margin="1rem 0"/>
+                            <InputCoinWatch name="Staking"
+                                            onChange={handleInterestsChange} type="checkbox" width={"20px"} margin="1rem 0"/>
                             <p style={{color: "white", display: "inline"}}>Staking</p>
                         </div>
                     </div>
@@ -175,11 +260,13 @@ const SignUp = () =>{
                 <div style={{width: '100%'}}>
                     <div>
                         <div>
-                            <InputCoinWatch type="checkbox" width={"20px"} margin="1rem 0"/>
+                            <InputCoinWatch name="NFTs"
+                                            onChange={handleInterestsChange} type="checkbox" width={"20px"} margin="1rem 0"/>
                             <p style={{color: "white", display: "inline"}}>NFTs</p>
                         </div>
                         <div>
-                            <InputCoinWatch type="checkbox" width={"20px"} margin="1rem 0"/>
+                            <InputCoinWatch name="News"
+                                            onChange={handleInterestsChange} type="checkbox" width={"20px"} margin="1rem 0"/>
                             <p style={{color: "white", display: "inline"}}>News</p>
                         </div>
                     </div>
@@ -187,11 +274,15 @@ const SignUp = () =>{
             </FormSection>
             <div style={{border: "1px solid rgb(222,222,222,0.4)", margin: "1.5rem 0"}}></div>
             <div>
-                <InputCoinWatch type="checkbox" width={"20px"} margin="1rem 0"/>
+                <InputCoinWatch name="agreedToTerms"
+                                checked={formData.agreedToTerms}
+                                onChange={handleChange} type="checkbox" width={"20px"} margin="1rem 0"/>
                 <p style={{color: "white", display: "inline"}}>I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a></p>
             </div>
             <div>
-                <InputCoinWatch type="checkbox" width={"20px"} margin="0.2rem 0 3rem 0"/>
+                <InputCoinWatch name="receiveUpdates"
+                                checked={formData.receiveUpdates}
+                                onChange={handleChange} type="checkbox" width={"20px"} margin="0.2rem 0 3rem 0"/>
                 <p style={{color: "white", display: "inline"}}>I want to receive news, updates, and offers from
                     CoinWatch</p>
             </div>

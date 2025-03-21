@@ -92,16 +92,24 @@ interface SelectCoinWatchProps {
     width?: string,
     defaultValue?: string
     margin?: string
+    onChange?: (value: string,name:string) => void;
+    name?:string
 }
-export const SelectCoinWatch = ({items,width,defaultValue,margin} : SelectCoinWatchProps) => {
+export const SelectCoinWatch = ({name,items,width,defaultValue,margin,onChange} : SelectCoinWatchProps) => {
     const [value, setValue] = useState<string>(defaultValue || '');
 
     const handleChange = (event: SelectChangeEvent) => {
-        setValue(event.target.value);
+        const {name,value} = event.target;
+        setValue(value);
+
+        if (onChange) {
+            onChange(value,name);
+        }
     };
 
     return <Select
         value={value}
+        name={name}
         onChange={handleChange}
         sx={{
             backgroundColor: '#000000',
@@ -148,13 +156,13 @@ export const SelectCoinWatch = ({items,width,defaultValue,margin} : SelectCoinWa
     </Select>
 }
 interface RadioCoinWatchProps {
-    value: string;
+    defaultValue: string;
     label: string;
 }
-export const RadioCoinWatch: FC<RadioCoinWatchProps> = ({ value, label }) => {
+export const RadioCoinWatch: FC<RadioCoinWatchProps> = ({defaultValue, label }) => {
     return (
         <FormControlLabel
-            value={value}
+            value={defaultValue}
             control={
                 <Radio
                     sx={{
