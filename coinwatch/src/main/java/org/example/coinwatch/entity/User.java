@@ -1,6 +1,8 @@
 package org.example.coinwatch.entity;
 
 import jakarta.persistence.*;
+import org.example.coinwatch.dto.ExperienceLevel;
+import org.example.coinwatch.dto.Interest;
 
 import java.time.LocalDate;
 import java.util.Set;
@@ -49,14 +51,6 @@ public class User {
     private boolean agreedToTerms;
 
     private boolean receiveUpdates;
-
-    public enum ExperienceLevel {
-        BEGINNER, INTERMEDIATE, EXPERT
-    }
-
-    public enum Interest {
-        BITCOIN, TRADING, ETHEREUM, MINING, DEFI, STAKING, NFTS, NEWS
-    }
 
     public Long getId() {
         return id;

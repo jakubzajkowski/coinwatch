@@ -47,14 +47,6 @@ public class UserRegistrationDTO {
 
     private boolean receiveUpdates;
 
-    public enum ExperienceLevel {
-        BEGINNER, INTERMEDIATE, EXPERT
-    }
-
-    public enum Interest {
-        BITCOIN, TRADING, ETHEREUM, MINING, DEFI, STAKING, NFTS, NEWS
-    }
-
     public String getFirstName() {
         return firstName;
     }
