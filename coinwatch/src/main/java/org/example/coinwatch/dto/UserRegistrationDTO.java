@@ -1,6 +1,7 @@
 package org.example.coinwatch.dto;
 
-import javax.validation.constraints.*;
+import jakarta.validation.constraints.*;
+
 import java.time.LocalDate;
 import java.util.Set;
 
@@ -37,10 +38,10 @@ public class UserRegistrationDTO {
     private String preferredCurrency;
 
     @NotNull(message = "Experience level is required")
-    private ExperienceLevel experienceLevel;
+    private String experienceLevel;
 
     @NotEmpty(message = "At least one interest must be selected")
-    private Set<Interest> interests;
+    private Set<String> interests;
 
     @AssertTrue(message = "You must agree to the Terms of Service and Privacy Policy")
     private boolean agreedToTerms;
@@ -119,19 +120,19 @@ public class UserRegistrationDTO {
         this.preferredCurrency = preferredCurrency;
     }
 
-    public ExperienceLevel getExperienceLevel() {
+    public String getExperienceLevel() {
         return experienceLevel;
     }
 
-    public void setExperienceLevel(ExperienceLevel experienceLevel) {
+    public void setExperienceLevel(String experienceLevel) {
         this.experienceLevel = experienceLevel;
     }
 
-    public Set<Interest> getInterests() {
+    public Set<String> getInterests() {
         return interests;
     }
 
-    public void setInterests(Set<Interest> interests) {
+    public void setInterests(Set<String> interests) {
         this.interests = interests;
     }
 

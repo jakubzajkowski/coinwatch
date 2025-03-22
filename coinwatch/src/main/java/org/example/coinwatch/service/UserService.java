@@ -1,12 +1,17 @@
 package org.example.coinwatch.service;
 
-import jakarta.persistence.Entity;
+import org.example.coinwatch.dto.ExperienceLevel;
+import org.example.coinwatch.dto.Interest;
+import org.example.coinwatch.dto.UserRegisterResponseDTO;
 import org.example.coinwatch.dto.UserRegistrationDTO;
 import org.example.coinwatch.entity.User;
 import org.example.coinwatch.respository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @Service
 public class UserService {
@@ -18,7 +23,7 @@ public class UserService {
     private PasswordEncoder passwordEncoder;
 
 
-    public User registerUser(UserRegistrationDTO dto) {
+    public UserRegisterResponseDTO registerUser(UserRegistrationDTO dto) {
         if (userRepository.existsByEmail(dto.getEmail())) {
             throw new IllegalArgumentException("Email is already in use");
         }
@@ -36,11 +41,17 @@ public class UserService {
         user.setCountry(dto.getCountry());
         user.setPassword(passwordEncoder.encode(dto.getPassword()));
         user.setPreferredCurrency(dto.getPreferredCurrency());
-        user.setExperienceLevel(dto.getExperienceLevel());
-        user.setInterests(dto.getInterests());
+        ExperienceLevel level = ExperienceLevel.fromString(dto.getExperienceLevel());
+        user.setExperienceLevel(level);
+        Set<Interest> interests = new HashSet<>();
+        for(String interest : dto.getInterests()){
+            interests.add(Interest.fromString(interest));
+        }
+        user.setInterests(interests);
         user.setAgreedToTerms(dto.isAgreedToTerms());
         user.setReceiveUpdates(dto.isReceiveUpdates());
+        User createdUser = userRepository.save(user);
 
-        return userRepository.save(user);
+        return new UserRegisterResponseDTO(createdUser.getId(),createdUser.getEmail());
     }
 }
