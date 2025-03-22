@@ -1,13 +1,15 @@
 import styled from "styled-components";
 import BackToHome from "../components/BackToHome.tsx";
-import {ButtonPrimary, InputCoinWatch, LabelCoinWatch, RadioCoinWatch} from "../components/styled.tsx";
+import {ButtonPrimary, FormError, InputCoinWatch, LabelCoinWatch, RadioCoinWatch} from "../components/styled.tsx";
 import {SelectCoinWatch} from "../components/styled.tsx";
 import {RadioGroup} from "@mui/material";
-import {useState} from "react";
+import React, {useState} from "react";
 import countries from "../data/countries.ts";
 import currencies from "../data/currencies.ts";
+import AuthService from "../api/AuthService.ts";
+import {AxiosError} from "axios";
 
-interface FormDataType {
+export interface FormDataType {
     firstName: string,
     lastName: string,
     email: string,
@@ -91,6 +93,7 @@ const SignUp = () =>{
         agreedToTerms: false,
         receiveUpdates: false,
     });
+    const [formErrors, setFormErrors] = useState<Record<string, string>>({});
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value, type, checked } = e.target;
@@ -124,7 +127,20 @@ const SignUp = () =>{
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        console.log(formData);
+        try {
+            const response = await AuthService.register(formData);
+            console.log(response);
+        }catch(e: unknown){
+            if (e instanceof AxiosError) {
+                if(e.response) {
+                    const serverErrors = e.response.data;
+
+                    setFormErrors(serverErrors);
+                }
+            } else {
+                console.error("Unknown error:", e);
+            }
+        }
     };
 
     return (<Container>
@@ -141,6 +157,7 @@ const SignUp = () =>{
                         <LabelCoinWatch htmlFor="email">First name</LabelCoinWatch>
                         <InputCoinWatch name="firstName" value={formData.firstName}
                                         onChange={handleChange} margin="0.5rem 0" width="100%" placeholder="John"/>
+                        {formErrors.email && <FormError>{formErrors.email}</FormError>}
                     </div>
                     <div style={{width: '100%', margin: '1rem 0rem'}}>
                         <LabelCoinWatch htmlFor="email">Email</LabelCoinWatch>
@@ -183,6 +200,7 @@ const SignUp = () =>{
                         <p style={{color: "#b4b4b4", fontSize: '0.8rem'}}>
                             Must be at least 8 characters with a number and a special character
                         </p>
+                        {formErrors.password && <FormError>{formErrors.password}</FormError>}
                     </div>
                 </div>
                 <div style={{width: '100%'}}>
