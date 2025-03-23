@@ -8,6 +8,7 @@ import countries from "../data/countries.ts";
 import currencies from "../data/currencies.ts";
 import AuthService from "../api/AuthService.ts";
 import {AxiosError} from "axios";
+import {useNavigate} from "react-router-dom";
 
 export interface FormDataType {
     firstName: string,
@@ -78,6 +79,8 @@ const FormTitle = styled.h1`
 `
 
 const SignUp = () =>{
+    const navigate = useNavigate();
+
     const [formData, setFormData] = useState<FormDataType>({
         firstName: "",
         lastName: "",
@@ -93,7 +96,23 @@ const SignUp = () =>{
         agreedToTerms: false,
         receiveUpdates: false,
     });
-    const [formErrors, setFormErrors] = useState<Record<string, string>>({});
+    const [formErrors, setFormErrors] = useState<Record<keyof FormDataType, string> & { adult: string , general: string}>({
+        agreedToTerms: "",
+        confirmPassword: "",
+        country: "",
+        dateOfBirth: "",
+        email: "",
+        experienceLevel: "",
+        firstName: "",
+        interests: "",
+        lastName: "",
+        password: "",
+        phoneNumber: "",
+        preferredCurrency: "",
+        receiveUpdates: "",
+        adult: "",
+        general: ""
+    });
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value, type, checked } = e.target;
@@ -127,18 +146,19 @@ const SignUp = () =>{
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+
         try {
-            const response = await AuthService.register(formData);
-            console.log(response);
+            const {data} = await AuthService.register(formData);
+            console.log(data)
+            if (!data?.id) throw new Error("Invalid response: Missing user ID");
+
+            navigate("/");
         }catch(e: unknown){
             if (e instanceof AxiosError) {
                 if(e.response) {
                     const serverErrors = e.response.data;
-
                     setFormErrors(serverErrors);
                 }
-            } else {
-                console.error("Unknown error:", e);
             }
         }
     };
@@ -157,17 +177,20 @@ const SignUp = () =>{
                         <LabelCoinWatch htmlFor="email">First name</LabelCoinWatch>
                         <InputCoinWatch name="firstName" value={formData.firstName}
                                         onChange={handleChange} margin="0.5rem 0" width="100%" placeholder="John"/>
-                        {formErrors.email && <FormError>{formErrors.email}</FormError>}
+                        {formErrors.firstName && <FormError>{formErrors.firstName}</FormError>}
                     </div>
                     <div style={{width: '100%', margin: '1rem 0rem'}}>
                         <LabelCoinWatch htmlFor="email">Email</LabelCoinWatch>
                         <InputCoinWatch name="email" value={formData.email}
                                         onChange={handleChange} margin="0.5rem 0" width="100%" placeholder="john@email.com"/>
+                        {formErrors.email && <FormError>{formErrors.email}</FormError>}
                     </div>
                     <div style={{width: '100%', margin: '1rem 0rem'}}>
                         <LabelCoinWatch htmlFor="email">Date of birth</LabelCoinWatch>
                         <InputCoinWatch name="dateOfBirth" value={formData.dateOfBirth}
                                         onChange={handleChange} type="date" margin="0.5rem 0" width="100%"/>
+                        {formErrors.dateOfBirth && <FormError>{formErrors.dateOfBirth}</FormError>}
+                        {formErrors.adult && <FormError>{formErrors.adult}</FormError>}
                     </div>
                 </div>
                 <div style={{width: '100%'}}>
@@ -175,17 +198,20 @@ const SignUp = () =>{
                         <LabelCoinWatch htmlFor="email">Last name</LabelCoinWatch>
                         <InputCoinWatch name="lastName" value={formData.lastName}
                                         onChange={handleChange} margin="0.5rem 0" width="100%" placeholder="Doe"/>
+                        {formErrors.lastName && <FormError>{formErrors.lastName}</FormError>}
                     </div>
                     <div style={{width: '100%', margin: '1rem 0rem'}}>
                         <LabelCoinWatch htmlFor="email">Phone number (optional)</LabelCoinWatch>
                         <InputCoinWatch name="phoneNumber" value={formData.phoneNumber}
                                         onChange={handleChange} margin="0.5rem 0" width="100%" placeholder="+1 (555) 000-0000"/>
+                        {formErrors.phoneNumber && <FormError>{formErrors.phoneNumber}</FormError>}
                     </div>
                     <div style={{width: '100%', margin: '1rem 0rem'}}>
                         <LabelCoinWatch htmlFor="email">Country</LabelCoinWatch>
                         <SelectCoinWatch name="country"
                                          onChange={handleCustomChange} items={countries} defaultValue="Select country"
                                          margin="0.5rem 0" width="100%"/>
+                        {formErrors.country && <FormError>{formErrors.country}</FormError>}
                     </div>
                 </div>
             </FormSection>
@@ -209,6 +235,7 @@ const SignUp = () =>{
                         <InputCoinWatch name="confirmPassword"
                                         value={formData.confirmPassword}
                                         onChange={handleChange} margin="0.5rem 0" type="password" width="100%"/>
+                        {formErrors.confirmPassword && <FormError>{formErrors.confirmPassword}</FormError>}
                     </div>
                 </div>
             </FormSection>
@@ -220,6 +247,7 @@ const SignUp = () =>{
                         <SelectCoinWatch name="preferredCurrency"
                                          onChange={handleCustomChange} items={currencies} defaultValue="Select currency" margin="0.5rem 0"
                                          width="100%"/>
+                        {formErrors.preferredCurrency && <FormError>{formErrors.preferredCurrency}</FormError>}
                     </div>
                 </div>
                 <div style={{width: '100%'}}>
@@ -230,6 +258,7 @@ const SignUp = () =>{
                             <RadioCoinWatch defaultValue="intermediate" label="Intermediate"/>
                             <RadioCoinWatch defaultValue="expert" label="Expert"/>
                         </RadioGroup>
+                        {formErrors.experienceLevel && <FormError>{formErrors.experienceLevel}</FormError>}
                     </div>
                 </div>
             </FormSection>
@@ -292,12 +321,14 @@ const SignUp = () =>{
                     </div>
                 </div>
             </FormSection>
+            {formErrors.interests && <FormError>{formErrors.interests}</FormError>}
             <div style={{border: "1px solid rgb(222,222,222,0.4)", margin: "1.5rem 0"}}></div>
             <div>
                 <InputCoinWatch name="agreedToTerms"
                                 checked={formData.agreedToTerms}
                                 onChange={handleChange} type="checkbox" width={"20px"} margin="1rem 0"/>
                 <p style={{color: "white", display: "inline"}}>I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a></p>
+                {formErrors.agreedToTerms && <FormError>{formErrors.agreedToTerms}</FormError>}
             </div>
             <div>
                 <InputCoinWatch name="receiveUpdates"
@@ -306,6 +337,7 @@ const SignUp = () =>{
                 <p style={{color: "white", display: "inline"}}>I want to receive news, updates, and offers from
                     CoinWatch</p>
             </div>
+            {formErrors.general && <FormError>{formErrors.general}</FormError>}
             <ButtonPrimary>Create Account</ButtonPrimary>
             <p style={{color: "white",margin:"2rem 0"}}>Already have an account? <a href="#">Sign in</a></p>
         </Form>

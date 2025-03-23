@@ -1,6 +1,7 @@
 
 import {FormDataType} from "../pages/SignUp.tsx";
 import axiosClient from "../utils/axiosClient.ts";
+import {AxiosResponse} from "axios";
 
 type UserDataType = FormDataType
 
@@ -10,7 +11,7 @@ interface UserRegisterResponseTYpe{
 }
 
 class AuthService {
-    async register(userData: UserDataType): Promise<UserRegisterResponseTYpe> {
+    async register(userData: UserDataType): Promise<AxiosResponse<UserRegisterResponseTYpe>> {
         return await axiosClient.post("/api/signup", userData);
     }
 }
