@@ -1,8 +1,10 @@
 package org.example.coinwatch.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.*;
 
 import java.time.LocalDate;
+import java.time.Period;
 import java.util.Set;
 
 public class UserRegistrationDTO {
@@ -17,7 +19,14 @@ public class UserRegistrationDTO {
     private String email;
 
     @NotNull(message = "Date of birth is required")
+    @Past(message = "Date of birth must be in past")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate dateOfBirth;
+
+    @AssertTrue(message = "User must be at least 18 years old")
+    public boolean isAdult() {
+        return dateOfBirth != null && Period.between(dateOfBirth, LocalDate.now()).getYears() >= 18;
+    }
 
     @Pattern(regexp = "^\\+?[0-9. ()-]{7,25}$", message = "Invalid phone number")
     private String phoneNumber;
@@ -37,7 +46,7 @@ public class UserRegistrationDTO {
     @NotBlank(message = "Preferred currency is required")
     private String preferredCurrency;
 
-    @NotNull(message = "Experience level is required")
+    @NotBlank(message = "Experience level is required")
     private String experienceLevel;
 
     @NotEmpty(message = "At least one interest must be selected")
