@@ -15,27 +15,33 @@ import {theme} from "./theme/theme.ts";
 import Footer from "./components/Footer.tsx";
 import Notifications from "./pages/Notifications.tsx";
 import SignUp from "./pages/SignUp.tsx";
+import {Provider} from "react-redux";
+import store from "./redux/store.ts";
+import Alerts from "./pages/Alerts.tsx";
 
 function App() {
 
     return (
-        <ApolloProvider client={client}>
-            <ThemeProvider theme={theme}>
-                <Router>
-                    <div>
-                        <NavBar />
-                        <Routes>
-                            <Route path="/about" element={<About />} />
-                            <Route path="/" element={<Home />} />
-                            <Route path="/dashboard" element={<Dashboard />} />
-                            <Route path="/notifications" element={<Notifications />} />
-                            <Route path="/sign-up" element={<SignUp />} />
-                        </Routes>
-                        <Footer />
-                    </div>
-                </Router>
-            </ThemeProvider>
-        </ApolloProvider>
+        <Provider store={store}>
+            <ApolloProvider client={client}>
+                <ThemeProvider theme={theme}>
+                    <Router>
+                        <div>
+                            <NavBar />
+                            <Routes>
+                                <Route path="/about" element={<About />} />
+                                <Route path="/" element={<Home />} />
+                                <Route path="/dashboard" element={<Dashboard />} />
+                                <Route path="/notifications" element={<Notifications />} />
+                                <Route path="/sign-up" element={<SignUp />} />
+                                <Route path="/alerts" element={<Alerts />} />
+                            </Routes>
+                            <Footer />
+                        </div>
+                    </Router>
+                </ThemeProvider>
+            </ApolloProvider>
+        </Provider>
     )
 }
 
