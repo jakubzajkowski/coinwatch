@@ -38,9 +38,13 @@ export const ButtonSecondary = styled.button`
     }
 `;
 
-export const LinkCoinWatch = styled(Link)`
+interface LinkCoinWatchProps {
+    color?: string;
+}
+
+export const LinkCoinWatch = styled(Link)<LinkCoinWatchProps>`
     text-decoration: none;
-    color: white;
+    color: ${(props) => props.color || "white"};
 `
 
 export const SearchInput = styled.input`

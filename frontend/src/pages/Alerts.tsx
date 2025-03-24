@@ -1,24 +1,23 @@
-import {useDispatch, useSelector} from "react-redux";
-import {AppDispatch, ReducerType} from "../redux/store.ts";
-import {login} from "../redux/actions.ts";
+import { useSelector } from "react-redux";
+import { ReducerType } from "../redux/store.ts";
+import styled from "styled-components";
 
+const Container = styled.div`
+    padding: 5rem 0.5rem 0 0.5rem;
+`
 
 const Alerts = () =>{
     const { user, isAuthenticated } = useSelector((state: ReducerType) => state.auth);
-    const dispatch = useDispatch<AppDispatch>();
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
 
-        const newUser = { id: '123', name:"awda" };
-        dispatch(login(newUser));
+    if(isAuthenticated){
+        return <Container>
 
-    };
-    return <div style={{margin: "10rem 0 0 0"}}>
-        {isAuthenticated && "Hello World"}
-        {user?.name}
-        Hello World
-        <button onClick={handleSubmit}>Submit</button>
-    </div>
+            </Container>
+    }else{
+        return <Container>
+            <h1>You don't have permission</h1>
+        </Container>
+    }
 }
 
 export default Alerts;
