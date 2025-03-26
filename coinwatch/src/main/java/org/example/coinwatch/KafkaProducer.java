@@ -13,7 +13,8 @@ public class KafkaProducer {
         this.kafkaTemplate = kafkaTemplate;
     }
 
-    public void sendMessage(String message) {
-        kafkaTemplate.send("test-topic", message);
+    public void sendAlert(String symbol, String message) {
+        kafkaTemplate.send("crypto-alerts", symbol, message);
+        System.out.println("🔔 Alert wysłany do Kafki: " + message);
     }
 }

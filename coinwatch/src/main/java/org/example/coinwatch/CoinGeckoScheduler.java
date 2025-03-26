@@ -35,11 +35,10 @@ public class CoinGeckoScheduler {
     @Async
     @Scheduled(fixedRateString = "${scheduler.interval}")
     public void saveUpdateGeckoCryptoCurrency(){
-        kafkaProducer.sendMessage("Hello World");
         logger.info("Starting scheduled task: saveUpdateGeckoCryptoCurrency");
         try {
             List<CryptoCurrencyDTO> cryptoCurrencyDTOS = coinGeckoService.getCryptoCurrencies();
-
+            cryptoPriceHistoryService.monitorPriceChanges();
             for (CryptoCurrencyDTO dto : cryptoCurrencyDTOS){
                 cryptoCurrencyService.saveOrUpdate(dto);
                 cryptoPriceHistoryService.saveCyrrencyPrice(dto);
