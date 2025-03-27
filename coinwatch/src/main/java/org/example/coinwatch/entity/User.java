@@ -5,6 +5,7 @@ import org.example.coinwatch.dto.ExperienceLevel;
 import org.example.coinwatch.dto.Interest;
 
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -51,6 +52,17 @@ public class User {
     private boolean agreedToTerms;
 
     private boolean receiveUpdates;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Subscription> subscriptions = new HashSet<>();
+
+    public Set<Subscription> getSubscriptions() {
+        return subscriptions;
+    }
+
+    public void setSubscriptions(Set<Subscription> subscriptions) {
+        this.subscriptions = subscriptions;
+    }
 
     public Long getId() {
         return id;

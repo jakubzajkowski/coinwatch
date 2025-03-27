@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "crypto_currencies") // Nazwa tabeli w bazie danych
@@ -88,6 +90,17 @@ public class CryptoCurrency {
 
     @Column(name = "last_updated")
     private ZonedDateTime lastUpdated;
+
+    @OneToMany(mappedBy = "cryptoCurrency", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Subscription> subscriptions = new HashSet<>();
+
+    public Set<Subscription> getSubscriptions() {
+        return subscriptions;
+    }
+
+    public void setSubscriptions(Set<Subscription> subscriptions) {
+        this.subscriptions = subscriptions;
+    }
 
     public CryptoCurrency(Long id, String cryptoId, String symbol, String name, String imageUrl, BigDecimal currentPrice, Long marketCap, Integer marketCapRank, Long fullyDilutedValuation, Long totalVolume, BigDecimal high24h, BigDecimal low24h, BigDecimal priceChange24h, BigDecimal priceChangePercentage24h, Long marketCapChange24h, BigDecimal marketCapChangePercentage24h, Long circulatingSupply, Long totalSupply, Long maxSupply, BigDecimal ath, BigDecimal athChangePercentage, ZonedDateTime athDate, BigDecimal atl, BigDecimal atlChangePercentage, ZonedDateTime atlDate, ZonedDateTime lastUpdated) {
         this.id = id;
