@@ -2,6 +2,7 @@ package org.example.coinwatch;
 
 import org.example.coinwatch.dto.CryptoCurrencyDTO;
 import org.example.coinwatch.service.CoinGeckoService;
+import org.example.coinwatch.service.CryptoAlertsService;
 import org.example.coinwatch.service.CryptoCurrencyService;
 import org.example.coinwatch.service.CryptoPriceHistoryService;
 import org.slf4j.Logger;
@@ -24,7 +25,7 @@ public class CoinGeckoScheduler {
     private CoinGeckoService coinGeckoService;
 
     @Autowired
-    private KafkaProducer kafkaProducer;
+    private CryptoAlertsService cryptoAlertsService;
 
     @Autowired
     private CryptoCurrencyService cryptoCurrencyService;
@@ -38,7 +39,7 @@ public class CoinGeckoScheduler {
         logger.info("Starting scheduled task: saveUpdateGeckoCryptoCurrency");
         try {
             List<CryptoCurrencyDTO> cryptoCurrencyDTOS = coinGeckoService.getCryptoCurrencies();
-            cryptoPriceHistoryService.monitorPriceChanges();
+            cryptoAlertsService.monitorPriceChanges();
             for (CryptoCurrencyDTO dto : cryptoCurrencyDTOS){
                 cryptoCurrencyService.saveOrUpdate(dto);
                 cryptoPriceHistoryService.saveCyrrencyPrice(dto);
