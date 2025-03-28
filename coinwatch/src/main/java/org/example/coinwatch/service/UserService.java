@@ -1,5 +1,6 @@
 package org.example.coinwatch.service;
 
+import org.example.coinwatch.component.JwtUtil;
 import org.example.coinwatch.dto.ExperienceLevel;
 import org.example.coinwatch.dto.Interest;
 import org.example.coinwatch.dto.UserRegisterResponseDTO;
@@ -7,6 +8,8 @@ import org.example.coinwatch.dto.UserRegistrationDTO;
 import org.example.coinwatch.entity.User;
 import org.example.coinwatch.respository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +24,13 @@ public class UserService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    CustomUserDetailsService userDetailsService;
+
+    @Autowired
+    private JwtUtil jwtUtil;
+
 
 
     public UserRegisterResponseDTO registerUser(UserRegistrationDTO dto) {
@@ -53,5 +63,18 @@ public class UserService {
         User createdUser = userRepository.save(user);
 
         return new UserRegisterResponseDTO(createdUser.getId(),createdUser.getEmail());
+    }
+    public String login(String username, String password) {
+        try {
+            UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+
+            if (passwordEncoder.matches(password, userDetails.getPassword())) {
+                return jwtUtil.generateToken(username);
+            } else {
+                throw new RuntimeException("Invalid username or password");
+            }
+        } catch (UsernameNotFoundException e) {
+            throw new RuntimeException("Invalid username or password", e);
+        }
     }
 }

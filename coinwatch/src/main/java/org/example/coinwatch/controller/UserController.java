@@ -2,6 +2,8 @@ package org.example.coinwatch.controller;
 
 
 import jakarta.validation.Valid;
+import org.example.coinwatch.dto.UserLoginDTO;
+import org.example.coinwatch.dto.UserLoginResponseDTO;
 import org.example.coinwatch.dto.UserRegisterResponseDTO;
 import org.example.coinwatch.dto.UserRegistrationDTO;
 import org.example.coinwatch.service.UserService;
@@ -22,5 +24,11 @@ public class UserController {
     @PostMapping("/api/signup")
     public ResponseEntity<UserRegisterResponseDTO> signUp(@Valid @RequestBody UserRegistrationDTO userRegistrationDTO){
         return new ResponseEntity<>(userService.registerUser(userRegistrationDTO), HttpStatus.CREATED);
+    }
+
+    @PostMapping("/api/signin")
+    public ResponseEntity<UserLoginResponseDTO> signIn(@Valid @RequestBody UserLoginDTO request){
+        String token = userService.login(request.getEmail(), request.getPassword());
+        return new ResponseEntity<>(new UserLoginResponseDTO(token),HttpStatus.CREATED);
     }
 }
