@@ -2,17 +2,28 @@
 import {FormDataType} from "../pages/SignUp.tsx";
 import axiosClient from "../utils/axiosClient.ts";
 import {AxiosResponse} from "axios";
+import {FormLoginDataType} from "../pages/SignIn.tsx";
 
-type UserDataType = FormDataType
+type UserRegisterDataType = FormDataType
+
+type UserLoginDataType = FormLoginDataType
 
 interface UserRegisterResponseTYpe{
     id: number
     email: string
 }
 
+interface UserLoginResponseType{
+    token: string
+    email: string
+}
+
 class AuthService {
-    async register(userData: UserDataType): Promise<AxiosResponse<UserRegisterResponseTYpe>> {
-        return await axiosClient.post("/api/signup", userData);
+    async register(userData: UserRegisterDataType): Promise<AxiosResponse<UserRegisterResponseTYpe>> {
+        return await axiosClient.post("/api/auth/signup", userData);
+    }
+    async login(userData: UserLoginDataType): Promise<AxiosResponse<UserLoginResponseType>> {
+        return await axiosClient.post("/api/auth/signin", userData);
     }
 }
 

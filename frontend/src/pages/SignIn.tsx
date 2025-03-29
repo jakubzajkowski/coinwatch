@@ -1,7 +1,14 @@
-import {FC} from "react";
+import React, {FC, useState} from "react";
 import BackToHome from "../components/BackToHome.tsx";
 import styled from "styled-components";
-import {ButtonPrimary, ButtonSecondary, InputCoinWatch, LabelCoinWatch} from "../components/styled.tsx";
+import {ButtonPrimary, ButtonSecondary, FormError, InputCoinWatch, LabelCoinWatch} from "../components/styled.tsx";
+import AuthService from "../api/AuthService.ts";
+import {AxiosError} from "axios";
+
+export interface FormLoginDataType {
+    email: string;
+    password: string;
+}
 
 const Container = styled.div`
     display: flex;
@@ -17,6 +24,9 @@ const Container = styled.div`
 const Header = styled.header`
     width: 25%;
     margin: 1rem;
+    @media (max-width: 950px) {
+        width: 95%;
+    }
 `
 const Title = styled.h1`
     color: #ffffff;
@@ -43,6 +53,33 @@ const OauthButtonsContainer = styled.div`
 `
 
 const SignIn : FC = () =>{
+    const [userData,setUserData] = useState<FormLoginDataType>({email: "", password: ""})
+    const [error,setError] = useState<string | Record<keyof FormLoginDataType, string>>()
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target;
+        setUserData({
+            ...userData,
+            [name]: value,
+        });
+    };
+
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) =>{
+        e.preventDefault()
+        try{
+            const {data} = await AuthService.login(userData);
+            console.log(data)
+        }catch (e:unknown){
+            if (e instanceof AxiosError) {
+                if(e.response) {
+                    const serverError = e.response.data;
+                    console.log(serverError)
+                    setError(serverError)
+                }
+            }
+        }
+    }
+
     return <Container>
         <Header>
             <BackToHome />
@@ -51,18 +88,21 @@ const SignIn : FC = () =>{
                 <Description>Sign in to your CoinWatch account</Description>
             </div>
         </Header>
-        <Form>
+        <Form onSubmit={handleSubmit}>
             <div style={{width: '100%', margin: '1rem 0rem'}}>
                 <LabelCoinWatch htmlFor="email">Email</LabelCoinWatch>
-                <InputCoinWatch name="email" margin="0.5rem 0" width="100%" placeholder="john@email.com"/>
+                <InputCoinWatch name="email" onChange={handleChange} margin="0.5rem 0" width="100%" placeholder="john@email.com"/>
+                {error && <FormError>{typeof error !== "string" ? error?.email : ""}</FormError>}
             </div>
             <div style={{width: '100%', margin: '1rem 0rem'}}>
                 <LabelCoinWatch htmlFor="email">Password</LabelCoinWatch>
-                <InputCoinWatch name="password" type="password" margin="0.5rem 0" width="100%"/>
+                <InputCoinWatch onChange={handleChange} name="password" type="password" margin="0.5rem 0" width="100%"/>
+                {error && <FormError>{typeof error !== "string" ? error?.password : ""}</FormError>}
                 <p style={{color: "#b4b4b4", fontSize: '0.8rem', textAlign: "right"}}>
                     Forgot your password?
                 </p>
             </div>
+            {typeof error === "string" && <FormError>{error}!</FormError>}
             <ButtonPrimary width={"100%"}>Sign In</ButtonPrimary>
             <p style={{color: "#b4b4b4", fontSize: '0.8rem', textAlign: "center", margin: "0.5rem"}}>
                 OR CONTINUE WITH
