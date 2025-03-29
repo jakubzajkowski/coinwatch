@@ -2,7 +2,7 @@ import {LOGIN_SUCCESS, LOGOUT, AuthActionTypes } from './actions';
 import {UnknownAction} from "redux";
 
 export interface AuthState {
-    user: { id: string, name: string } | null;
+    user: { token: string, email: string } | null;
     isAuthenticated: boolean;
     error: string | null;
 }

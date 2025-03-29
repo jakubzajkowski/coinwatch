@@ -4,6 +4,9 @@ import styled from "styled-components";
 import {ButtonPrimary, ButtonSecondary, FormError, InputCoinWatch, LabelCoinWatch} from "../components/styled.tsx";
 import AuthService from "../api/AuthService.ts";
 import {AxiosError} from "axios";
+import {login} from "../redux/actions.ts";
+import {useDispatch} from "react-redux";
+import {useNavigate, useNavigation} from "react-router-dom";
 
 export interface FormLoginDataType {
     email: string;
@@ -53,6 +56,8 @@ const OauthButtonsContainer = styled.div`
 `
 
 const SignIn : FC = () =>{
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
     const [userData,setUserData] = useState<FormLoginDataType>({email: "", password: ""})
     const [error,setError] = useState<string | Record<keyof FormLoginDataType, string>>()
 
@@ -68,12 +73,12 @@ const SignIn : FC = () =>{
         e.preventDefault()
         try{
             const {data} = await AuthService.login(userData);
-            console.log(data)
+            dispatch(login(data));
+            navigate("/dashboard")
         }catch (e:unknown){
             if (e instanceof AxiosError) {
                 if(e.response) {
                     const serverError = e.response.data;
-                    console.log(serverError)
                     setError(serverError)
                 }
             }
