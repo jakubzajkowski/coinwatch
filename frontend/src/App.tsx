@@ -19,6 +19,7 @@ import {Provider} from "react-redux";
 import store from "./redux/store.ts";
 import Alerts from "./pages/Alerts.tsx";
 import NotFound from "./pages/404.tsx";
+import SignIn from "./pages/SignIn.tsx";
 
 function App() {
 
@@ -35,6 +36,7 @@ function App() {
                                 <Route path="/dashboard" element={<Dashboard />} />
                                 <Route path="/notifications" element={<Notifications />} />
                                 <Route path="/sign-up" element={<SignUp />} />
+                                <Route path="/sign-in" element={<SignIn />} />
                                 <Route path="/alerts" element={<Alerts />} />
 
                                 <Route path="*" element={<NotFound />} />

@@ -4,7 +4,10 @@ import {FormControlLabel, MenuItem, Radio, SelectChangeEvent, Typography} from "
 import Select from '@mui/material/Select';
 import {FC, useState} from "react";
 
-export const ButtonPrimary = styled.button`
+interface ButtonPrimaryProps {
+    width?: string;
+}
+export const ButtonPrimary = styled.button<ButtonPrimaryProps>`
     padding: 0.6rem 1.2rem;                
     color: black;                           
     background-color: white;                
@@ -14,14 +17,17 @@ export const ButtonPrimary = styled.button`
     outline: none;                          
     cursor: pointer;                       
     font-weight: 600;                       
-    border: none;         
+    border: none;
+    width: ${(props)=>props.width || 'auto'};
 
     &:hover {
         opacity: 0.9;                     
     }
 `;
-
-export const ButtonSecondary = styled.button`
+interface ButtonSecondaryProps {
+    width?: string;
+}
+export const ButtonSecondary = styled.button<ButtonSecondaryProps>`
     padding: 0.6rem 1.2rem;                 
     color: white;                           
     background-color: black;              
@@ -31,7 +37,8 @@ export const ButtonSecondary = styled.button`
     font-size: 0.9rem;                    
     cursor: pointer;                      
     font-weight: 600;                       
-    transition: all 0.3s ease;               
+    transition: all 0.3s ease;       
+    width: ${(props)=>props.width || 'auto'};
 
     &:hover {
         opacity: 0.9;                       
