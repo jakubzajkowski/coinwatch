@@ -1,5 +1,6 @@
 package org.example.coinwatch.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.example.coinwatch.KafkaProducer;
 import org.example.coinwatch.entity.CryptoCurrency;
 import org.example.coinwatch.entity.CryptoPriceHistory;
@@ -43,7 +44,7 @@ public class CryptoAlertsService {
         }
     }
 
-    public void shortTermTrendChange(String symbol) {
+    public void shortTermTrendChange(String symbol) throws JsonProcessingException {
         ZonedDateTime fiveMinutesAgo = ZonedDateTime.now().minusMinutes(5);
         List<CryptoPriceHistory> historyList = cryptoPriceHistoryRepository.findBySymbolAndRecordedAtAfter(symbol, fiveMinutesAgo);
 
@@ -58,12 +59,8 @@ public class CryptoAlertsService {
                 .divide(oldPrice, 4, BigDecimal.ROUND_HALF_UP)
                 .multiply(BigDecimal.valueOf(100));
 
-        if (changePercent.abs().compareTo(BigDecimal.valueOf(1)) > 0) {
-            String alertMessage = String.format(
-                    "📈 TREND ALERT: %s zmienił się o %.2f%% w ciągu 5 min! (stara: %s, nowa: %s)",
-                    symbol, changePercent, oldPrice, currentPrice
-            );
-            kafkaProducer.sendAlert(symbol, alertMessage);
+        if (changePercent.abs().compareTo(BigDecimal.valueOf(0.01)) > 0) {
+            kafkaProducer.sendPriceChangeAlert(symbol, changePercent, oldPrice, currentPrice);
         }
     }
 
