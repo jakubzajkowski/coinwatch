@@ -1,5 +1,6 @@
 package org.example.coinwatch.config;
 
+import jakarta.servlet.Filter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -21,7 +22,7 @@ public class SecurityConfig {
     private CustomUserDetailsService userDetailsService;
 
     @Autowired
-    private JwtUtil jwtUtil;
+    private JwtFilter jwtFilter;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -32,11 +33,11 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .csrf(csrf -> csrf.disable())
-                .authorizeHttpRequests(authz -> authz
-                        .requestMatchers("/auth/**").permitAll()
+                .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers("/api/auth/signin","/api/auth/signup").permitAll()
                         .anyRequest().authenticated()
                 )
-                .addFilterBefore(new JwtFilter(jwtUtil, userDetailsService), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
 }

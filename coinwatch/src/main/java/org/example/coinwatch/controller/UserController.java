@@ -21,14 +21,18 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @PostMapping("/api/signup")
+    @PostMapping("/api/auth/signup")
     public ResponseEntity<UserRegisterResponseDTO> signUp(@Valid @RequestBody UserRegistrationDTO userRegistrationDTO){
         return new ResponseEntity<>(userService.registerUser(userRegistrationDTO), HttpStatus.CREATED);
     }
 
-    @PostMapping("/api/signin")
+    @PostMapping("/api/auth/signin")
     public ResponseEntity<UserLoginResponseDTO> signIn(@Valid @RequestBody UserLoginDTO request){
-        String token = userService.login(request.getEmail(), request.getPassword());
-        return new ResponseEntity<>(new UserLoginResponseDTO(token),HttpStatus.CREATED);
+        return new ResponseEntity<>(userService.login(request.getEmail(),request.getPassword()),HttpStatus.OK);
+    }
+
+    @PostMapping("/api/test")
+    public ResponseEntity<String> test(){
+        return new ResponseEntity<>("Hello world",HttpStatus.OK);
     }
 }

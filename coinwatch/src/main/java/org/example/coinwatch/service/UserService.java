@@ -1,15 +1,12 @@
 package org.example.coinwatch.service;
 
 import org.example.coinwatch.component.JwtUtil;
-import org.example.coinwatch.dto.ExperienceLevel;
-import org.example.coinwatch.dto.Interest;
-import org.example.coinwatch.dto.UserRegisterResponseDTO;
-import org.example.coinwatch.dto.UserRegistrationDTO;
+import org.example.coinwatch.dto.*;
 import org.example.coinwatch.entity.User;
+import org.example.coinwatch.exception.InvalidUsernameOrPasswordException;
 import org.example.coinwatch.respository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -64,17 +61,15 @@ public class UserService {
 
         return new UserRegisterResponseDTO(createdUser.getId(),createdUser.getEmail());
     }
-    public String login(String username, String password) {
-        try {
-            UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+    public UserLoginResponseDTO login(String username, String password) {
+        UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
-            if (passwordEncoder.matches(password, userDetails.getPassword())) {
-                return jwtUtil.generateToken(username);
-            } else {
-                throw new RuntimeException("Invalid username or password");
-            }
-        } catch (UsernameNotFoundException e) {
-            throw new RuntimeException("Invalid username or password", e);
+        if (passwordEncoder.matches(password, userDetails.getPassword())) {
+            String token = jwtUtil.generateToken(username);
+            String email = userDetails.getUsername();
+            return new UserLoginResponseDTO(token,email);
+        } else {
+            throw new InvalidUsernameOrPasswordException("Invalid username or password");
         }
     }
 }
