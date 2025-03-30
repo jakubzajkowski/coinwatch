@@ -10,9 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Set;
 
 @Service
 public class KafkaConsumer {
@@ -29,6 +29,7 @@ public class KafkaConsumer {
         this.messagingTemplate = messagingTemplate;
     }
 
+    @Transactional
     @KafkaListener(topics = "crypto-alerts", groupId = "crypto-alert-group", containerFactory = "kafkaListenerContainerFactory")
     public void consumeAlert(String alert) throws JsonProcessingException {
         PriceChangeAlert priceChangeAlert = objectMapper.readValue(alert,PriceChangeAlert.class);
