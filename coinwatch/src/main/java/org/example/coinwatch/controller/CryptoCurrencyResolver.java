@@ -1,7 +1,9 @@
 package org.example.coinwatch.controller;
 
 import org.example.coinwatch.entity.CryptoCurrency;
+import org.example.coinwatch.entity.CryptoPriceHistory;
 import org.example.coinwatch.respository.CryptoCurrencyRepository;
+import org.example.coinwatch.respository.CryptoPriceHistoryRepository;
 import org.example.coinwatch.service.CryptoCurrencyService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,6 +25,9 @@ public class CryptoCurrencyResolver {
     @Autowired
     private CryptoCurrencyRepository cryptoCurrencyRepository;
 
+    @Autowired
+    private CryptoPriceHistoryRepository cryptoPriceHistoryRepository;
+
     @QueryMapping
     public List<CryptoCurrency> getCryptoCurrencies(
             @Argument int limit,
@@ -39,6 +44,7 @@ public class CryptoCurrencyResolver {
 
         return cryptoCurrencyRepository.findAll(pageable).getContent();
     }
+
     @QueryMapping
     public CryptoCurrency getCryptoCurrencyByCryptoId(@Argument String cryptoId){
         Optional<CryptoCurrency> cryptoCurrency = cryptoCurrencyRepository.findByCryptoId(cryptoId);
@@ -50,4 +56,8 @@ public class CryptoCurrencyResolver {
         return cryptoCurrency.get();
     }
 
+    @QueryMapping
+    public List<CryptoPriceHistory> getCryptoPriceHistory(@Argument String cryptoId){
+        return cryptoPriceHistoryRepository.findByCryptoIdOrderByRecordedAtAsc(cryptoId);
+    }
 }

@@ -43,7 +43,17 @@ type CryptoCurrency {
     lastUpdated: String
 }
 
+type CryptoPriceHistory {
+    id: ID
+    cryptoId: String
+    symbol: String
+    price: Float
+    recordedAt: String
+}
+
+
 type Query {
     getCryptoCurrencyByCryptoId(cryptoId: String!): CryptoCurrency
     getCryptoCurrencies(limit: Int, orderBy: String): [CryptoCurrency]
+    getCryptoPriceHistory(cryptoId: String!): [CryptoPriceHistory]
 }

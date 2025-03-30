@@ -8,4 +8,5 @@ import java.util.List;
 
 public interface CryptoPriceHistoryRepository extends JpaRepository<CryptoPriceHistory,Long> {
     List<CryptoPriceHistory> findBySymbolAndRecordedAtAfter(String symbol, ZonedDateTime timestamp);
+    List<CryptoPriceHistory> findByCryptoIdOrderByRecordedAtAsc(String cryptoId);
 }
