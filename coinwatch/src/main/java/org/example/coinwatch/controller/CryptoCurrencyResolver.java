@@ -26,6 +26,9 @@ public class CryptoCurrencyResolver {
     private CryptoCurrencyRepository cryptoCurrencyRepository;
 
     @Autowired
+    private CryptoCurrencyService cryptoCurrencyService;
+
+    @Autowired
     private CryptoPriceHistoryRepository cryptoPriceHistoryRepository;
 
     @QueryMapping
@@ -33,27 +36,12 @@ public class CryptoCurrencyResolver {
             @Argument int limit,
             @Argument String orderBy
     ){
-        List<String> allowedFields = List.of("currentPrice", "marketCap", "priceChangePercentage24h","cryptoId","id");
-        if (!allowedFields.contains(orderBy)) {
-            logger.error("Invalid field for sorting: {}", orderBy);
-            throw new IllegalArgumentException("Invalid sorting field: " + orderBy);
-        }
-
-        Sort sort = Sort.by(Sort.Order.asc(orderBy));
-        Pageable pageable = PageRequest.of(0, limit, sort);
-
-        return cryptoCurrencyRepository.findAll(pageable).getContent();
+      return cryptoCurrencyService.getCryptoCurrencies(orderBy,limit);
     }
 
     @QueryMapping
     public CryptoCurrency getCryptoCurrencyByCryptoId(@Argument String cryptoId){
-        Optional<CryptoCurrency> cryptoCurrency = cryptoCurrencyRepository.findByCryptoId(cryptoId);
-
-        if (cryptoCurrency.isEmpty()) {
-            logger.error("CryptoCurrency with cryptoId: {} not found", cryptoId);
-        }
-
-        return cryptoCurrency.get();
+       return cryptoCurrencyService.getCryptoCurrencyById(cryptoId);
     }
 
     @QueryMapping

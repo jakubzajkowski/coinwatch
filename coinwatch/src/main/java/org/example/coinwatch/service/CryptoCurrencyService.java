@@ -4,14 +4,22 @@ import jakarta.transaction.Transactional;
 import org.example.coinwatch.dto.CryptoCurrencyDTO;
 import org.example.coinwatch.entity.CryptoCurrency;
 import org.example.coinwatch.respository.CryptoCurrencyRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CryptoCurrencyService {
+    private final Logger logger = LoggerFactory.getLogger(CryptoCurrencyService.class);
+
     @Autowired
     private CryptoCurrencyRepository cryptoCurrencyRepository;
 
@@ -79,5 +87,23 @@ public class CryptoCurrencyService {
                             cryptoCurrencyRepository.save(cryptoCurrency);
                         }
                 );
+    }
+    public List<CryptoCurrency> getCryptoCurrencies(String orderBy, int limit){
+        List<String> allowedFields = List.of("currentPrice", "marketCap", "priceChangePercentage24h","cryptoId","id");
+        if (!allowedFields.contains(orderBy)) {
+            logger.error("Invalid field for sorting: {}", orderBy);
+            throw new IllegalArgumentException("Invalid sorting field: " + orderBy);
+        }
+
+        Sort sort = Sort.by(Sort.Order.asc(orderBy));
+        Pageable pageable = PageRequest.of(0, limit, sort);
+
+        return cryptoCurrencyRepository.findAll(pageable).getContent();
+    }
+    public CryptoCurrency getCryptoCurrencyById(String cryptoId){
+        return cryptoCurrencyRepository.findByCryptoId(cryptoId).orElseThrow(()->{
+            logger.error("CryptoCurrency with cryptoId: {} not found", cryptoId);
+            return new IllegalArgumentException("Error");
+        });
     }
 }

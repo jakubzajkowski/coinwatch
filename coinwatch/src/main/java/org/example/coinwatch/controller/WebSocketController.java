@@ -13,9 +13,4 @@ public class WebSocketController {
     public WebSocketController(SimpMessagingTemplate messagingTemplate) {
         this.messagingTemplate = messagingTemplate;
     }
-
-    @MessageMapping("/hello")
-    public void greeting(String message) {
-        messagingTemplate.convertAndSend("/topic/greetings", "Hello, " + message);
-    }
 }
