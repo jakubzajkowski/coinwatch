@@ -8,9 +8,6 @@ import org.example.coinwatch.service.CryptoCurrencyService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -33,10 +30,11 @@ public class CryptoCurrencyResolver {
 
     @QueryMapping
     public List<CryptoCurrency> getCryptoCurrencies(
-            @Argument int limit,
-            @Argument String orderBy
+            @Argument Optional<Integer> limit,
+            @Argument Optional<String> orderBy
     ){
-      return cryptoCurrencyService.getCryptoCurrencies(orderBy,limit);
+        int finalLimit = limit.orElse(Integer.MAX_VALUE);
+      return cryptoCurrencyService.getCryptoCurrencies(orderBy.orElse(null),finalLimit);
     }
 
     @QueryMapping

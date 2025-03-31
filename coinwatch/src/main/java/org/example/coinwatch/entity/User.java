@@ -53,7 +53,7 @@ public class User {
 
     private boolean receiveUpdates;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true,fetch = FetchType.LAZY)
     private Set<Subscription> subscriptions = new HashSet<>();
 
     public Set<Subscription> getSubscriptions() {

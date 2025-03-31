@@ -91,7 +91,7 @@ public class CryptoCurrency {
     @Column(name = "last_updated")
     private ZonedDateTime lastUpdated;
 
-    @OneToMany(mappedBy = "cryptoCurrency", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "cryptoCurrency", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private Set<Subscription> subscriptions = new HashSet<>();
 
     public Set<Subscription> getSubscriptions() {

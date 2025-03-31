@@ -1,3 +1,11 @@
+enum ExperienceLevel {
+    BEGINNER, INTERMEDIATE, EXPERT
+}
+
+enum Interest {
+    BITCOIN, TRADING, ETHEREUM, MINING, DEFI, STAKING, NFTS, NEWS
+}
+
 type Mutation {
     addSubscription(userId: ID!, cryptoId: ID!): Subscription
 }
@@ -10,8 +18,20 @@ type Subscription {
 }
 
 type User {
-    id: ID
-    email: String
+    id: ID!
+    firstName: String!
+    lastName: String!
+    email: String!
+    dateOfBirth: String!
+    phoneNumber: String
+    country: String!
+    password: String!
+    preferredCurrency: String!
+    experienceLevel: ExperienceLevel!
+    interests: [Interest!]!
+    agreedToTerms: Boolean!
+    receiveUpdates: Boolean!
+    subscriptions: [Subscription!]!
 }
 
 type CryptoCurrency {
@@ -53,6 +73,7 @@ type CryptoPriceHistory {
 
 
 type Query {
+    getUserById(id: ID!): User
     getCryptoCurrencyByCryptoId(cryptoId: String!): CryptoCurrency
     getCryptoCurrencies(limit: Int, orderBy: String): [CryptoCurrency]
     getCryptoPriceHistory(cryptoId: String!): [CryptoPriceHistory]

@@ -90,6 +90,11 @@ public class CryptoCurrencyService {
     }
     public List<CryptoCurrency> getCryptoCurrencies(String orderBy, int limit){
         List<String> allowedFields = List.of("currentPrice", "marketCap", "priceChangePercentage24h","cryptoId","id");
+        if (orderBy == null || orderBy.isBlank()) {
+            logger.warn("orderBy is null or empty, using default sorting field: 'cryptoId'");
+            orderBy = "cryptoId";
+        }
+
         if (!allowedFields.contains(orderBy)) {
             logger.error("Invalid field for sorting: {}", orderBy);
             throw new IllegalArgumentException("Invalid sorting field: " + orderBy);

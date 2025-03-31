@@ -72,4 +72,7 @@ public class UserService {
             throw new InvalidUsernameOrPasswordException("Invalid username or password");
         }
     }
+    public User getUserById(Long id){
+        return userRepository.findById(id).orElseThrow(()->new IllegalArgumentException("Invalid user id"));
+    }
 }
