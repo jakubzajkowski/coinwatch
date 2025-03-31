@@ -67,7 +67,8 @@ public class UserService {
         if (passwordEncoder.matches(password, userDetails.getPassword())) {
             String token = jwtUtil.generateToken(username);
             String email = userDetails.getUsername();
-            return new UserLoginResponseDTO(token,email);
+            User user = userRepository.findByEmail(email).orElseThrow(()->new IllegalArgumentException("User not found"));
+            return new UserLoginResponseDTO(token,email,user.getId(),user.getFirstName(),user.getLastName());
         } else {
             throw new InvalidUsernameOrPasswordException("Invalid username or password");
         }
