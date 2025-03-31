@@ -1,5 +1,6 @@
 package org.example.coinwatch;
 
+import org.example.coinwatch.kafka.KafkaProducer;
 import org.example.coinwatch.service.CoinGeckoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;

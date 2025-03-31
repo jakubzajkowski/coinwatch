@@ -1,19 +1,13 @@
 package org.example.coinwatch.service;
 
 import jakarta.transaction.Transactional;
-import org.example.coinwatch.KafkaProducer;
 import org.example.coinwatch.dto.CryptoCurrencyDTO;
 import org.example.coinwatch.entity.CryptoPriceHistory;
-import org.example.coinwatch.respository.CryptoCurrencyRepository;
 import org.example.coinwatch.respository.CryptoPriceHistoryRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.math.BigDecimal;
-import java.time.ZonedDateTime;
-import java.util.List;
 
 @Service
 public class CryptoPriceHistoryService {

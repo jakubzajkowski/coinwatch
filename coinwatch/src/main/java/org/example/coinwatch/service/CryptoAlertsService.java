@@ -1,7 +1,7 @@
 package org.example.coinwatch.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import org.example.coinwatch.KafkaProducer;
+import org.example.coinwatch.kafka.KafkaProducer;
 import org.example.coinwatch.entity.CryptoCurrency;
 import org.example.coinwatch.entity.CryptoPriceHistory;
 import org.example.coinwatch.respository.CryptoCurrencyRepository;
@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.time.ZonedDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class CryptoAlertsService {
