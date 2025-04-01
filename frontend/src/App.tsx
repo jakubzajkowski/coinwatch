@@ -20,6 +20,7 @@ import store from "./redux/store.ts";
 import Alerts from "./pages/Alerts.tsx";
 import NotFound from "./pages/404.tsx";
 import SignIn from "./pages/SignIn.tsx";
+import Crypto from "./pages/Crypto.tsx";
 
 function App() {
 
@@ -38,6 +39,7 @@ function App() {
                                 <Route path="/sign-up" element={<SignUp />} />
                                 <Route path="/sign-in" element={<SignIn />} />
                                 <Route path="/alerts" element={<Alerts />} />
+                                <Route path="/crypto/:id" element={<Crypto />} />
 
                                 <Route path="*" element={<NotFound />} />
                             </Routes>

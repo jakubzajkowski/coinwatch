@@ -47,10 +47,49 @@ export type CryptoCurrency = {
   totalVolume?: Maybe<Scalars['Float']['output']>;
 };
 
+export type CryptoPriceHistory = {
+  __typename?: 'CryptoPriceHistory';
+  cryptoId?: Maybe<Scalars['String']['output']>;
+  id?: Maybe<Scalars['ID']['output']>;
+  price?: Maybe<Scalars['Float']['output']>;
+  recordedAt?: Maybe<Scalars['String']['output']>;
+  symbol?: Maybe<Scalars['String']['output']>;
+};
+
+export enum ExperienceLevel {
+  Beginner = 'BEGINNER',
+  Expert = 'EXPERT',
+  Intermediate = 'INTERMEDIATE'
+}
+
+export enum Interest {
+  Bitcoin = 'BITCOIN',
+  Defi = 'DEFI',
+  Ethereum = 'ETHEREUM',
+  Mining = 'MINING',
+  News = 'NEWS',
+  Nfts = 'NFTS',
+  Staking = 'STAKING',
+  Trading = 'TRADING'
+}
+
+export type Mutation = {
+  __typename?: 'Mutation';
+  addSubscription?: Maybe<Subscription>;
+};
+
+
+export type MutationAddSubscriptionArgs = {
+  cryptoId: Scalars['ID']['input'];
+  userId: Scalars['ID']['input'];
+};
+
 export type Query = {
   __typename?: 'Query';
   getCryptoCurrencies?: Maybe<Array<Maybe<CryptoCurrency>>>;
   getCryptoCurrencyByCryptoId?: Maybe<CryptoCurrency>;
+  getCryptoPriceHistory?: Maybe<Array<Maybe<CryptoPriceHistory>>>;
+  getUserById?: Maybe<User>;
 };
 
 
@@ -64,6 +103,42 @@ export type QueryGetCryptoCurrencyByCryptoIdArgs = {
   cryptoId: Scalars['String']['input'];
 };
 
+
+export type QueryGetCryptoPriceHistoryArgs = {
+  cryptoId: Scalars['String']['input'];
+};
+
+
+export type QueryGetUserByIdArgs = {
+  id: Scalars['ID']['input'];
+};
+
+export type Subscription = {
+  __typename?: 'Subscription';
+  cryptoCurrency?: Maybe<CryptoCurrency>;
+  id?: Maybe<Scalars['ID']['output']>;
+  subscriptionDate?: Maybe<Scalars['String']['output']>;
+  user?: Maybe<User>;
+};
+
+export type User = {
+  __typename?: 'User';
+  agreedToTerms: Scalars['Boolean']['output'];
+  country: Scalars['String']['output'];
+  dateOfBirth: Scalars['String']['output'];
+  email: Scalars['String']['output'];
+  experienceLevel: ExperienceLevel;
+  firstName: Scalars['String']['output'];
+  id: Scalars['ID']['output'];
+  interests: Array<Interest>;
+  lastName: Scalars['String']['output'];
+  password: Scalars['String']['output'];
+  phoneNumber?: Maybe<Scalars['String']['output']>;
+  preferredCurrency: Scalars['String']['output'];
+  receiveUpdates: Scalars['Boolean']['output'];
+  subscriptions: Array<Subscription>;
+};
+
 export type GetCryptoCurrenciesQueryVariables = Exact<{
   limit: Scalars['Int']['input'];
   orderBy: Scalars['String']['input'];
@@ -71,6 +146,13 @@ export type GetCryptoCurrenciesQueryVariables = Exact<{
 
 
 export type GetCryptoCurrenciesQuery = { __typename?: 'Query', getCryptoCurrencies?: Array<{ __typename?: 'CryptoCurrency', id: string, name: string, symbol: string, currentPrice?: number | null, priceChangePercentage24h?: number | null, marketCap?: number | null, totalVolume?: number | null, imageUrl?: string | null } | null> | null };
+
+export type GetCryptoCurrencyByCryptoIdQueryVariables = Exact<{
+  cryptoId: Scalars['String']['input'];
+}>;
+
+
+export type GetCryptoCurrencyByCryptoIdQuery = { __typename?: 'Query', getCryptoCurrencyByCryptoId?: { __typename?: 'CryptoCurrency', id: string, name: string, symbol: string, currentPrice?: number | null, priceChangePercentage24h?: number | null, marketCap?: number | null, marketCapChange24h?: number | null, circulatingSupply?: number | null, priceChange24h?: number | null, totalVolume?: number | null, imageUrl?: string | null } | null };
 
 
 export const GetCryptoCurrenciesDocument = gql`
@@ -121,3 +203,53 @@ export type GetCryptoCurrenciesQueryHookResult = ReturnType<typeof useGetCryptoC
 export type GetCryptoCurrenciesLazyQueryHookResult = ReturnType<typeof useGetCryptoCurrenciesLazyQuery>;
 export type GetCryptoCurrenciesSuspenseQueryHookResult = ReturnType<typeof useGetCryptoCurrenciesSuspenseQuery>;
 export type GetCryptoCurrenciesQueryResult = Apollo.QueryResult<GetCryptoCurrenciesQuery, GetCryptoCurrenciesQueryVariables>;
+export const GetCryptoCurrencyByCryptoIdDocument = gql`
+    query getCryptoCurrencyByCryptoId($cryptoId: String!) {
+  getCryptoCurrencyByCryptoId(cryptoId: $cryptoId) {
+    id
+    name
+    symbol
+    currentPrice
+    priceChangePercentage24h
+    marketCap
+    marketCapChange24h
+    circulatingSupply
+    priceChange24h
+    totalVolume
+    imageUrl
+  }
+}
+    `;
+
+/**
+ * __useGetCryptoCurrencyByCryptoIdQuery__
+ *
+ * To run a query within a React component, call `useGetCryptoCurrencyByCryptoIdQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCryptoCurrencyByCryptoIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetCryptoCurrencyByCryptoIdQuery({
+ *   variables: {
+ *      cryptoId: // value for 'cryptoId'
+ *   },
+ * });
+ */
+export function useGetCryptoCurrencyByCryptoIdQuery(baseOptions: Apollo.QueryHookOptions<GetCryptoCurrencyByCryptoIdQuery, GetCryptoCurrencyByCryptoIdQueryVariables> & ({ variables: GetCryptoCurrencyByCryptoIdQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetCryptoCurrencyByCryptoIdQuery, GetCryptoCurrencyByCryptoIdQueryVariables>(GetCryptoCurrencyByCryptoIdDocument, options);
+      }
+export function useGetCryptoCurrencyByCryptoIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetCryptoCurrencyByCryptoIdQuery, GetCryptoCurrencyByCryptoIdQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetCryptoCurrencyByCryptoIdQuery, GetCryptoCurrencyByCryptoIdQueryVariables>(GetCryptoCurrencyByCryptoIdDocument, options);
+        }
+export function useGetCryptoCurrencyByCryptoIdSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetCryptoCurrencyByCryptoIdQuery, GetCryptoCurrencyByCryptoIdQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetCryptoCurrencyByCryptoIdQuery, GetCryptoCurrencyByCryptoIdQueryVariables>(GetCryptoCurrencyByCryptoIdDocument, options);
+        }
+export type GetCryptoCurrencyByCryptoIdQueryHookResult = ReturnType<typeof useGetCryptoCurrencyByCryptoIdQuery>;
+export type GetCryptoCurrencyByCryptoIdLazyQueryHookResult = ReturnType<typeof useGetCryptoCurrencyByCryptoIdLazyQuery>;
+export type GetCryptoCurrencyByCryptoIdSuspenseQueryHookResult = ReturnType<typeof useGetCryptoCurrencyByCryptoIdSuspenseQuery>;
+export type GetCryptoCurrencyByCryptoIdQueryResult = Apollo.QueryResult<GetCryptoCurrencyByCryptoIdQuery, GetCryptoCurrencyByCryptoIdQueryVariables>;

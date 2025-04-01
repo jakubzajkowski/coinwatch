@@ -4,9 +4,10 @@ import styled from "styled-components";
 import {ButtonPrimary, ButtonSecondary, FormError, InputCoinWatch, LabelCoinWatch} from "../components/styled.tsx";
 import AuthService from "../api/AuthService.ts";
 import {AxiosError} from "axios";
-import {login} from "../redux/actions.ts";
 import {useDispatch} from "react-redux";
-import {useNavigate, useNavigation} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
+import {AppDispatch} from "../redux/store.ts";
+import {login} from "../redux/authSlice.ts";
 
 export interface FormLoginDataType {
     email: string;
@@ -57,7 +58,7 @@ const OauthButtonsContainer = styled.div`
 
 const SignIn : FC = () =>{
     const navigate = useNavigate();
-    const dispatch = useDispatch();
+    const dispatch = useDispatch<AppDispatch>();
     const [userData,setUserData] = useState<FormLoginDataType>({email: "", password: ""})
     const [error,setError] = useState<string | Record<keyof FormLoginDataType, string>>()
 

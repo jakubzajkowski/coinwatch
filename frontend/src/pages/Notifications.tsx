@@ -17,7 +17,7 @@ const Notifications = () =>{
                 client.subscribe('/topic/greetings', (message) => {
                     setMessages((prevMessages) => [...prevMessages, message.body]);
                 });
-                client.subscribe('/topic/kafka-messages', (message) => {
+                client.subscribe('/topic/crypto-alerts', (message) => {
                     setMessages((prevMessages) => [...prevMessages, message.body]);
                 });
             },

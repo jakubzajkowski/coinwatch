@@ -1,5 +1,4 @@
 import { useSelector } from "react-redux";
-import { ReducerType } from "../redux/store.ts";
 import styled from "styled-components";
 import {ButtonSecondary} from "../components/styled.tsx";
 

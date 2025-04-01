@@ -14,3 +14,21 @@ export const GET_CURRENCIES_FOR_MARKETOVERVIEW =  gql`
     }
   }
 `
+
+export const GET_CURRENCIES_BY_ID_FOR_CRYPTO = gql`
+  query getCryptoCurrencyByCryptoId($cryptoId: String!){
+    getCryptoCurrencyByCryptoId(cryptoId: $cryptoId) {
+      id
+      name
+      symbol
+      currentPrice
+      priceChangePercentage24h
+      marketCap
+      marketCapChange24h
+      circulatingSupply
+      priceChange24h
+      totalVolume
+      imageUrl
+    }
+  }
+`

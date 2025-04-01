@@ -16,6 +16,9 @@ interface UserRegisterResponseTYpe{
 interface UserLoginResponseType{
     token: string
     email: string
+    firstname: string
+    id: number
+    lastname: string
 }
 
 class AuthService {
