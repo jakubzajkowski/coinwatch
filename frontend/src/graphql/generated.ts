@@ -154,6 +154,13 @@ export type GetCryptoCurrencyByCryptoIdQueryVariables = Exact<{
 
 export type GetCryptoCurrencyByCryptoIdQuery = { __typename?: 'Query', getCryptoCurrencyByCryptoId?: { __typename?: 'CryptoCurrency', id: string, name: string, symbol: string, currentPrice?: number | null, priceChangePercentage24h?: number | null, marketCap?: number | null, marketCapChange24h?: number | null, circulatingSupply?: number | null, priceChange24h?: number | null, totalVolume?: number | null, imageUrl?: string | null } | null };
 
+export type GetCryptoPriceHistoryQueryVariables = Exact<{
+  cryptoId: Scalars['String']['input'];
+}>;
+
+
+export type GetCryptoPriceHistoryQuery = { __typename?: 'Query', getCryptoPriceHistory?: Array<{ __typename?: 'CryptoPriceHistory', price?: number | null, recordedAt?: string | null } | null> | null };
+
 
 export const GetCryptoCurrenciesDocument = gql`
     query getCryptoCurrencies($limit: Int!, $orderBy: String!) {
@@ -253,3 +260,44 @@ export type GetCryptoCurrencyByCryptoIdQueryHookResult = ReturnType<typeof useGe
 export type GetCryptoCurrencyByCryptoIdLazyQueryHookResult = ReturnType<typeof useGetCryptoCurrencyByCryptoIdLazyQuery>;
 export type GetCryptoCurrencyByCryptoIdSuspenseQueryHookResult = ReturnType<typeof useGetCryptoCurrencyByCryptoIdSuspenseQuery>;
 export type GetCryptoCurrencyByCryptoIdQueryResult = Apollo.QueryResult<GetCryptoCurrencyByCryptoIdQuery, GetCryptoCurrencyByCryptoIdQueryVariables>;
+export const GetCryptoPriceHistoryDocument = gql`
+    query getCryptoPriceHistory($cryptoId: String!) {
+  getCryptoPriceHistory(cryptoId: $cryptoId) {
+    price
+    recordedAt
+  }
+}
+    `;
+
+/**
+ * __useGetCryptoPriceHistoryQuery__
+ *
+ * To run a query within a React component, call `useGetCryptoPriceHistoryQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCryptoPriceHistoryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetCryptoPriceHistoryQuery({
+ *   variables: {
+ *      cryptoId: // value for 'cryptoId'
+ *   },
+ * });
+ */
+export function useGetCryptoPriceHistoryQuery(baseOptions: Apollo.QueryHookOptions<GetCryptoPriceHistoryQuery, GetCryptoPriceHistoryQueryVariables> & ({ variables: GetCryptoPriceHistoryQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetCryptoPriceHistoryQuery, GetCryptoPriceHistoryQueryVariables>(GetCryptoPriceHistoryDocument, options);
+      }
+export function useGetCryptoPriceHistoryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetCryptoPriceHistoryQuery, GetCryptoPriceHistoryQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetCryptoPriceHistoryQuery, GetCryptoPriceHistoryQueryVariables>(GetCryptoPriceHistoryDocument, options);
+        }
+export function useGetCryptoPriceHistorySuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetCryptoPriceHistoryQuery, GetCryptoPriceHistoryQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetCryptoPriceHistoryQuery, GetCryptoPriceHistoryQueryVariables>(GetCryptoPriceHistoryDocument, options);
+        }
+export type GetCryptoPriceHistoryQueryHookResult = ReturnType<typeof useGetCryptoPriceHistoryQuery>;
+export type GetCryptoPriceHistoryLazyQueryHookResult = ReturnType<typeof useGetCryptoPriceHistoryLazyQuery>;
+export type GetCryptoPriceHistorySuspenseQueryHookResult = ReturnType<typeof useGetCryptoPriceHistorySuspenseQuery>;
+export type GetCryptoPriceHistoryQueryResult = Apollo.QueryResult<GetCryptoPriceHistoryQuery, GetCryptoPriceHistoryQueryVariables>;

@@ -1,4 +1,4 @@
-import {FC, use, useState} from "react";
+import {FC, useState} from "react";
 import styled from "styled-components";
 import {useNavigate, useParams} from "react-router-dom";
 import {useQuery} from "@apollo/client";
@@ -6,7 +6,7 @@ import {GetCryptoCurrencyByCryptoIdQuery} from "../graphql/generated.ts";
 import {GET_CURRENCIES_BY_ID_FOR_CRYPTO} from "../apollo/queries.ts";
 import BackToHome from "../components/BackToHome.tsx";
 import {FaCaretDown, FaCaretUp} from "react-icons/fa";
-import {theme} from "../theme/theme.ts";
+import CryptoChart from "../components/crypto/CryptoChart.tsx";
 
 const Container = styled.div`
     padding: 5rem 0.5rem 0 0.5rem;
@@ -35,8 +35,9 @@ const NavigationPanel = styled.div`
     display: flex;
     width: 25%;
     justify-content: space-between;
-    padding: 0.6rem;
+    padding: 0.5rem;
     border-radius: 0.4rem;
+    margin: 2rem 0 3rem 0;
     color: ${({ theme }) => theme.colors.third };
     background-color: ${({ theme }) => theme.colors.fourth};
 `
@@ -47,7 +48,7 @@ interface NavigationPanelOptionProps {
 
 const NavigationPanelOption = styled.div<NavigationPanelOptionProps>`
     cursor: pointer;
-    padding: 0.8rem;
+    padding: 0.6rem;
     border-radius: 0.4rem;
     color: ${({ color }) => color || "auto"};
     background-color: ${({ backgroundColor }) => backgroundColor || "auto"};
@@ -101,6 +102,8 @@ const Crypto : FC = () =>{
                     <NavigationPanelOption color={panel==title ? "white" : "auto"} backgroundColor={panel==title ? "#000000" : "auto"} onClick={()=>setPanel(title)} key={title}>{title}</NavigationPanelOption>
                 )}
             </NavigationPanel>
+            <h2>Chart Price</h2>
+            <CryptoChart cryptoId={id as string} />
         </CryptoMain>
     </Container>
 }

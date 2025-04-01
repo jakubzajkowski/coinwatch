@@ -32,3 +32,12 @@ export const GET_CURRENCIES_BY_ID_FOR_CRYPTO = gql`
     }
   }
 `
+
+export const GET_CRYPTO_PRICE_HISTORY_FOR_CRYPTO = gql`
+    query getCryptoPriceHistory($cryptoId: String!){
+        getCryptoPriceHistory(cryptoId: $cryptoId) {
+            price
+            recordedAt
+        }
+    }
+`
