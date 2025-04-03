@@ -2,6 +2,7 @@ package org.example.coinwatch.entity;
 
 import jakarta.persistence.*;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
@@ -10,7 +11,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "crypto_currencies") // Nazwa tabeli w bazie danych
-public class CryptoCurrency {
+public class CryptoCurrency implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

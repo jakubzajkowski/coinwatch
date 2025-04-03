@@ -1,16 +1,19 @@
 package org.example.coinwatch.service;
 
+import jakarta.transaction.Transactional;
 import org.example.coinwatch.component.JwtUtil;
 import org.example.coinwatch.dto.*;
 import org.example.coinwatch.entity.User;
 import org.example.coinwatch.exception.InvalidUsernameOrPasswordException;
 import org.example.coinwatch.respository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -27,8 +30,6 @@ public class UserService {
 
     @Autowired
     private JwtUtil jwtUtil;
-
-
 
     public UserRegisterResponseDTO registerUser(UserRegistrationDTO dto) {
         if (userRepository.existsByEmail(dto.getEmail())) {
@@ -76,4 +77,10 @@ public class UserService {
     public User getUserById(Long id){
         return userRepository.findById(id).orElseThrow(()->new IllegalArgumentException("Invalid user id"));
     }
+
+    @Cacheable(value = "users")
+    public List<User> redisTest() {
+        return userRepository.findAll();
+    }
+
 }
