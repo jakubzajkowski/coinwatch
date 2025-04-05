@@ -74,13 +74,9 @@ public class UserService {
             throw new InvalidUsernameOrPasswordException("Invalid username or password");
         }
     }
+    @Cacheable(value = "users",key = "#id")
     public User getUserById(Long id){
         return userRepository.findById(id).orElseThrow(()->new IllegalArgumentException("Invalid user id"));
-    }
-
-    @Cacheable(value = "users")
-    public List<User> redisTest() {
-        return userRepository.findAll();
     }
 
 }

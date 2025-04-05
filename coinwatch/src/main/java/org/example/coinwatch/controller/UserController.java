@@ -33,9 +33,4 @@ public class UserController {
     public ResponseEntity<UserLoginResponseDTO> signIn(@Valid @RequestBody UserLoginDTO request){
         return new ResponseEntity<>(userService.login(request.getEmail(),request.getPassword()),HttpStatus.OK);
     }
-
-    @PostMapping("/api/test")
-    public ResponseEntity<List<User>> test(){
-        return new ResponseEntity<>(userService.redisTest(),HttpStatus.OK);
-    }
 }

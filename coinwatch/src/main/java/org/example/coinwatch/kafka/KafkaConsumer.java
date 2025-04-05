@@ -6,6 +6,7 @@ import org.example.coinwatch.dto.PriceChangeAlert;
 import org.example.coinwatch.entity.Subscription;
 import org.example.coinwatch.entity.User;
 import org.example.coinwatch.respository.UserRepository;
+import org.example.coinwatch.service.SubscriptionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -23,7 +24,7 @@ public class KafkaConsumer {
     private final SimpMessagingTemplate messagingTemplate;
 
     @Autowired
-    private UserRepository userRepository;
+    private SubscriptionService subscriptionService;
 
     public KafkaConsumer(SimpMessagingTemplate messagingTemplate) {
         this.messagingTemplate = messagingTemplate;
@@ -34,15 +35,21 @@ public class KafkaConsumer {
     public void consumeAlert(String alert) throws JsonProcessingException {
         PriceChangeAlert priceChangeAlert = objectMapper.readValue(alert,PriceChangeAlert.class);
 
-        List<User> users = userRepository.findAll();
+        List<Long> users = subscriptionService.getUserIdsSubscribedTo(priceChangeAlert.getSymbol());
 
-        for (User user : users){
-            for (Subscription subscription : user.getSubscriptions()) {
-                if (subscription.getCryptoCurrency().getSymbol().equals(priceChangeAlert.getSymbol())) {
-                    String destination = "/user/" + user.getId() + "/topic/crypto-alerts";
-                    messagingTemplate.convertAndSend(destination, priceChangeAlert);
-                }
+        for (Object userIdObj : users) {
+            Long userId = null;
+
+            if (userIdObj instanceof Integer intId) {
+                userId = intId.longValue();
+            } else if (userIdObj instanceof Long longId) {
+                userId = longId;
+            } else {
+                throw new IllegalArgumentException("Unsupported user ID type: " + userIdObj.getClass());
             }
+
+            String destination = "/user/" + userId + "/topic/crypto-alerts";
+            messagingTemplate.convertAndSend(destination, priceChangeAlert);
         }
     }
 }
