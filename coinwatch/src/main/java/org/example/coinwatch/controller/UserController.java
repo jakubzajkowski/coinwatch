@@ -1,22 +1,15 @@
 package org.example.coinwatch.controller;
 
-
 import jakarta.validation.Valid;
 import org.example.coinwatch.dto.UserLoginDTO;
 import org.example.coinwatch.dto.UserLoginResponseDTO;
 import org.example.coinwatch.dto.UserRegisterResponseDTO;
 import org.example.coinwatch.dto.UserRegistrationDTO;
-import org.example.coinwatch.entity.User;
 import org.example.coinwatch.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
+import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin(origins = "http://localhost:5173")
 @RestController

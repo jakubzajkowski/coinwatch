@@ -7,6 +7,9 @@ import org.example.coinwatch.respository.CryptoCurrencyRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.Cache;
+import org.springframework.cache.CacheManager;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -23,6 +26,9 @@ public class CryptoCurrencyService {
 
     @Autowired
     private CryptoCurrencyRepository cryptoCurrencyRepository;
+
+    @Autowired
+    private CacheManager cacheManager;
 
     @Transactional
     public void saveOrUpdate(CryptoCurrencyDTO dto) {
@@ -83,12 +89,22 @@ public class CryptoCurrencyService {
                             existingCrypto.setLastUpdated(cryptoCurrency.getLastUpdated());
 
                             cryptoCurrencyRepository.save(existingCrypto);
+
+                            updateCache(existingCrypto.getCryptoId(),existingCrypto);
+
                         },
                         () -> {
                             cryptoCurrencyRepository.save(cryptoCurrency);
                         }
                 );
     }
+    public void updateCache(String cryptoId,CryptoCurrency cryptoCurrency) {
+        Cache cache = cacheManager.getCache("cryptocurrencies");
+        if (cache != null) {
+            cache.put(cryptoId,cryptoCurrency);
+        }
+    }
+
     public List<CryptoCurrency> getCryptoCurrencies(String orderBy, int limit){
         List<String> allowedFields = List.of("currentPrice", "marketCap", "priceChangePercentage24h","cryptoId","id");
         if (orderBy == null || orderBy.isBlank()) {
@@ -106,7 +122,6 @@ public class CryptoCurrencyService {
 
         return cryptoCurrencyRepository.findAll(pageable).getContent();
     }
-
 
     @Cacheable(value = "cryptocurrencies", key = "#cryptoId")
     public CryptoCurrency getCryptoCurrencyById(String cryptoId){

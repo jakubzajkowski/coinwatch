@@ -1,18 +1,17 @@
 package org.example.coinwatch.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "crypto_currencies") // Nazwa tabeli w bazie danych
+@Table(name = "crypto_currencies")
 public class CryptoCurrency implements Serializable {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id; // Unikalny identyfikator encji (primary key)
@@ -92,7 +91,8 @@ public class CryptoCurrency implements Serializable {
     @Column(name = "last_updated")
     private ZonedDateTime lastUpdated;
 
-    @OneToMany(mappedBy = "cryptoCurrency", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @JsonIgnore
+    @OneToMany(mappedBy = "cryptoCurrency", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private Set<Subscription> subscriptions = new HashSet<>();
 
     public Set<Subscription> getSubscriptions() {
