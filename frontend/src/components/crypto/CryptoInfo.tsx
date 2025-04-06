@@ -1,5 +1,6 @@
 import {FC} from "react";
 import styled from "styled-components";
+import formatNumber from "../../utils/formatNumber.ts";
 
 interface CryptoInfoProps {
     marketCap: number | null | undefined
@@ -38,7 +39,7 @@ const CryptoInfo : FC<CryptoInfoProps> = ({marketCap,volume24h,supply,allTimeHig
                 Market Cap
             </DataLabel>
             <DataInfo>
-                ${marketCap}
+                ${formatNumber(marketCap as number)}
             </DataInfo>
         </InfoCard>
         <InfoCard>
@@ -46,7 +47,7 @@ const CryptoInfo : FC<CryptoInfoProps> = ({marketCap,volume24h,supply,allTimeHig
                 Volume (24)
             </DataLabel>
             <DataInfo>
-                ${volume24h}
+                ${formatNumber(volume24h as number)}
             </DataInfo>
         </InfoCard>
         <InfoCard>
@@ -54,7 +55,7 @@ const CryptoInfo : FC<CryptoInfoProps> = ({marketCap,volume24h,supply,allTimeHig
                 Circulating Supply
             </DataLabel>
             <DataInfo>
-                {supply} BTC
+                {formatNumber(supply as number)} BTC
             </DataInfo>
         </InfoCard>
         <InfoCard>
@@ -62,7 +63,7 @@ const CryptoInfo : FC<CryptoInfoProps> = ({marketCap,volume24h,supply,allTimeHig
                  All-Time High
             </DataLabel>
             <DataInfo>
-                ${allTimeHigh}
+                ${formatNumber(allTimeHigh as number)}
             </DataInfo>
         </InfoCard>
     </Container>

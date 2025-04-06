@@ -8,6 +8,7 @@ import BackToHome from "../components/BackToHome.tsx";
 import {FaCaretDown, FaCaretUp} from "react-icons/fa";
 import CryptoChart from "../components/crypto/CryptoChart.tsx";
 import CryptoInfo from "../components/crypto/CryptoInfo.tsx";
+import formatNumber from "../utils/formatNumber.ts";
 
 const Container = styled.div`
     padding: 5rem 0.5rem 0 0.5rem;
@@ -88,7 +89,7 @@ const Crypto : FC = () =>{
                 </div>
             </Logo>
             <div>
-                <CryptoPrice>${data?.getCryptoCurrencyByCryptoId?.currentPrice}</CryptoPrice>
+                <CryptoPrice>${formatNumber(data?.getCryptoCurrencyByCryptoId?.currentPrice as number)}</CryptoPrice>
                 {(data?.getCryptoCurrencyByCryptoId?.priceChangePercentage24h as number)>0 ?
                     <p style={{textAlign:"right"}}>
                         <FaCaretUp color='green' />
@@ -114,7 +115,7 @@ const Crypto : FC = () =>{
             />
             <div style={{margin: "3rem 0 1rem 0"}}>
                 <h2>Chart Price</h2>
-                <p>Historical price data for Bitcoin</p>
+                <p style={{color:"#b4b4b4"}}>Historical price data for Bitcoin</p>
             </div>
             <CryptoChart cryptoId={id as string}/>
         </CryptoMain>
