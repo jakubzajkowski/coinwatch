@@ -44,8 +44,8 @@ public class CryptoAlertsService {
     }
 
     public void shortTermTrendChange(String cryptoId) throws JsonProcessingException {
-        ZonedDateTime fiveMinutesAgo = ZonedDateTime.now().minusMinutes(5);
-        List<CryptoPriceHistory> historyList = cryptoPriceHistoryRepository.findByCryptoIdAndRecordedAtAfter(cryptoId, fiveMinutesAgo);
+        ZonedDateTime minutesAgo = ZonedDateTime.now().minusMinutes(15);
+        List<CryptoPriceHistory> historyList = cryptoPriceHistoryRepository.findByCryptoIdAndRecordedAtAfter(cryptoId, minutesAgo);
 
         if (historyList.isEmpty()) {
             logger.warn("No price data for {} in the last 5 minutes.", cryptoId);
@@ -53,9 +53,10 @@ public class CryptoAlertsService {
         }
 
         BigDecimal oldPrice = historyList.get(0).getPrice();
-        String id= historyList.get(0).getCryptoId();
-        String symbol=historyList.get(0).getSymbol();
+        String id = historyList.get(0).getCryptoId();
+        String symbol = historyList.get(0).getSymbol();
         BigDecimal currentPrice = historyList.get(historyList.size()-1).getPrice();
+
         BigDecimal changePercent = currentPrice.subtract(oldPrice)
                 .divide(oldPrice, 4, BigDecimal.ROUND_HALF_UP)
                 .multiply(BigDecimal.valueOf(100));

@@ -17,6 +17,16 @@ type Subscription {
     subscriptionDate: String
 }
 
+type Alert {
+    id: ID!
+    user: User!
+    symbol: String!
+    cryptoCurrency: CryptoCurrency!
+    changePercent: Float
+    oldPrice: Float
+    newPrice: Float
+}
+
 type User {
     id: ID!
     firstName: String!
@@ -73,6 +83,8 @@ type CryptoPriceHistory {
 
 
 type Query {
+    getAlerts: [Alert]
+    getAlertByUserId(userId: ID!): [Alert]
     getUserById(id: ID!): User
     getCryptoCurrencyByCryptoId(cryptoId: String!): CryptoCurrency
     getCryptoCurrencies(limit: Int, orderBy: String): [CryptoCurrency]
