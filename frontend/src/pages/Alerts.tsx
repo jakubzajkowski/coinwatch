@@ -1,7 +1,6 @@
 import { useSelector } from "react-redux";
 import styled from "styled-components";
 import {ButtonSecondary} from "../components/styled.tsx";
-import {ReducerType} from "@reduxjs/toolkit";
 import {RootState} from "../redux/store.ts";
 
 const Container = styled.div`

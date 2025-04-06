@@ -7,6 +7,7 @@ import {GET_CURRENCIES_BY_ID_FOR_CRYPTO} from "../apollo/queries.ts";
 import BackToHome from "../components/BackToHome.tsx";
 import {FaCaretDown, FaCaretUp} from "react-icons/fa";
 import CryptoChart from "../components/crypto/CryptoChart.tsx";
+import CryptoInfo from "../components/crypto/CryptoInfo.tsx";
 
 const Container = styled.div`
     padding: 5rem 0.5rem 0 0.5rem;
@@ -57,6 +58,10 @@ const CryptoMain = styled.div`
     padding: 1rem;
 `
 
+const CryptoPrice = styled.h2`
+    font-size: 3rem;
+`
+
 const Crypto : FC = () =>{
     const [panel,setPanel] = useState<string>("Overview");
 
@@ -83,7 +88,7 @@ const Crypto : FC = () =>{
                 </div>
             </Logo>
             <div>
-                <h2>${data?.getCryptoCurrencyByCryptoId?.currentPrice}</h2>
+                <CryptoPrice>${data?.getCryptoCurrencyByCryptoId?.currentPrice}</CryptoPrice>
                 {(data?.getCryptoCurrencyByCryptoId?.priceChangePercentage24h as number)>0 ?
                     <p style={{textAlign:"right"}}>
                         <FaCaretUp color='green' />
@@ -102,8 +107,16 @@ const Crypto : FC = () =>{
                     <NavigationPanelOption color={panel==title ? "white" : "auto"} backgroundColor={panel==title ? "#000000" : "auto"} onClick={()=>setPanel(title)} key={title}>{title}</NavigationPanelOption>
                 )}
             </NavigationPanel>
-            <h2>Chart Price</h2>
-            <CryptoChart cryptoId={id as string} />
+            <CryptoInfo marketCap={data?.getCryptoCurrencyByCryptoId?.marketCap}
+                        volume24h={data?.getCryptoCurrencyByCryptoId?.totalVolume}
+                        supply={data?.getCryptoCurrencyByCryptoId?.circulatingSupply}
+                        allTimeHigh={data?.getCryptoCurrencyByCryptoId?.ath}
+            />
+            <div style={{margin: "3rem 0 1rem 0"}}>
+                <h2>Chart Price</h2>
+                <p>Historical price data for Bitcoin</p>
+            </div>
+            <CryptoChart cryptoId={id as string}/>
         </CryptoMain>
     </Container>
 }

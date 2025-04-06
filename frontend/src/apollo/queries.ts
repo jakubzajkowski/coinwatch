@@ -22,6 +22,7 @@ export const GET_CURRENCIES_BY_ID_FOR_CRYPTO = gql`
       id
       name
       symbol
+      ath
       currentPrice
       priceChangePercentage24h
       marketCap

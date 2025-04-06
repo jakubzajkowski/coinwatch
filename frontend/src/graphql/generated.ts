@@ -152,7 +152,7 @@ export type GetCryptoCurrencyByCryptoIdQueryVariables = Exact<{
 }>;
 
 
-export type GetCryptoCurrencyByCryptoIdQuery = { __typename?: 'Query', getCryptoCurrencyByCryptoId?: { __typename?: 'CryptoCurrency', id: string, name: string, symbol: string, currentPrice?: number | null, priceChangePercentage24h?: number | null, marketCap?: number | null, marketCapChange24h?: number | null, circulatingSupply?: number | null, priceChange24h?: number | null, totalVolume?: number | null, imageUrl?: string | null } | null };
+export type GetCryptoCurrencyByCryptoIdQuery = { __typename?: 'Query', getCryptoCurrencyByCryptoId?: { __typename?: 'CryptoCurrency', id: string, name: string, symbol: string, ath?: number | null, currentPrice?: number | null, priceChangePercentage24h?: number | null, marketCap?: number | null, marketCapChange24h?: number | null, circulatingSupply?: number | null, priceChange24h?: number | null, totalVolume?: number | null, imageUrl?: string | null } | null };
 
 export type GetCryptoPriceHistoryQueryVariables = Exact<{
   cryptoId: Scalars['String']['input'];
@@ -217,6 +217,7 @@ export const GetCryptoCurrencyByCryptoIdDocument = gql`
     id
     name
     symbol
+    ath
     currentPrice
     priceChangePercentage24h
     marketCap

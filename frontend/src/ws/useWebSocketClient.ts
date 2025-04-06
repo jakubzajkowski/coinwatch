@@ -50,7 +50,7 @@ const useWebSocketClient = (url: string): UseWebSocketClientResult => {
 
     const unsubscribe = useCallback((subscription: StompSubscription) => {
         if (subscription) {
-            subscription.unsubscribe();  // Anulowanie subskrypcji
+            subscription.unsubscribe();
         }
     }, []);
 
