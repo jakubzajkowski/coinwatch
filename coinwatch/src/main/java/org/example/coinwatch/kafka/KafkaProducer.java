@@ -21,8 +21,8 @@ public class KafkaProducer {
         this.kafkaTemplate = kafkaTemplate;
     }
 
-    public void sendPriceChangeAlert(String symbol, BigDecimal changePercent, BigDecimal oldPrice, BigDecimal newPrice) throws JsonProcessingException {
-        PriceChangeAlert alert = new PriceChangeAlert(symbol, changePercent, oldPrice, newPrice);
+    public void sendPriceChangeAlert(String cryptoId,String symbol, BigDecimal changePercent, BigDecimal oldPrice, BigDecimal newPrice) throws JsonProcessingException {
+        PriceChangeAlert alert = new PriceChangeAlert(cryptoId,symbol, changePercent, oldPrice, newPrice);
         var json = objectMapper.writeValueAsString(alert);
         kafkaTemplate.send("crypto-alerts", symbol, json);
     }

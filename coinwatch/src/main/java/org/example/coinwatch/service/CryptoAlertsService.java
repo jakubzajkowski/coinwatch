@@ -53,13 +53,14 @@ public class CryptoAlertsService {
         }
 
         BigDecimal oldPrice = historyList.get(0).getPrice();
+        String cryptoId= historyList.get(0).getCryptoId();
         BigDecimal currentPrice = historyList.get(historyList.size()-1).getPrice();
         BigDecimal changePercent = currentPrice.subtract(oldPrice)
                 .divide(oldPrice, 4, BigDecimal.ROUND_HALF_UP)
                 .multiply(BigDecimal.valueOf(100));
 
         if (changePercent.abs().compareTo(BigDecimal.valueOf(0.01)) > 0) {
-            kafkaProducer.sendPriceChangeAlert(symbol, changePercent, oldPrice, currentPrice);
+            kafkaProducer.sendPriceChangeAlert(cryptoId,symbol, changePercent, oldPrice, currentPrice);
         }
     }
 

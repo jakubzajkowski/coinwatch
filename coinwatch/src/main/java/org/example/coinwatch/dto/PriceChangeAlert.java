@@ -8,12 +8,22 @@ public class PriceChangeAlert {
     private BigDecimal changePercent;
     private BigDecimal oldPrice;
     private BigDecimal newPrice;
+    private String cryptoId;
 
-    public PriceChangeAlert(String symbol, BigDecimal changePercent, BigDecimal oldPrice, BigDecimal newPrice) {
+    public PriceChangeAlert(String cryptoId,String symbol, BigDecimal changePercent, BigDecimal oldPrice, BigDecimal newPrice) {
         this.symbol = symbol;
+        this.cryptoId=cryptoId;
         this.changePercent = changePercent;
         this.oldPrice = oldPrice;
         this.newPrice = newPrice;
+    }
+
+    public String getCryptoId() {
+        return cryptoId;
+    }
+
+    public void setCryptoId(String cryptoId) {
+        this.cryptoId = cryptoId;
     }
 
     public String getSymbol() {

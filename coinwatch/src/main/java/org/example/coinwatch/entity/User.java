@@ -52,6 +52,10 @@ public class User implements Serializable {
     @Enumerated(EnumType.STRING)
     private Set<Interest> interests;
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Alert> alerts = new HashSet<>();
+
     @Column(nullable = false)
     private boolean agreedToTerms;
 

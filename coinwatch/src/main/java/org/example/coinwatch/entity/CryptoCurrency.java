@@ -19,7 +19,7 @@ public class CryptoCurrency implements Serializable {
     @Column(name = "crypto_id", unique = true, nullable = false)
     private String cryptoId; // Identyfikator kryptowaluty (np. "bitcoin")
 
-    @Column(nullable = false)
+    @Column(nullable = false,unique = true)
     private String symbol; // Symbol kryptowaluty (np. "btc")
 
     @Column(nullable = false)
@@ -94,6 +94,18 @@ public class CryptoCurrency implements Serializable {
     @JsonIgnore
     @OneToMany(mappedBy = "cryptoCurrency", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private Set<Subscription> subscriptions = new HashSet<>();
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "cryptoCurrency", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    private Set<Alert> alerts = new HashSet<>();
+
+    public Set<Alert> getAlerts() {
+        return alerts;
+    }
+
+    public void setAlerts(Set<Alert> alerts) {
+        this.alerts = alerts;
+    }
 
     public Set<Subscription> getSubscriptions() {
         return subscriptions;

@@ -3,10 +3,15 @@ package org.example.coinwatch.kafka;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.example.coinwatch.dto.PriceChangeAlert;
+import org.example.coinwatch.entity.CryptoCurrency;
 import org.example.coinwatch.entity.Subscription;
 import org.example.coinwatch.entity.User;
+import org.example.coinwatch.respository.CryptoCurrencyRepository;
 import org.example.coinwatch.respository.UserRepository;
+import org.example.coinwatch.service.AlertService;
+import org.example.coinwatch.service.CryptoCurrencyService;
 import org.example.coinwatch.service.SubscriptionService;
+import org.example.coinwatch.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -24,6 +29,15 @@ public class KafkaConsumer {
     private final SimpMessagingTemplate messagingTemplate;
 
     @Autowired
+    private AlertService alertService;
+
+    @Autowired
+    private CryptoCurrencyService cryptoCurrencyService;
+
+    @Autowired
+    private UserService userService;
+
+    @Autowired
     private SubscriptionService subscriptionService;
 
     public KafkaConsumer(SimpMessagingTemplate messagingTemplate) {
@@ -37,16 +51,16 @@ public class KafkaConsumer {
 
         List<Long> users = subscriptionService.getUserIdsSubscribedTo(priceChangeAlert.getSymbol());
 
-        for (Object userIdObj : users) {
-            Long userId = null;
+        for (Long userId : users) {
+            User user = userService.getUserById(userId);
 
-            if (userIdObj instanceof Integer intId) {
-                userId = intId.longValue();
-            } else if (userIdObj instanceof Long longId) {
-                userId = longId;
-            } else {
-                throw new IllegalArgumentException("Unsupported user ID type: " + userIdObj.getClass());
-            }
+            CryptoCurrency cryptoCurrency = cryptoCurrencyService.getCryptoCurrencyById(priceChangeAlert.getCryptoId());
+
+
+            alertService.createAlert(user, cryptoCurrency, priceChangeAlert.getSymbol(),
+                    priceChangeAlert.getChangePercent(),
+                    priceChangeAlert.getOldPrice(),
+                    priceChangeAlert.getNewPrice());
 
             String destination = "/user/" + userId + "/topic/crypto-alerts";
             messagingTemplate.convertAndSend(destination, priceChangeAlert);
