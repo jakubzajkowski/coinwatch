@@ -1,60 +1,44 @@
 import {useEffect, useState} from "react";
-import SockJS from 'sockjs-client';
-import { Client } from '@stomp/stompjs';
+import useWebSocketClient from "../ws/useWebSocketClient.ts";
+import {StompSubscription} from "@stomp/stompjs";
+import {useSelector} from "react-redux";
+import {RootState} from "../redux/store.ts";
 
 
-const Notifications = () =>{
+
+const Notifications = () => {
     const [messages, setMessages] = useState<string[]>([]);
-    const [inputValue, setInputValue] = useState<string>('');
-    const [stompClient, setStompClient] = useState<Client | null>(null);
+    const { subscribe, unsubscribe, sendMessage, connected } = useWebSocketClient(import.meta.env.VITE_WS_API_URL);
+    const { user} = useSelector((state: RootState) => state.auth);
 
     useEffect(() => {
-        const socket = new SockJS('http://localhost:8080/ws');
-        const client = new Client({
-            webSocketFactory: () => socket,
-            reconnectDelay: 5000,
-            onConnect: () => {
-                client.subscribe('/topic/greetings', (message) => {
-                    setMessages((prevMessages) => [...prevMessages, message.body]);
-                });
-                client.subscribe('/topic/crypto-alerts', (message) => {
-                    setMessages((prevMessages) => [...prevMessages, message.body]);
-                });
-            },
-            onStompError: (frame) => {
-                console.error('STOMP error:', frame.headers.message);
-            },
-        });
+        let subscription: StompSubscription | null = null;
 
-        client.activate();
-        setStompClient(client);
+        if (connected) {
+            subscription = subscribe(`/user/${user?.id}/topic/crypto-alerts`, (message: string) => {
+                setMessages(prevMessages => [...prevMessages, message]);
+            }) as StompSubscription;
+        }
 
         return () => {
-            client.deactivate();
+            if (subscription) {
+                unsubscribe(subscription);
+            }
         };
-    }, []);
+    }, [connected, subscribe, unsubscribe]);
 
-    const sendMessage = () => {
-        if (stompClient && inputValue) {
-            stompClient.publish({
-                destination: '/app/hello',
-                body: inputValue,
-            });
-            setInputValue('');
+    const sendNotification = () => {
+        if (connected) {
+            sendMessage('/app/notify', 'New notification from client!');
         }
     };
 
     return (
-        <div style={{margin:"5rem 0"}}>
-            <h1>WebSocket with SockJS and STOMP</h1>
-            <div>
-                <input
-                    type="text"
-                    value={inputValue}
-                    onChange={(e) => setInputValue(e.target.value)}
-                />
-                <button onClick={sendMessage}>Send</button>
-            </div>
+        <div style={{ margin: "5rem 0" }}>
+            <h1>WebSocket Notifications</h1>
+            <button onClick={sendNotification} disabled={!connected}>
+                Send Notification
+            </button>
             <div>
                 <h2>Messages:</h2>
                 <ul>
@@ -65,6 +49,6 @@ const Notifications = () =>{
             </div>
         </div>
     );
-}
+};
 
 export default Notifications;

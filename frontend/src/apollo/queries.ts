@@ -6,6 +6,7 @@ export const GET_CURRENCIES_FOR_MARKETOVERVIEW =  gql`
       id
       name
       symbol
+      cryptoId
       currentPrice
       priceChangePercentage24h
       marketCap

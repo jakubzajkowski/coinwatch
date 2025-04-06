@@ -1,6 +1,8 @@
 import { useSelector } from "react-redux";
 import styled from "styled-components";
 import {ButtonSecondary} from "../components/styled.tsx";
+import {ReducerType} from "@reduxjs/toolkit";
+import {RootState} from "../redux/store.ts";
 
 const Container = styled.div`
     padding: 5rem 0.5rem 0 0.5rem;
@@ -61,7 +63,7 @@ const SubPanel = styled.div`
 `
 
 const Alerts = () =>{
-    const { user, isAuthenticated } = useSelector((state: ReducerType) => state.auth);
+    const { isAuthenticated } = useSelector((state: RootState) => state.auth);
 
     if(isAuthenticated){
         return <Container>
