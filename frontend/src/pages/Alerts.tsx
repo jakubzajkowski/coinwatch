@@ -2,6 +2,7 @@ import { useSelector } from "react-redux";
 import styled from "styled-components";
 import {ButtonSecondary} from "../components/styled.tsx";
 import {RootState} from "../redux/store.ts";
+import LiveAlerts from "../components/alert/LiveAlerts.tsx";
 
 const Container = styled.div`
     padding: 5rem 0.5rem 0 0.5rem;
@@ -28,6 +29,7 @@ const Dashboard = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: start;
+    gap: 1rem;
     padding: 1rem;
     .item {
         border: 1px solid #fff;
@@ -39,7 +41,7 @@ const MainPanel = styled.div`
     display: flex;
     justify-content: center;
     flex-direction: column;
-
+    gap: 1rem;
     .item {
         width: 100%;
         border: 1px solid #fff;
@@ -52,7 +54,7 @@ const SubPanel = styled.div`
     display: flex;
     justify-content: center;
     flex-direction: column;
-
+    gap: 1rem;
     .item {
         width: 100%;
         border: 1px solid #fff;
@@ -77,7 +79,7 @@ const Alerts = () =>{
                 </Header>
             <Dashboard>
                 <MainPanel>
-                    <div className="item">Kolumna 30%</div>
+                    <LiveAlerts />
                     <div className="item">Kolumna 30%</div>
                 </MainPanel>
                 <SubPanel>
