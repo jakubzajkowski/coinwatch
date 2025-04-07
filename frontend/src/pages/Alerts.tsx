@@ -3,6 +3,7 @@ import styled from "styled-components";
 import {ButtonSecondary} from "../components/styled.tsx";
 import {RootState} from "../redux/store.ts";
 import LiveAlerts from "../components/alert/LiveAlerts.tsx";
+import HistoryAlerts from "../components/alert/HistoryAlerts.tsx";
 
 const Container = styled.div`
     padding: 5rem 0.5rem 0 0.5rem;
@@ -80,7 +81,7 @@ const Alerts = () =>{
             <Dashboard>
                 <MainPanel>
                     <LiveAlerts />
-                    <div className="item">Kolumna 30%</div>
+                    <HistoryAlerts />
                 </MainPanel>
                 <SubPanel>
                     <div className="item">Kolumna 30%</div>

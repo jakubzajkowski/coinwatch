@@ -1,7 +1,8 @@
 import styled from "styled-components";
 import {FaCaretDown, FaCaretUp, FaChartBar} from "react-icons/fa";
+import {FC} from "react";
 
-interface Alert {
+export interface Alert {
     name: string;
     type: "increase" | "decrease" | "volume";
     change: string;
@@ -70,7 +71,7 @@ const AlertIcon: React.FC<{ type: Alert["type"] }> = ({ type }) => {
     }
 };
 
-const HistoryAlertCard: React.FC<HistoryAlertCardProps> = ({ alert }) => (
+const HistoryAlertCard: FC<HistoryAlertCardProps> = ({ alert }) => (
     <Card>
         <CardContent>
             <AlertIcon type={alert.type} />
