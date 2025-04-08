@@ -1,17 +1,10 @@
 import styled from "styled-components";
-import {FaCaretDown, FaCaretUp, FaChartBar} from "react-icons/fa";
+import {FaCaretDown, FaCaretUp} from "react-icons/fa";
 import {FC} from "react";
-
-export interface Alert {
-    name: string;
-    type: "increase" | "decrease" | "volume";
-    change: string;
-    price: string;
-    date: string;
-}
+import {Alert} from "./HistoryAlerts.tsx";
 
 interface HistoryAlertCardProps {
-    alert : Alert;
+    alert : Alert | null;
 }
 
 const Card = styled.div`
@@ -58,35 +51,31 @@ const PriceDate = styled.div`
   color: #aaa;
 `;
 
-const AlertIcon: React.FC<{ type: Alert["type"] }> = ({ type }) => {
-    switch (type) {
-        case "increase":
-            return <FaCaretUp color='green' />;
-        case "decrease":
-            return <FaCaretDown color='red' />;
-        case "volume":
-            return <FaChartBar color="blue" />;
-        default:
-            return null;
-    }
+const AlertIcon: FC<{ type: Alert["changePercent"] | null}> = ({ type }) => {
+        if (type as number>0) return <FaCaretUp color='green' />
+        else return <FaCaretDown color='red' />;
 };
 
 const HistoryAlertCard: FC<HistoryAlertCardProps> = ({ alert }) => (
     <Card>
         <CardContent>
-            <AlertIcon type={alert.type} />
+            <AlertIcon type={alert?.changePercent as number} />
             <AlertText>
-                <AlertName>{alert.name}</AlertName>
+                <AlertName>{alert?.symbol}</AlertName>
                 <AlertDesc>
-                    {alert.type === "increase" && `Price increased by ${alert.change}`}
-                    {alert.type === "decrease" && `Price decreased by ${alert.change}`}
-                    {alert.type === "volume" && `Volume spiked by ${alert.change}`}
+                    {(alert?.changePercent as number)<0 ?
+                        <div>
+                            Price increased by {Math.abs(alert?.changePercent as number)}%
+                        </div>:
+                        <div>
+                            Price decreased by {Math.abs(alert?.changePercent as number)}%
+                        </div>}
                 </AlertDesc>
             </AlertText>
         </CardContent>
         <AlertPrice>
-            <PriceValue>{alert.price}</PriceValue>
-            <PriceDate>{alert.date}</PriceDate>
+            <PriceValue>${alert?.newPrice}</PriceValue>
+            <PriceDate>{alert?.createdAt}</PriceDate>
         </AlertPrice>
     </Card>
 );

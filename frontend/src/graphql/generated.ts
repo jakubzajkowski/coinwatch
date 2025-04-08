@@ -17,6 +17,18 @@ export type Scalars = {
   Float: { input: number; output: number; }
 };
 
+export type Alert = {
+  __typename?: 'Alert';
+  changePercent?: Maybe<Scalars['Float']['output']>;
+  createdAt?: Maybe<Scalars['String']['output']>;
+  cryptoCurrency: CryptoCurrency;
+  id: Scalars['ID']['output'];
+  newPrice?: Maybe<Scalars['Float']['output']>;
+  oldPrice?: Maybe<Scalars['Float']['output']>;
+  symbol: Scalars['String']['output'];
+  user: User;
+};
+
 export type CryptoCurrency = {
   __typename?: 'CryptoCurrency';
   ath?: Maybe<Scalars['Float']['output']>;
@@ -86,10 +98,17 @@ export type MutationAddSubscriptionArgs = {
 
 export type Query = {
   __typename?: 'Query';
+  getAlertByUserId?: Maybe<Array<Maybe<Alert>>>;
+  getAlerts?: Maybe<Array<Maybe<Alert>>>;
   getCryptoCurrencies?: Maybe<Array<Maybe<CryptoCurrency>>>;
   getCryptoCurrencyByCryptoId?: Maybe<CryptoCurrency>;
   getCryptoPriceHistory?: Maybe<Array<Maybe<CryptoPriceHistory>>>;
   getUserById?: Maybe<User>;
+};
+
+
+export type QueryGetAlertByUserIdArgs = {
+  userId: Scalars['ID']['input'];
 };
 
 
@@ -160,6 +179,13 @@ export type GetCryptoPriceHistoryQueryVariables = Exact<{
 
 
 export type GetCryptoPriceHistoryQuery = { __typename?: 'Query', getCryptoPriceHistory?: Array<{ __typename?: 'CryptoPriceHistory', price?: number | null, recordedAt?: string | null } | null> | null };
+
+export type GetAlertByUserIdQueryVariables = Exact<{
+  userId: Scalars['ID']['input'];
+}>;
+
+
+export type GetAlertByUserIdQuery = { __typename?: 'Query', getAlertByUserId?: Array<{ __typename?: 'Alert', id: string, symbol: string, changePercent?: number | null, oldPrice?: number | null, newPrice?: number | null, createdAt?: string | null } | null> | null };
 
 
 export const GetCryptoCurrenciesDocument = gql`
@@ -303,3 +329,48 @@ export type GetCryptoPriceHistoryQueryHookResult = ReturnType<typeof useGetCrypt
 export type GetCryptoPriceHistoryLazyQueryHookResult = ReturnType<typeof useGetCryptoPriceHistoryLazyQuery>;
 export type GetCryptoPriceHistorySuspenseQueryHookResult = ReturnType<typeof useGetCryptoPriceHistorySuspenseQuery>;
 export type GetCryptoPriceHistoryQueryResult = Apollo.QueryResult<GetCryptoPriceHistoryQuery, GetCryptoPriceHistoryQueryVariables>;
+export const GetAlertByUserIdDocument = gql`
+    query getAlertByUserId($userId: ID!) {
+  getAlertByUserId(userId: $userId) {
+    id
+    symbol
+    changePercent
+    oldPrice
+    newPrice
+    createdAt
+  }
+}
+    `;
+
+/**
+ * __useGetAlertByUserIdQuery__
+ *
+ * To run a query within a React component, call `useGetAlertByUserIdQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetAlertByUserIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetAlertByUserIdQuery({
+ *   variables: {
+ *      userId: // value for 'userId'
+ *   },
+ * });
+ */
+export function useGetAlertByUserIdQuery(baseOptions: Apollo.QueryHookOptions<GetAlertByUserIdQuery, GetAlertByUserIdQueryVariables> & ({ variables: GetAlertByUserIdQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetAlertByUserIdQuery, GetAlertByUserIdQueryVariables>(GetAlertByUserIdDocument, options);
+      }
+export function useGetAlertByUserIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetAlertByUserIdQuery, GetAlertByUserIdQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetAlertByUserIdQuery, GetAlertByUserIdQueryVariables>(GetAlertByUserIdDocument, options);
+        }
+export function useGetAlertByUserIdSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetAlertByUserIdQuery, GetAlertByUserIdQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetAlertByUserIdQuery, GetAlertByUserIdQueryVariables>(GetAlertByUserIdDocument, options);
+        }
+export type GetAlertByUserIdQueryHookResult = ReturnType<typeof useGetAlertByUserIdQuery>;
+export type GetAlertByUserIdLazyQueryHookResult = ReturnType<typeof useGetAlertByUserIdLazyQuery>;
+export type GetAlertByUserIdSuspenseQueryHookResult = ReturnType<typeof useGetAlertByUserIdSuspenseQuery>;
+export type GetAlertByUserIdQueryResult = Apollo.QueryResult<GetAlertByUserIdQuery, GetAlertByUserIdQueryVariables>;

@@ -43,3 +43,16 @@ export const GET_CRYPTO_PRICE_HISTORY_FOR_CRYPTO = gql`
         }
     }
 `
+
+export const GET_ALERT_BY_USER_ID = gql`
+    query getAlertByUserId($userId: ID!){
+        getAlertByUserId(userId: $userId) {
+            id
+            symbol
+            changePercent
+            oldPrice
+            newPrice
+            createdAt
+        }
+    }
+`

@@ -1,17 +1,15 @@
-import {FC, useState} from "react";
-import HistoryAlertCard, {Alert} from "./HistoryAlertCard.tsx";
+import {FC} from "react";
+import HistoryAlertCard from "./HistoryAlertCard.tsx";
 import styled from "styled-components";
+import {useQuery} from "@apollo/client";
+import {GetAlertByUserIdQuery} from "../../graphql/generated.ts";
+import {GET_ALERT_BY_USER_ID} from "../../apollo/queries.ts";
+import {useSelector} from "react-redux";
+import {RootState} from "../../redux/store.ts";
 
-
-const alerts: Alert[] = [
-    { name: "Bitcoin (BTC)", type: "increase", change: "23.5%", price: "$51,342.67", date: "Apr 7, 09:24 PM" },
-    { name: "Ethereum (ETH)", type: "volume", change: "45.2%", price: "$2,786.43", date: "Apr 7, 06:24 PM" },
-    { name: "Cardano (ADA)", type: "decrease", change: "18.7%", price: "$0.58", date: "Apr 7, 11:24 AM" },
-    { name: "Solana (SOL)", type: "increase", change: "32.1%", price: "$102.78", date: "Apr 6, 11:24 PM" },
-    { name: "XRP (XRP)", type: "decrease", change: "15.3%", price: "$0.52", date: "Apr 5, 11:24 PM" },
-    { name: "Polkadot (DOT)", type: "volume", change: "28.9%", price: "$7.23", date: "Apr 4, 11:24 PM" },
-    { name: "Dogecoin (DOGE)", type: "increase", change: "20.3%", price: "$0.12", date: "Apr 2, 10:00 PM" },
-];
+export interface Alert {
+    id: string; symbol: string; changePercent?: number | null | undefined; oldPrice?: number | null | undefined; newPrice?: number | null | undefined; createdAt?: string | null
+}
 
 const Container = styled.div`
     padding: 1rem;
@@ -48,11 +46,11 @@ const TabButton = styled.button<{ active: boolean }>`
 `;
 
 const CryptoAlertsComponent: FC = () => {
-    const [filter, setFilter] = useState<"all" | Alert["type"]>("all");
+    const { user } = useSelector((state: RootState) => state.auth)
 
-    const filteredAlerts = alerts.filter(
-        (a) => filter === "all" || a.type === filter
-    );
+    const {error,loading,data} = useQuery<GetAlertByUserIdQuery>(GET_ALERT_BY_USER_ID,{
+        variables: { userId: user?.id }
+    })
 
     return (
         <Container>
@@ -60,13 +58,13 @@ const CryptoAlertsComponent: FC = () => {
             <SubTitle>Your recent price movement notifications</SubTitle>
 
             <TabList>
-                <TabButton active={filter === "all"} onClick={() => setFilter("all")}>All</TabButton>
-                <TabButton active={filter === "increase"} onClick={() => setFilter("increase")}>Price Increase</TabButton>
-                <TabButton active={filter === "decrease"} onClick={() => setFilter("decrease")}>Price Decrease</TabButton>
-                <TabButton active={filter === "volume"} onClick={() => setFilter("volume")}>Volume Spike</TabButton>
+                <TabButton active={true} >All</TabButton>
+                <TabButton active={false} >Price Increase</TabButton>
+                <TabButton active={false} >Price Decrease</TabButton>
+                <TabButton active={false} >Volume Spike</TabButton>
             </TabList>
 
-            {filteredAlerts.map((alert, i) => (
+            {data?.getAlertByUserId && data.getAlertByUserId.map((alert, i) => (
                 <HistoryAlertCard key={i} alert={alert} />
             ))}
         </Container>
