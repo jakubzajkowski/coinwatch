@@ -1,4 +1,4 @@
-import {FC} from "react";
+import {FC, useMemo, useState} from "react";
 import HistoryAlertCard from "./HistoryAlertCard.tsx";
 import styled from "styled-components";
 import {useQuery} from "@apollo/client";
@@ -46,11 +46,31 @@ const TabButton = styled.button<{ active: boolean }>`
 `;
 
 const CryptoAlertsComponent: FC = () => {
+    const [activeTab, setActiveTab] = useState<'all' | 'increase' | 'decrease'>('all')
     const { user } = useSelector((state: RootState) => state.auth)
 
     const {error,loading,data} = useQuery<GetAlertByUserIdQuery>(GET_ALERT_BY_USER_ID,{
         variables: { userId: user?.id }
     })
+
+    const handleTabClick = (tab: 'all' | 'increase' | 'decrease') => {
+        setActiveTab(tab)
+    }
+
+    const filteredAlerts = useMemo(() => {
+        if (!data?.getAlertByUserId) return []
+
+        return data.getAlertByUserId.filter((alert) => {
+            switch (activeTab) {
+                case 'increase':
+                    return alert?.changePercent && alert.changePercent > 0
+                case 'decrease':
+                    return alert?.changePercent && alert.changePercent < 0
+                default:
+                    return true
+            }
+        })
+    }, [data?.getAlertByUserId, activeTab])
 
     return (
         <Container>
@@ -58,15 +78,19 @@ const CryptoAlertsComponent: FC = () => {
             <SubTitle>Your recent price movement notifications</SubTitle>
 
             <TabList>
-                <TabButton active={true} >All</TabButton>
-                <TabButton active={false} >Price Increase</TabButton>
-                <TabButton active={false} >Price Decrease</TabButton>
-                <TabButton active={false} >Volume Spike</TabButton>
+                <TabButton active={activeTab === 'all'} onClick={() => handleTabClick('all')}>All</TabButton>
+                <TabButton active={activeTab === 'increase'} onClick={() => handleTabClick('increase')}>Price Increase</TabButton>
+                <TabButton active={activeTab === 'decrease'} onClick={() => handleTabClick('decrease')}>Price Decrease</TabButton>
             </TabList>
 
-            {data?.getAlertByUserId && data.getAlertByUserId.map((alert, i) => (
+            {loading && <div>Loading history alerts</div>}
+
+            {error && <div>Error fetching history alerts</div>}
+
+            {filteredAlerts?.slice().reverse().map((alert, i) => (
                 <HistoryAlertCard key={i} alert={alert} />
             ))}
+
         </Container>
     );
 };

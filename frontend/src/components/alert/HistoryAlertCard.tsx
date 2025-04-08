@@ -2,6 +2,7 @@ import styled from "styled-components";
 import {FaCaretDown, FaCaretUp} from "react-icons/fa";
 import {FC} from "react";
 import {Alert} from "./HistoryAlerts.tsx";
+import formatDateTime from "../../utils/formatDateTime.ts";
 
 interface HistoryAlertCardProps {
     alert : Alert | null;
@@ -75,7 +76,7 @@ const HistoryAlertCard: FC<HistoryAlertCardProps> = ({ alert }) => (
         </CardContent>
         <AlertPrice>
             <PriceValue>${alert?.newPrice}</PriceValue>
-            <PriceDate>{alert?.createdAt}</PriceDate>
+            <PriceDate>{formatDateTime(alert?.createdAt as string)}</PriceDate>
         </AlertPrice>
     </Card>
 );
