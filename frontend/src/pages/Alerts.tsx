@@ -4,6 +4,8 @@ import {ButtonSecondary} from "../components/styled.tsx";
 import {RootState} from "../redux/store.ts";
 import LiveAlerts from "../components/alert/LiveAlerts.tsx";
 import HistoryAlerts from "../components/alert/HistoryAlerts.tsx";
+import {useState} from "react";
+import ConfigureAlertsModal from "../components/alert/ConfigureAlertsModal.tsx";
 
 const Container = styled.div`
     padding: 5rem 0.5rem 0 0.5rem;
@@ -66,16 +68,18 @@ const SubPanel = styled.div`
 
 const Alerts = () =>{
     const { isAuthenticated } = useSelector((state: RootState) => state.auth);
+    const [isConfigureAlertsModal, setIsConfigureAlertsModal] = useState<boolean>(false);
 
     if(isAuthenticated){
         return <Container>
+            {isConfigureAlertsModal && <ConfigureAlertsModal setIsOpen={setIsConfigureAlertsModal}/>}
                 <Header>
                     <div>
                         <HeaderTitle>Price Alerts</HeaderTitle>
                         <HeaderDescription>Get notified about significant price movements in real-time</HeaderDescription>
                     </div>
                     <div>
-                        <ButtonSecondary>Configure Alerts</ButtonSecondary>
+                        <ButtonSecondary onClick={()=>setIsConfigureAlertsModal(state => !state)}>Configure Alerts</ButtonSecondary>
                     </div>
                 </Header>
             <Dashboard>
