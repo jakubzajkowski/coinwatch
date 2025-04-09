@@ -56,3 +56,11 @@ export const GET_ALERT_BY_USER_ID = gql`
         }
     }
 `
+
+export const MUTATION_ADD_SUBSCRIPTION = gql`
+    mutation AddSubscription($userId: ID!, $cryptoId: ID!) {
+        addSubscription(userId: $userId, cryptoId: $cryptoId) {
+            id
+        }
+    }
+`

@@ -187,6 +187,14 @@ export type GetAlertByUserIdQueryVariables = Exact<{
 
 export type GetAlertByUserIdQuery = { __typename?: 'Query', getAlertByUserId?: Array<{ __typename?: 'Alert', id: string, symbol: string, changePercent?: number | null, oldPrice?: number | null, newPrice?: number | null, createdAt?: string | null } | null> | null };
 
+export type AddSubscriptionMutationVariables = Exact<{
+  userId: Scalars['ID']['input'];
+  cryptoId: Scalars['ID']['input'];
+}>;
+
+
+export type AddSubscriptionMutation = { __typename?: 'Mutation', addSubscription?: { __typename?: 'Subscription', id?: string | null } | null };
+
 
 export const GetCryptoCurrenciesDocument = gql`
     query getCryptoCurrencies($limit: Int!, $orderBy: String!) {
@@ -374,3 +382,37 @@ export type GetAlertByUserIdQueryHookResult = ReturnType<typeof useGetAlertByUse
 export type GetAlertByUserIdLazyQueryHookResult = ReturnType<typeof useGetAlertByUserIdLazyQuery>;
 export type GetAlertByUserIdSuspenseQueryHookResult = ReturnType<typeof useGetAlertByUserIdSuspenseQuery>;
 export type GetAlertByUserIdQueryResult = Apollo.QueryResult<GetAlertByUserIdQuery, GetAlertByUserIdQueryVariables>;
+export const AddSubscriptionDocument = gql`
+    mutation AddSubscription($userId: ID!, $cryptoId: ID!) {
+  addSubscription(userId: $userId, cryptoId: $cryptoId) {
+    id
+  }
+}
+    `;
+export type AddSubscriptionMutationFn = Apollo.MutationFunction<AddSubscriptionMutation, AddSubscriptionMutationVariables>;
+
+/**
+ * __useAddSubscriptionMutation__
+ *
+ * To run a mutation, you first call `useAddSubscriptionMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAddSubscriptionMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [addSubscriptionMutation, { data, loading, error }] = useAddSubscriptionMutation({
+ *   variables: {
+ *      userId: // value for 'userId'
+ *      cryptoId: // value for 'cryptoId'
+ *   },
+ * });
+ */
+export function useAddSubscriptionMutation(baseOptions?: Apollo.MutationHookOptions<AddSubscriptionMutation, AddSubscriptionMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<AddSubscriptionMutation, AddSubscriptionMutationVariables>(AddSubscriptionDocument, options);
+      }
+export type AddSubscriptionMutationHookResult = ReturnType<typeof useAddSubscriptionMutation>;
+export type AddSubscriptionMutationResult = Apollo.MutationResult<AddSubscriptionMutation>;
+export type AddSubscriptionMutationOptions = Apollo.BaseMutationOptions<AddSubscriptionMutation, AddSubscriptionMutationVariables>;
