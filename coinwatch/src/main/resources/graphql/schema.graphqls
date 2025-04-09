@@ -25,6 +25,7 @@ type Alert {
     changePercent: Float
     oldPrice: Float
     newPrice: Float
+    createdAt: String
 }
 
 type User {
@@ -87,6 +88,7 @@ type Query {
     getAlertByUserId(userId: ID!): [Alert]
     getUserById(id: ID!): User
     getCryptoCurrencyByCryptoId(cryptoId: String!): CryptoCurrency
+    searchCryptoCurrencyByCryptoId(cryptoId: String!): [CryptoCurrency]
     getCryptoCurrencies(limit: Int, orderBy: String): [CryptoCurrency]
     getCryptoPriceHistory(cryptoId: String!): [CryptoPriceHistory]
 }

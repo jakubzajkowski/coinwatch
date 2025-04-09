@@ -6,6 +6,7 @@ import org.example.coinwatch.entity.CryptoCurrency;
 import org.example.coinwatch.entity.User;
 import org.example.coinwatch.respository.AlertRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
@@ -17,10 +18,12 @@ public class AlertService {
     @Autowired
     private AlertRepository alertRepository;
 
-    public Alert createAlert(User user, CryptoCurrency cryptoCurrency, String symbol, BigDecimal changePercent, BigDecimal oldPrice, BigDecimal newPrice) {
+    @CacheEvict(value = "alerts", allEntries = true)
+    public void createAlert(User user, CryptoCurrency cryptoCurrency, String symbol, BigDecimal changePercent, BigDecimal oldPrice, BigDecimal newPrice) {
         Alert alert = new Alert(user, cryptoCurrency, symbol, changePercent, oldPrice, newPrice);
-        return alertRepository.save(alert);
+        alertRepository.save(alert);
     }
+
     @Cacheable(value = "alerts")
     public List<Alert> getAlerts(){
         return alertRepository.findAll();

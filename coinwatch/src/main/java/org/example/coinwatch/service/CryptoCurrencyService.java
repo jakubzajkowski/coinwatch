@@ -130,4 +130,11 @@ public class CryptoCurrencyService {
             return new IllegalArgumentException("Error");
         });
     }
+
+    public List<CryptoCurrency> searchCryptoCurrencies(String cryptoId){
+        return cryptoCurrencyRepository.findByCryptoIdContainingIgnoreCase(cryptoId).orElseThrow(()->{
+            logger.error("CryptoCurrency with cryptoId: {} not found", cryptoId);
+            return new IllegalArgumentException("Error");
+        });
+    }
 }

@@ -48,4 +48,9 @@ public class CryptoCurrencyResolver {
     public List<CryptoPriceHistory> getCryptoPriceHistory(@Argument String cryptoId){
         return cryptoPriceHistoryRepository.findByCryptoIdOrderByRecordedAtAsc(cryptoId);
     }
+
+    @QueryMapping
+    public List<CryptoCurrency> searchCryptoCurrencyByCryptoId(@Argument String cryptoId){
+        return cryptoCurrencyService.searchCryptoCurrencies(cryptoId);
+    }
 }
