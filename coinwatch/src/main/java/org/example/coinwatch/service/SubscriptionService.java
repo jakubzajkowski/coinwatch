@@ -47,6 +47,10 @@ public class SubscriptionService {
         }
     }
 
+    public List<Subscription> getSubscriptionsByUserId(Long userId) {
+        return subscriptionRepository.findSubscriptionsByUserId(userId).orElseThrow(()->new IllegalArgumentException("Subscrition not found"));
+    }
+
     @Cacheable(value = "cryptoSubscribers", key = "#symbol")
     public List<Long> getUserIdsSubscribedTo(String symbol) {
         List<?> rawIds = userRepository.findAll().stream()

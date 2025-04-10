@@ -19,7 +19,7 @@ public class CryptoCurrency implements Serializable {
     @Column(name = "crypto_id", unique = true, nullable = false)
     private String cryptoId; // Identyfikator kryptowaluty (np. "bitcoin")
 
-    @Column(nullable = false,unique = true)
+    @Column(nullable = false)
     private String symbol; // Symbol kryptowaluty (np. "btc")
 
     @Column(nullable = false)

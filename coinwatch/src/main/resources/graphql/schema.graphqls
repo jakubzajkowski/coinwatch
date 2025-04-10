@@ -86,6 +86,7 @@ type CryptoPriceHistory {
 type Query {
     getAlerts: [Alert]
     getAlertByUserId(userId: ID!): [Alert]
+    getSubscriptionByUserId(userId: ID!): [Subscription]
     getUserById(id: ID!): User
     getCryptoCurrencyByCryptoId(cryptoId: String!): CryptoCurrency
     searchCryptoCurrencyByCryptoId(cryptoId: String!): [CryptoCurrency]
