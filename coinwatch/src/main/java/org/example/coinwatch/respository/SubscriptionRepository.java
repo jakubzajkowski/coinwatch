@@ -8,4 +8,5 @@ import java.util.Optional;
 
 public interface SubscriptionRepository extends JpaRepository<Subscription,Long> {
     Optional<List<Subscription>> findSubscriptionsByUserId(long id);
+    Optional<Subscription> findByUserIdAndCryptoCurrencyId(Long userId, Long cryptoId);
 }

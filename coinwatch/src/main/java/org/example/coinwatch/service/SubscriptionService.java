@@ -4,6 +4,7 @@ import jakarta.annotation.PostConstruct;
 import org.example.coinwatch.entity.CryptoCurrency;
 import org.example.coinwatch.entity.Subscription;
 import org.example.coinwatch.entity.User;
+import org.example.coinwatch.exception.SubscriptionAlreadyExistsException;
 import org.example.coinwatch.respository.CryptoCurrencyRepository;
 import org.example.coinwatch.respository.SubscriptionRepository;
 import org.example.coinwatch.respository.UserRepository;
@@ -15,6 +16,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class SubscriptionService {
@@ -31,6 +33,12 @@ public class SubscriptionService {
     private CacheManager cacheManager;
 
     public Subscription addSubscription(Long userId, Long cryptoId) {
+        Optional<Subscription> existing = subscriptionRepository.findByUserIdAndCryptoCurrencyId(userId, cryptoId);
+
+        if (existing.isPresent()) {
+            throw new SubscriptionAlreadyExistsException("User subscribe already exists");
+        }
+
         User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
         CryptoCurrency cryptoCurrency = cryptoCurrencyRepository.findById(cryptoId).orElseThrow(() -> new RuntimeException("CryptoCurrency not found"));
 
