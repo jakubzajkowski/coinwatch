@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import {Dispatch, FC, useState} from "react";
 import {ButtonPrimary} from "../styled.tsx";
+import SubscribedCryptoCurrencies from "./SubscribedCryptoCurrencies.tsx";
 
 interface ConfigureAlertsModalProps {
     setIsOpen: Dispatch<React.SetStateAction<boolean>>;
@@ -25,7 +26,7 @@ const ModalWrapper = styled.div`
     color: white;
     padding: 24px;
     border-radius: 12px;
-    width: 400px;
+    width: 500px;
     max-width: 90vw;
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
 `;
@@ -86,7 +87,7 @@ const ActionButtons = styled.div`
 `;
 
 const ConfigureAlertsModal: FC<ConfigureAlertsModalProps> = ({setIsOpen}) => {
-    const [activeTab, setActiveTab] = useState<"thresholds" | "coins" | "notifications">("coins");
+    const [activeTab, setActiveTab] = useState<"subscriptions" | "coins">("coins");
     const [customSymbol, setCustomSymbol] = useState("");
     const [subscribedCoins, setSubscribedCoins] = useState<string[]>([
         "Bitcoin (BTC)",
@@ -113,10 +114,11 @@ const ConfigureAlertsModal: FC<ConfigureAlertsModalProps> = ({setIsOpen}) => {
                 </p>
 
                 <Tabs>
-                    <Tab active={activeTab === "thresholds"} onClick={() => setActiveTab("thresholds")}>Thresholds</Tab>
+                    <Tab active={activeTab === "subscriptions"} onClick={() => setActiveTab("subscriptions")}>Subscriptions</Tab>
                     <Tab active={activeTab === "coins"} onClick={() => setActiveTab("coins")}>Coins</Tab>
-                    <Tab active={activeTab === "notifications"} onClick={() => setActiveTab("notifications")}>Notifications</Tab>
                 </Tabs>
+
+                {activeTab === "subscriptions" && <SubscribedCryptoCurrencies />}
 
                 {activeTab === "coins" && (
                     <>

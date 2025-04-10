@@ -103,7 +103,9 @@ export type Query = {
   getCryptoCurrencies?: Maybe<Array<Maybe<CryptoCurrency>>>;
   getCryptoCurrencyByCryptoId?: Maybe<CryptoCurrency>;
   getCryptoPriceHistory?: Maybe<Array<Maybe<CryptoPriceHistory>>>;
+  getSubscriptionByUserId?: Maybe<Array<Maybe<Subscription>>>;
   getUserById?: Maybe<User>;
+  searchCryptoCurrencyByCryptoId?: Maybe<Array<Maybe<CryptoCurrency>>>;
 };
 
 
@@ -128,8 +130,18 @@ export type QueryGetCryptoPriceHistoryArgs = {
 };
 
 
+export type QueryGetSubscriptionByUserIdArgs = {
+  userId: Scalars['ID']['input'];
+};
+
+
 export type QueryGetUserByIdArgs = {
   id: Scalars['ID']['input'];
+};
+
+
+export type QuerySearchCryptoCurrencyByCryptoIdArgs = {
+  cryptoId: Scalars['String']['input'];
 };
 
 export type Subscription = {
@@ -186,6 +198,13 @@ export type GetAlertByUserIdQueryVariables = Exact<{
 
 
 export type GetAlertByUserIdQuery = { __typename?: 'Query', getAlertByUserId?: Array<{ __typename?: 'Alert', id: string, symbol: string, changePercent?: number | null, oldPrice?: number | null, newPrice?: number | null, createdAt?: string | null } | null> | null };
+
+export type GetSubscriptionByUserIdQueryVariables = Exact<{
+  userId: Scalars['ID']['input'];
+}>;
+
+
+export type GetSubscriptionByUserIdQuery = { __typename?: 'Query', getSubscriptionByUserId?: Array<{ __typename?: 'Subscription', cryptoCurrency?: { __typename?: 'CryptoCurrency', cryptoId: string, symbol: string, imageUrl?: string | null } | null } | null> | null };
 
 export type AddSubscriptionMutationVariables = Exact<{
   userId: Scalars['ID']['input'];
@@ -382,6 +401,50 @@ export type GetAlertByUserIdQueryHookResult = ReturnType<typeof useGetAlertByUse
 export type GetAlertByUserIdLazyQueryHookResult = ReturnType<typeof useGetAlertByUserIdLazyQuery>;
 export type GetAlertByUserIdSuspenseQueryHookResult = ReturnType<typeof useGetAlertByUserIdSuspenseQuery>;
 export type GetAlertByUserIdQueryResult = Apollo.QueryResult<GetAlertByUserIdQuery, GetAlertByUserIdQueryVariables>;
+export const GetSubscriptionByUserIdDocument = gql`
+    query getSubscriptionByUserId($userId: ID!) {
+  getSubscriptionByUserId(userId: $userId) {
+    cryptoCurrency {
+      cryptoId
+      symbol
+      imageUrl
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetSubscriptionByUserIdQuery__
+ *
+ * To run a query within a React component, call `useGetSubscriptionByUserIdQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetSubscriptionByUserIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetSubscriptionByUserIdQuery({
+ *   variables: {
+ *      userId: // value for 'userId'
+ *   },
+ * });
+ */
+export function useGetSubscriptionByUserIdQuery(baseOptions: Apollo.QueryHookOptions<GetSubscriptionByUserIdQuery, GetSubscriptionByUserIdQueryVariables> & ({ variables: GetSubscriptionByUserIdQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetSubscriptionByUserIdQuery, GetSubscriptionByUserIdQueryVariables>(GetSubscriptionByUserIdDocument, options);
+      }
+export function useGetSubscriptionByUserIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetSubscriptionByUserIdQuery, GetSubscriptionByUserIdQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetSubscriptionByUserIdQuery, GetSubscriptionByUserIdQueryVariables>(GetSubscriptionByUserIdDocument, options);
+        }
+export function useGetSubscriptionByUserIdSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetSubscriptionByUserIdQuery, GetSubscriptionByUserIdQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetSubscriptionByUserIdQuery, GetSubscriptionByUserIdQueryVariables>(GetSubscriptionByUserIdDocument, options);
+        }
+export type GetSubscriptionByUserIdQueryHookResult = ReturnType<typeof useGetSubscriptionByUserIdQuery>;
+export type GetSubscriptionByUserIdLazyQueryHookResult = ReturnType<typeof useGetSubscriptionByUserIdLazyQuery>;
+export type GetSubscriptionByUserIdSuspenseQueryHookResult = ReturnType<typeof useGetSubscriptionByUserIdSuspenseQuery>;
+export type GetSubscriptionByUserIdQueryResult = Apollo.QueryResult<GetSubscriptionByUserIdQuery, GetSubscriptionByUserIdQueryVariables>;
 export const AddSubscriptionDocument = gql`
     mutation AddSubscription($userId: ID!, $cryptoId: ID!) {
   addSubscription(userId: $userId, cryptoId: $cryptoId) {

@@ -46,8 +46,8 @@ const NavBar = () => {
             </Menu>
         </div>
         <div>
-            <ButtonSecondary>Sign In</ButtonSecondary>
-            <ButtonPrimary>Get Started</ButtonPrimary>
+            <ButtonSecondary><LinkCoinWatch to={"/sign-in"}>Sign In</LinkCoinWatch></ButtonSecondary>
+            <ButtonPrimary><LinkCoinWatch color={"black"} to={"/sign-up"}>Get Started</LinkCoinWatch></ButtonPrimary>
         </div>
     </Nav>
 }

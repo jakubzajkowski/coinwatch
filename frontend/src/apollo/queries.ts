@@ -56,6 +56,18 @@ export const GET_ALERT_BY_USER_ID = gql`
         }
     }
 `
+export const GET_SUBSCRIPTION_BY_USER_ID = gql`
+    query getSubscriptionByUserId($userId: ID!){
+        getSubscriptionByUserId(userId: $userId) {
+            cryptoCurrency {
+                cryptoId
+                symbol
+                imageUrl
+            }
+        }
+    }
+`
+
 
 export const MUTATION_ADD_SUBSCRIPTION = gql`
     mutation AddSubscription($userId: ID!, $cryptoId: ID!) {
