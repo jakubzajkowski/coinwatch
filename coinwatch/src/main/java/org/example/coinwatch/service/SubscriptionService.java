@@ -48,6 +48,15 @@ public class SubscriptionService {
         return subscriptionRepository.save(subscription);
     }
 
+    public boolean deleteSubscription(Long userId, Long cryptoId) {
+        Subscription existing = subscriptionRepository.findByUserIdAndCryptoCurrencyId(userId, cryptoId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        subscriptionRepository.delete(existing);
+
+        return true;
+    }
+
     public void updateCache(String symbol) {
         Cache cache = cacheManager.getCache("cryptoSubscribers");
         if (cache != null) {

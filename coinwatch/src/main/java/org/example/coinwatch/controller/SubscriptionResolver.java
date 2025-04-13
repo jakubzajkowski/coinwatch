@@ -23,4 +23,8 @@ public class SubscriptionResolver {
     public List<Subscription> getSubscriptionByUserId(@Argument Long userId) {
         return subscriptionService.getSubscriptionsByUserId(userId);
     }
+    @MutationMapping
+    public boolean deleteSubscription(@Argument Long userId, @Argument Long cryptoId) {
+        return subscriptionService.deleteSubscription(userId, cryptoId);
+    }
 }

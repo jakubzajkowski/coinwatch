@@ -8,6 +8,7 @@ enum Interest {
 
 type Mutation {
     addSubscription(userId: ID!, cryptoId: ID!): Subscription
+    deleteSubscription(userId: ID!, cryptoId: ID!): Boolean
 }
 
 type Subscription {
