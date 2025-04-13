@@ -3,7 +3,7 @@ version: '3.8'
 services:
   postgres:
     image: postgres:15
-    container_name: postgres
+    container_name: coinwatch-postgres
     restart: always
     environment:
       POSTGRES_USER: postgres
@@ -16,13 +16,13 @@ services:
 
   redis:
     image: redis:7
-    container_name: redis
+    container_name: coinwatch-redis
     ports:
       - "6379:6379"
 
   zookeeper:
     image: confluentinc/cp-zookeeper:7.4.0
-    container_name: zookeeper
+    container_name: coinwatch-zookeeper
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
@@ -31,22 +31,23 @@ services:
 
   kafka:
     image: confluentinc/cp-kafka:7.4.0
-    container_name: kafka
+    container_name: coinwatch-kafka
     depends_on:
       - zookeeper
     ports:
       - "9092:9092"
     environment:
       KAFKA_BROKER_ID: 1
-      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
+      KAFKA_ZOOKEEPER_CONNECT: coinwatch-zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://coinwatch-kafka:9092
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
 
   app:
     build:
-      context: ../
+      context: .
       dockerfile: Dockerfile
-    container_name: springboot-app
+    container_name: coinwatch-springboot
     depends_on:
       - postgres
       - redis
@@ -54,17 +55,18 @@ services:
     ports:
       - "8080:8080"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/coinwatch
+      SPRING_DATASOURCE_URL: jdbc:postgresql://coinwatch-postgres:5432/coinwatch
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: zaq1@WSX
-      SPRING_REDIS_HOST: redis
-      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+      SPRING_DATA_REDIS_HOST: coinwatch-redis
+      SPRING_KAFKA_PRODUCER_BOOTSTRAP_SERVERS: coinwatch-kafka:9092
+      SPRING_KAFKA_CONSUMER_BOOTSTRAP_SERVERS: coinwatch-kafka:9092
 
   frontend:
     build:
-      context: ../../frontend
-      dockerfile: Dockerfile
-    container_name: vite-frontend
+      context: ../frontend
+      dockerfile: ../frontend/Dockerfile
+    container_name: coinwatch-react
     ports:
       - "5173:5173"
     depends_on:
