@@ -1,5 +1,6 @@
 package org.example.coinwatch.service;
 
+
 import jakarta.annotation.PostConstruct;
 import org.example.coinwatch.entity.CryptoCurrency;
 import org.example.coinwatch.entity.Subscription;
@@ -14,6 +15,7 @@ import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -48,11 +50,14 @@ public class SubscriptionService {
         return subscriptionRepository.save(subscription);
     }
 
+    @Transactional
     public boolean deleteSubscription(Long userId, Long cryptoId) {
-        Subscription existing = subscriptionRepository.findByUserIdAndCryptoCurrencyId(userId, cryptoId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+        subscriptionRepository.deleteByUserIdAndCryptoId(userId, cryptoId);
+        CryptoCurrency crypto = cryptoCurrencyRepository.findById(cryptoId).orElse(null);
 
-        subscriptionRepository.delete(existing);
+        if (crypto != null) {
+            updateCache(crypto.getSymbol());
+        }
 
         return true;
     }
