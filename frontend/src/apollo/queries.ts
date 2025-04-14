@@ -60,6 +60,7 @@ export const GET_SUBSCRIPTION_BY_USER_ID = gql`
     query getSubscriptionByUserId($userId: ID!){
         getSubscriptionByUserId(userId: $userId) {
             cryptoCurrency {
+                id
                 cryptoId
                 symbol
                 imageUrl
@@ -67,6 +68,18 @@ export const GET_SUBSCRIPTION_BY_USER_ID = gql`
         }
     }
 `
+export const SEARCH_CRYPTO_CURRENCIES_BY_CRYPTO_ID = gql`
+    query searchCryptoCurrencyByCryptoId($cryptoId: String!){
+        searchCryptoCurrencyByCryptoId(cryptoId: $cryptoId) {
+            id
+            cryptoId
+            symbol
+            name
+            imageUrl
+        }
+    }
+`
+
 
 
 export const MUTATION_ADD_SUBSCRIPTION = gql`
@@ -74,5 +87,11 @@ export const MUTATION_ADD_SUBSCRIPTION = gql`
         addSubscription(userId: $userId, cryptoId: $cryptoId) {
             id
         }
+    }
+`
+
+export const MUTATION_DELETE_SUBSCRIPTION = gql`
+    mutation DeleteSubscription($userId: ID!, $cryptoId: ID!) {
+        deleteSubscription(userId: $userId, cryptoId: $cryptoId)
     }
 `

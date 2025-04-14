@@ -1,6 +1,6 @@
 import styled from "styled-components";
-import {useQuery} from "@apollo/client";
-import {GET_SUBSCRIPTION_BY_USER_ID} from "../../apollo/queries.ts";
+import {useMutation, useQuery} from "@apollo/client";
+import {GET_SUBSCRIPTION_BY_USER_ID, MUTATION_DELETE_SUBSCRIPTION} from "../../apollo/queries.ts";
 import {useSelector} from "react-redux";
 import {RootState} from "../../redux/store.ts";
 import {GetSubscriptionByUserIdQuery} from "../../graphql/generated.ts";
@@ -12,6 +12,7 @@ const Container = styled.div`
 const Title = styled.h2`
     color: ${({theme})=>theme.colors.primary};
     font-size: 0.9rem;
+    margin: 0.5rem 0;
 `
 
 const Description = styled.p`
@@ -38,9 +39,25 @@ const SubscribedCryptoCard = styled.div`
 const SubscribedCryptoCurrencies = () => {
     const {user} = useSelector((state: RootState) => state.auth);
 
-    const {error,loading,data} = useQuery<GetSubscriptionByUserIdQuery>(GET_SUBSCRIPTION_BY_USER_ID,{
+    const {error,loading,data,refetch} = useQuery<GetSubscriptionByUserIdQuery>(GET_SUBSCRIPTION_BY_USER_ID,{
         variables: {userId: user?.id}
     })
+
+    const [deleteSubscription] = useMutation(MUTATION_DELETE_SUBSCRIPTION);
+
+    const handleDelete = async (cryptoId: string) => {
+        try {
+            const response = await deleteSubscription({
+                variables: { userId: user?.id, cryptoId: cryptoId }
+            });
+
+            if (response.data) {
+                await refetch();
+            }
+        } catch (err) {
+            console.error('Błąd przy usuwaniu subskrypcji ❌', err);
+        }
+    };
 
     console.log(data)
 
@@ -52,7 +69,7 @@ const SubscribedCryptoCurrencies = () => {
         Loading...
     </div>
 
-    return <Container>
+    return (data?.getSubscriptionByUserId?.length==0 ? <Title>You have no subscribed cryptocurrencies</Title> : <Container>
         <Title>Your subscribed cryptocurrencies</Title>
         <Description>You'll receive alerts for these cryptocurrencies</Description>
         <SubscribedCryptos>
@@ -62,11 +79,11 @@ const SubscribedCryptoCurrencies = () => {
                         <img style={{height:"30px",width:"30px"}} src={crypto?.cryptoCurrency?.imageUrl as string}/>
                         <p style={{display:"inline"}}>{crypto?.cryptoCurrency?.cryptoId} ({crypto?.cryptoCurrency?.symbol})</p>
                     </div>
-                    <TiDelete style={{height:"30px",width:"30px",cursor:"pointer"}}/>
+                    <TiDelete onClick={()=>handleDelete(crypto?.cryptoCurrency?.id as string)} style={{height:"30px",width:"30px",cursor:"pointer"}}/>
                 </SubscribedCryptoCard>
             })}
         </SubscribedCryptos>
-    </Container>
+    </Container>)
 }
 
 export default SubscribedCryptoCurrencies;

@@ -127,7 +127,7 @@ const Home = () =>{
             <NewsLetterDescription>Subscribe to our newsletter for the latest crypto news and market updates.</NewsLetterDescription>
             <div style={{width:'100%',display:"flex",justifyContent:'center',alignItems:'center'}}>
                 <InputCoinWatch width={"25%"} placeholder="Enter your email"/>
-                <ButtonPrimary>Subscribe</ButtonPrimary>
+                <ButtonPrimary>Subscribe123</ButtonPrimary>
             </div>
         </NewsLetterContainer>
     </main>

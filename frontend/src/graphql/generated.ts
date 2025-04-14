@@ -88,10 +88,17 @@ export enum Interest {
 export type Mutation = {
   __typename?: 'Mutation';
   addSubscription?: Maybe<Subscription>;
+  deleteSubscription?: Maybe<Scalars['Boolean']['output']>;
 };
 
 
 export type MutationAddSubscriptionArgs = {
+  cryptoId: Scalars['ID']['input'];
+  userId: Scalars['ID']['input'];
+};
+
+
+export type MutationDeleteSubscriptionArgs = {
   cryptoId: Scalars['ID']['input'];
   userId: Scalars['ID']['input'];
 };
@@ -204,7 +211,14 @@ export type GetSubscriptionByUserIdQueryVariables = Exact<{
 }>;
 
 
-export type GetSubscriptionByUserIdQuery = { __typename?: 'Query', getSubscriptionByUserId?: Array<{ __typename?: 'Subscription', cryptoCurrency?: { __typename?: 'CryptoCurrency', cryptoId: string, symbol: string, imageUrl?: string | null } | null } | null> | null };
+export type GetSubscriptionByUserIdQuery = { __typename?: 'Query', getSubscriptionByUserId?: Array<{ __typename?: 'Subscription', cryptoCurrency?: { __typename?: 'CryptoCurrency', id: string, cryptoId: string, symbol: string, imageUrl?: string | null } | null } | null> | null };
+
+export type SearchCryptoCurrencyByCryptoIdQueryVariables = Exact<{
+  cryptoId: Scalars['String']['input'];
+}>;
+
+
+export type SearchCryptoCurrencyByCryptoIdQuery = { __typename?: 'Query', searchCryptoCurrencyByCryptoId?: Array<{ __typename?: 'CryptoCurrency', id: string, cryptoId: string, symbol: string, name: string, imageUrl?: string | null } | null> | null };
 
 export type AddSubscriptionMutationVariables = Exact<{
   userId: Scalars['ID']['input'];
@@ -213,6 +227,14 @@ export type AddSubscriptionMutationVariables = Exact<{
 
 
 export type AddSubscriptionMutation = { __typename?: 'Mutation', addSubscription?: { __typename?: 'Subscription', id?: string | null } | null };
+
+export type DeleteSubscriptionMutationVariables = Exact<{
+  userId: Scalars['ID']['input'];
+  cryptoId: Scalars['ID']['input'];
+}>;
+
+
+export type DeleteSubscriptionMutation = { __typename?: 'Mutation', deleteSubscription?: boolean | null };
 
 
 export const GetCryptoCurrenciesDocument = gql`
@@ -405,6 +427,7 @@ export const GetSubscriptionByUserIdDocument = gql`
     query getSubscriptionByUserId($userId: ID!) {
   getSubscriptionByUserId(userId: $userId) {
     cryptoCurrency {
+      id
       cryptoId
       symbol
       imageUrl
@@ -445,6 +468,50 @@ export type GetSubscriptionByUserIdQueryHookResult = ReturnType<typeof useGetSub
 export type GetSubscriptionByUserIdLazyQueryHookResult = ReturnType<typeof useGetSubscriptionByUserIdLazyQuery>;
 export type GetSubscriptionByUserIdSuspenseQueryHookResult = ReturnType<typeof useGetSubscriptionByUserIdSuspenseQuery>;
 export type GetSubscriptionByUserIdQueryResult = Apollo.QueryResult<GetSubscriptionByUserIdQuery, GetSubscriptionByUserIdQueryVariables>;
+export const SearchCryptoCurrencyByCryptoIdDocument = gql`
+    query searchCryptoCurrencyByCryptoId($cryptoId: String!) {
+  searchCryptoCurrencyByCryptoId(cryptoId: $cryptoId) {
+    id
+    cryptoId
+    symbol
+    name
+    imageUrl
+  }
+}
+    `;
+
+/**
+ * __useSearchCryptoCurrencyByCryptoIdQuery__
+ *
+ * To run a query within a React component, call `useSearchCryptoCurrencyByCryptoIdQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSearchCryptoCurrencyByCryptoIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSearchCryptoCurrencyByCryptoIdQuery({
+ *   variables: {
+ *      cryptoId: // value for 'cryptoId'
+ *   },
+ * });
+ */
+export function useSearchCryptoCurrencyByCryptoIdQuery(baseOptions: Apollo.QueryHookOptions<SearchCryptoCurrencyByCryptoIdQuery, SearchCryptoCurrencyByCryptoIdQueryVariables> & ({ variables: SearchCryptoCurrencyByCryptoIdQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<SearchCryptoCurrencyByCryptoIdQuery, SearchCryptoCurrencyByCryptoIdQueryVariables>(SearchCryptoCurrencyByCryptoIdDocument, options);
+      }
+export function useSearchCryptoCurrencyByCryptoIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SearchCryptoCurrencyByCryptoIdQuery, SearchCryptoCurrencyByCryptoIdQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<SearchCryptoCurrencyByCryptoIdQuery, SearchCryptoCurrencyByCryptoIdQueryVariables>(SearchCryptoCurrencyByCryptoIdDocument, options);
+        }
+export function useSearchCryptoCurrencyByCryptoIdSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<SearchCryptoCurrencyByCryptoIdQuery, SearchCryptoCurrencyByCryptoIdQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<SearchCryptoCurrencyByCryptoIdQuery, SearchCryptoCurrencyByCryptoIdQueryVariables>(SearchCryptoCurrencyByCryptoIdDocument, options);
+        }
+export type SearchCryptoCurrencyByCryptoIdQueryHookResult = ReturnType<typeof useSearchCryptoCurrencyByCryptoIdQuery>;
+export type SearchCryptoCurrencyByCryptoIdLazyQueryHookResult = ReturnType<typeof useSearchCryptoCurrencyByCryptoIdLazyQuery>;
+export type SearchCryptoCurrencyByCryptoIdSuspenseQueryHookResult = ReturnType<typeof useSearchCryptoCurrencyByCryptoIdSuspenseQuery>;
+export type SearchCryptoCurrencyByCryptoIdQueryResult = Apollo.QueryResult<SearchCryptoCurrencyByCryptoIdQuery, SearchCryptoCurrencyByCryptoIdQueryVariables>;
 export const AddSubscriptionDocument = gql`
     mutation AddSubscription($userId: ID!, $cryptoId: ID!) {
   addSubscription(userId: $userId, cryptoId: $cryptoId) {
@@ -479,3 +546,35 @@ export function useAddSubscriptionMutation(baseOptions?: Apollo.MutationHookOpti
 export type AddSubscriptionMutationHookResult = ReturnType<typeof useAddSubscriptionMutation>;
 export type AddSubscriptionMutationResult = Apollo.MutationResult<AddSubscriptionMutation>;
 export type AddSubscriptionMutationOptions = Apollo.BaseMutationOptions<AddSubscriptionMutation, AddSubscriptionMutationVariables>;
+export const DeleteSubscriptionDocument = gql`
+    mutation DeleteSubscription($userId: ID!, $cryptoId: ID!) {
+  deleteSubscription(userId: $userId, cryptoId: $cryptoId)
+}
+    `;
+export type DeleteSubscriptionMutationFn = Apollo.MutationFunction<DeleteSubscriptionMutation, DeleteSubscriptionMutationVariables>;
+
+/**
+ * __useDeleteSubscriptionMutation__
+ *
+ * To run a mutation, you first call `useDeleteSubscriptionMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteSubscriptionMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteSubscriptionMutation, { data, loading, error }] = useDeleteSubscriptionMutation({
+ *   variables: {
+ *      userId: // value for 'userId'
+ *      cryptoId: // value for 'cryptoId'
+ *   },
+ * });
+ */
+export function useDeleteSubscriptionMutation(baseOptions?: Apollo.MutationHookOptions<DeleteSubscriptionMutation, DeleteSubscriptionMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteSubscriptionMutation, DeleteSubscriptionMutationVariables>(DeleteSubscriptionDocument, options);
+      }
+export type DeleteSubscriptionMutationHookResult = ReturnType<typeof useDeleteSubscriptionMutation>;
+export type DeleteSubscriptionMutationResult = Apollo.MutationResult<DeleteSubscriptionMutation>;
+export type DeleteSubscriptionMutationOptions = Apollo.BaseMutationOptions<DeleteSubscriptionMutation, DeleteSubscriptionMutationVariables>;

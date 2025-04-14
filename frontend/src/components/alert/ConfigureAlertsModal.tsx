@@ -2,6 +2,10 @@ import styled from "styled-components";
 import {Dispatch, FC, useState} from "react";
 import {ButtonPrimary} from "../styled.tsx";
 import SubscribedCryptoCurrencies from "./SubscribedCryptoCurrencies.tsx";
+import {useQuery} from "@apollo/client";
+import {SEARCH_CRYPTO_CURRENCIES_BY_CRYPTO_ID} from "../../apollo/queries.ts";
+import {SearchCryptoCurrencyByCryptoIdQuery} from "../../graphql/generated.ts";
+import SearchedCryptoCurrenciesCard from "./SearchedCryptoCurrenciesCard.tsx";
 
 interface ConfigureAlertsModalProps {
     setIsOpen: Dispatch<React.SetStateAction<boolean>>;
@@ -51,9 +55,14 @@ const Tab = styled.button<{ active?: boolean }>`
     border-radius: 0.5rem;
 `;
 
-const SubscribedList = styled.div`
-    margin-bottom: 20px;
-    line-height: 1.6;
+const SearchedCryptoCurrenciesContainer = styled.div`
+    padding: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    max-height: 400px;
+    overflow-y: scroll;
+    gap: 1rem;
+    margin: 1rem 0;
 `;
 
 const InputRow = styled.div`
@@ -88,21 +97,14 @@ const ActionButtons = styled.div`
 
 const ConfigureAlertsModal: FC<ConfigureAlertsModalProps> = ({setIsOpen}) => {
     const [activeTab, setActiveTab] = useState<"subscriptions" | "coins">("coins");
-    const [customSymbol, setCustomSymbol] = useState("");
-    const [subscribedCoins, setSubscribedCoins] = useState<string[]>([
-        "Bitcoin (BTC)",
-        "Ethereum (ETH)",
-        "Solana (SOL)",
-        "Binance Coin (BNB)",
-        "Cardano (ADA)",
-        "XRP (XRP)",
-    ]);
+    const [cryptoId, setCryptoId] = useState("");
 
-    const handleAddSymbol = () => {
-        if (customSymbol.trim()) {
-            setSubscribedCoins([...subscribedCoins, customSymbol.trim()]);
-            setCustomSymbol("");
-        }
+    const { error, loading, data, refetch } = useQuery<SearchCryptoCurrencyByCryptoIdQuery>(SEARCH_CRYPTO_CURRENCIES_BY_CRYPTO_ID, {
+        variables: {cryptoId: ""}
+    });
+
+    const handleSearch = () => {
+        refetch({cryptoId: cryptoId})
     };
 
     return (
@@ -122,30 +124,25 @@ const ConfigureAlertsModal: FC<ConfigureAlertsModalProps> = ({setIsOpen}) => {
 
                 {activeTab === "coins" && (
                     <>
-                        <SubscribedList>
-                            <strong>Subscribed Cryptocurrencies:</strong>
-                            <ul>
-                                {subscribedCoins.map((coin, index) => (
-                                    <p key={index}> {coin}</p>
-                                ))}
-                            </ul>
-                        </SubscribedList>
-
                         <InputRow>
                             <Input
                                 type="text"
                                 placeholder="Enter symbol (e.g., LINK)"
-                                value={customSymbol}
-                                onChange={(e) => setCustomSymbol(e.target.value)}
+                                value={cryptoId}
+                                onChange={(e) => setCryptoId(e.target.value)}
                             />
-                            <AddButton onClick={handleAddSymbol}>Add</AddButton>
+                            <AddButton onClick={handleSearch}>Search</AddButton>
                         </InputRow>
+                        <SearchedCryptoCurrenciesContainer>
+                            {data?.searchCryptoCurrencyByCryptoId && data.searchCryptoCurrencyByCryptoId.map(({cryptoId,id,imageUrl}) =>
+                                <SearchedCryptoCurrenciesCard cryptoId={cryptoId} id={id} image={imageUrl}/>
+                            )}
+                        </SearchedCryptoCurrenciesContainer>
                     </>
                 )}
 
                 <ActionButtons>
                     <ButtonPrimary onClick={()=>setIsOpen(state=>!state)}>Cancel</ButtonPrimary>
-                    <ButtonPrimary>Save Changes</ButtonPrimary>
                 </ActionButtons>
             </ModalWrapper>
         </Overlay>
