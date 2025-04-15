@@ -83,9 +83,34 @@ type CryptoPriceHistory {
     recordedAt: String
 }
 
+type GlobalMarket {
+    id: ID!
+    activeCryptocurrencies: Int!
+    upcomingIcos: Int!
+    ongoingIcos: Int!
+    endedIcos: Int!
+    markets: Int!
+    totalMarketCap: [CurrencyValue!]!
+    totalVolume: [CurrencyValue!]!
+    marketCapPercentage: [CurrencyPercentage!]!
+    marketCapChangePercentage24hUsd: Float!
+    updatedAt: Float!
+}
+
+type CurrencyValue {
+    currency: String!
+    amount: Float!
+}
+
+type CurrencyPercentage {
+    currency: String!
+    percentage: Float
+}
+
 
 type Query {
     getAlerts: [Alert]
+    getGlobalMarket: GlobalMarket
     getAlertByUserId(userId: ID!): [Alert]
     getSubscriptionByUserId(userId: ID!): [Subscription]
     getUserById(id: ID!): User
