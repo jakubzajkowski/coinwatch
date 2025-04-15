@@ -21,6 +21,7 @@ import Alerts from "./pages/Alerts.tsx";
 import NotFound from "./pages/404.tsx";
 import SignIn from "./pages/SignIn.tsx";
 import Crypto from "./pages/Crypto.tsx";
+import Cryptocurrency from "./pages/Cryptocurrency.tsx";
 
 function App() {
 
@@ -33,6 +34,7 @@ function App() {
                             <NavBar />
                             <Routes>
                                 <Route path="/about" element={<About />} />
+                                <Route path="/cryptocurrencies" element={<Cryptocurrency />} />
                                 <Route path="/" element={<Home />} />
                                 <Route path="/dashboard" element={<Dashboard />} />
                                 <Route path="/notifications" element={<Notifications />} />
