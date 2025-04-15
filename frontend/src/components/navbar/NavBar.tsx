@@ -41,13 +41,15 @@ const NavBar = () => {
         <div>
             <Menu>
                 <li><LinkCoinWatch to="/">Home</LinkCoinWatch></li>
-                <li><LinkCoinWatch to="/">Markets</LinkCoinWatch></li>
+                <li><LinkCoinWatch to="/cryptocurrencies">Cryptos</LinkCoinWatch></li>
+                <li><LinkCoinWatch to="/alerts">Alerts</LinkCoinWatch></li>
+                <li><LinkCoinWatch to="/">Market</LinkCoinWatch></li>
                 <li><LinkCoinWatch to="/">Portfolio</LinkCoinWatch></li>
                 <li><LinkCoinWatch to="/">News</LinkCoinWatch></li>
             </Menu>
         </div>
-        <div style={{display:"flex",alignItems:"center"}}>
-            <LanguageSwitcher />
+        <div style={{display: "flex", alignItems: "center"}}>
+        <LanguageSwitcher />
             <ButtonSecondary><LinkCoinWatch to={"/sign-in"}>Sign In</LinkCoinWatch></ButtonSecondary>
             <ButtonPrimary><LinkCoinWatch color={"black"} to={"/sign-up"}>Get Started</LinkCoinWatch></ButtonPrimary>
         </div>

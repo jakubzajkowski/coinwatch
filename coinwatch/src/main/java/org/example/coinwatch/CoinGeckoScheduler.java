@@ -1,10 +1,8 @@
 package org.example.coinwatch;
 
 import org.example.coinwatch.dto.CryptoCurrencyDTO;
-import org.example.coinwatch.service.CoinGeckoService;
-import org.example.coinwatch.service.CryptoAlertsService;
-import org.example.coinwatch.service.CryptoCurrencyService;
-import org.example.coinwatch.service.CryptoPriceHistoryService;
+import org.example.coinwatch.dto.GlobalMarketDTO;
+import org.example.coinwatch.service.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +21,9 @@ public class CoinGeckoScheduler {
 
     @Autowired
     private CoinGeckoService coinGeckoService;
+
+    @Autowired
+    private GlobalMarketService globalMarketService;
 
     @Autowired
     private CryptoAlertsService cryptoAlertsService;
@@ -49,5 +50,14 @@ public class CoinGeckoScheduler {
         }
 
         logger.info("Finished scheduled task: saveUpdateGeckoCryptoCurrency");
+    }
+
+    @Async
+    @Scheduled(fixedRateString = "3600000")
+    public void saveUpdateGeckoGlobalMarket(){
+        logger.info("Starting scheduled task: saveUpdateGeckoGlobalMarket");
+        GlobalMarketDTO globalMarketDTO = coinGeckoService.getGlobalMarket();
+
+        globalMarketService.saveGlobalMarketData(globalMarketDTO);
     }
 }

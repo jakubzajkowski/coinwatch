@@ -1,6 +1,9 @@
 package org.example.coinwatch.service;
 
+import jakarta.annotation.PostConstruct;
+import org.apache.kafka.common.protocol.types.Field;
 import org.example.coinwatch.dto.CryptoCurrencyDTO;
+import org.example.coinwatch.dto.GlobalMarketDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -43,6 +46,16 @@ public class CoinGeckoService {
         }catch (Exception e){
             logger.error("Error fetching data from CoinGecko API: ", e);
             return Collections.emptyList();
+        }
+    }
+
+    public GlobalMarketDTO getGlobalMarket(){
+        try {
+            String url = String.format("%s/global", apiUrl);
+            return restTemplate.getForObject(url, GlobalMarketDTO.class);
+        }catch (Exception e){
+            logger.error("Error fetching data from CoinGecko API: ", e);
+            return null;
         }
     }
 }

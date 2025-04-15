@@ -36,33 +36,49 @@ public class CryptoAlertsService {
 
         for (String cryptoId : cryptoIds) {
             try {
-                shortTermTrendChange(cryptoId);
+                shortTermPriceChange(cryptoId);
             } catch (Exception e) {
                 logger.error("Error monitoring price for symbol: " + cryptoId, e);
             }
         }
     }
 
-    public void shortTermTrendChange(String cryptoId) throws JsonProcessingException {
-        ZonedDateTime minutesAgo = ZonedDateTime.now().minusMinutes(15);
+    public void shortTermPriceChange(String cryptoId) throws JsonProcessingException {
+        CryptoCurrency crypto = cryptoCurrencyRepository.findByCryptoId(cryptoId).orElseThrow(()-> new RuntimeException("Crypto Not found"));
+        BigDecimal currentPrice = crypto.getCurrentPrice();
+        BigDecimal threshold;
+        int interval;
+
+        if (currentPrice.compareTo(BigDecimal.valueOf(1)) < 0) {
+            threshold = BigDecimal.valueOf(3);
+            interval = 10;
+        } else if (currentPrice.compareTo(BigDecimal.valueOf(100)) < 0) {
+            threshold = BigDecimal.valueOf(0.3);
+            interval = 3;
+        } else {
+            threshold = BigDecimal.valueOf(0.1);
+            interval = 5;
+        }
+
+        ZonedDateTime minutesAgo = ZonedDateTime.now().minusMinutes(interval);
         List<CryptoPriceHistory> historyList = cryptoPriceHistoryRepository.findByCryptoIdAndRecordedAtAfter(cryptoId, minutesAgo);
 
         if (historyList.isEmpty()) {
-            logger.warn("No price data for {} in the last 5 minutes.", cryptoId);
+            logger.warn("No price data for {} in the last minutes.", cryptoId);
             return;
         }
 
         BigDecimal oldPrice = historyList.get(0).getPrice();
         String id = historyList.get(0).getCryptoId();
         String symbol = historyList.get(0).getSymbol();
-        BigDecimal currentPrice = historyList.get(historyList.size()-1).getPrice();
+        BigDecimal price = historyList.get(historyList.size()-1).getPrice();
 
         BigDecimal changePercent = currentPrice.subtract(oldPrice)
                 .divide(oldPrice, 4, BigDecimal.ROUND_HALF_UP)
                 .multiply(BigDecimal.valueOf(100));
 
-        if (changePercent.abs().compareTo(BigDecimal.valueOf(0.01)) > 0) {
-            kafkaProducer.sendPriceChangeAlert(id,symbol, changePercent, oldPrice, currentPrice);
+        if (changePercent.abs().compareTo(threshold) > 0) {
+            kafkaProducer.sendPriceChangeAlert(id,symbol, changePercent, oldPrice, price);
         }
     }
 
