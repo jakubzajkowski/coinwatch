@@ -1,0 +1,29 @@
+{
+  "home": {
+    "title": "Verfolge Kryptowährungen in Echtzeit",
+    "description": "Beobachte Kryptowährungspreise, Marktkapitalisierungen und Trends präzise und einfach.",
+    "search_placeholder": "Suche nach einer Kryptowährung...",
+    "overview_title": "Marktübersicht",
+    "overview_description": "Echtzeitdaten für die führenden Kryptowährungen nach Marktkapitalisierung.",
+    "features": {
+      "realtime": {
+        "title": "Echtzeitdaten",
+        "desc": "Greife auf minutengenaue Kryptowährungspreise und Marktdaten von mehreren Börsen zu."
+      },
+      "portfolio": {
+        "title": "Portfolio-Tracking",
+        "desc": "Beobachte deine Investitionen mit unseren intuitiven Portfolio-Tools."
+      },
+      "insights": {
+        "title": "Markteinblicke",
+        "desc": "Erhalte detaillierte Analysen und Einblicke, um fundierte Investitionsentscheidungen zu treffen."
+      }
+    },
+    "newsletter": {
+      "title": "Bleibe auf dem Laufenden",
+      "desc": "Abonniere unseren Newsletter für die neuesten Krypto-News und Marktupdates.",
+      "placeholder": "Gib deine E-Mail-Adresse ein",
+      "button": "Abonnieren"
+    }
+  }
+}

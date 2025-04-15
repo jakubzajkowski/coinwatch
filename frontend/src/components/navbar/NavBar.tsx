@@ -1,5 +1,6 @@
 import styled from 'styled-components'
-import {ButtonPrimary, ButtonSecondary, LinkCoinWatch} from "./styled.tsx";
+import {ButtonPrimary, ButtonSecondary, LinkCoinWatch} from "../styled.tsx";
+import LanguageSwitcher from "./LanguageSwitcher.tsx";
 
 const Nav = styled.nav`
     display: flex;
@@ -45,7 +46,8 @@ const NavBar = () => {
                 <li><LinkCoinWatch to="/">News</LinkCoinWatch></li>
             </Menu>
         </div>
-        <div>
+        <div style={{display:"flex",alignItems:"center"}}>
+            <LanguageSwitcher />
             <ButtonSecondary><LinkCoinWatch to={"/sign-in"}>Sign In</LinkCoinWatch></ButtonSecondary>
             <ButtonPrimary><LinkCoinWatch color={"black"} to={"/sign-up"}>Get Started</LinkCoinWatch></ButtonPrimary>
         </div>

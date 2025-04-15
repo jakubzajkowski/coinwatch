@@ -1,29 +1,29 @@
 {
-  "home" : {
-    "title": "Track Crypto in Real-Time",
-    "description": "Monitor cryptocurrency prices, market caps, and trends with precision and simplicity.",
-    "search_placeholder": "Search for a cryptocurrency...",
-    "overview_title": "Market Overview",
-    "overview_description": "Real-time data for the top cryptocurrencies by market capitalization.",
+  "home": {
+    "title": "Śledź kryptowaluty w czasie rzeczywistym",
+    "description": "Monitoruj ceny kryptowalut, kapitalizację rynkową i trendy z precyzją i prostotą.",
+    "search_placeholder": "Wyszukaj kryptowalutę...",
+    "overview_title": "Przegląd rynku",
+    "overview_description": "Dane w czasie rzeczywistym dla czołowych kryptowalut według kapitalizacji rynkowej.",
     "features": {
       "realtime": {
-        "title": "Real-Time Data",
-        "desc": "Access up-to-the-minute cryptocurrency prices and market data from multiple exchanges."
+        "title": "Dane na żywo",
+        "desc": "Uzyskaj dostęp do aktualnych cen kryptowalut i danych rynkowych z wielu giełd."
       },
       "portfolio": {
-        "title": "Portfolio Tracking",
-        "desc": "Monitor your investments with our intuitive portfolio management tools."
+        "title": "Śledzenie portfela",
+        "desc": "Monitoruj swoje inwestycje za pomocą intuicyjnych narzędzi do zarządzania portfelem."
       },
       "insights": {
-        "title": "Market Insights",
-        "desc": "Get detailed analytics and insights to make informed investment decisions."
+        "title": "Wgląd w rynek",
+        "desc": "Uzyskaj szczegółowe analizy i informacje, które pomogą Ci podejmować świadome decyzje inwestycyjne."
       }
     },
     "newsletter": {
-      "title": "Stay Updated",
-      "desc": "Subscribe to our newsletter for the latest crypto news and market updates.",
-      "placeholder": "Enter your email",
-      "button": "Subscribe"
+      "title": "Bądź na bieżąco",
+      "desc": "Zapisz się do newslettera, aby otrzymywać najnowsze wiadomości i aktualizacje rynku kryptowalut.",
+      "placeholder": "Wprowadź swój e-mail",
+      "button": "Zapisz się"
     }
   }
 }

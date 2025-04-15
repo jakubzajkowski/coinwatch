@@ -10,7 +10,7 @@ import Home from "./pages/Home.tsx";
 import {ApolloProvider} from "@apollo/client";
 import client from "./apollo/apollo-client.ts";
 import Dashboard from "./pages/Dashboard.tsx";
-import NavBar from "./components/NavBar.tsx";
+import NavBar from "./components/navbar/NavBar.tsx";
 import {theme} from "./theme/theme.ts";
 import Footer from "./components/Footer.tsx";
 import Notifications from "./pages/Notifications.tsx";
