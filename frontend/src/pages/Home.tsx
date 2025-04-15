@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import {ButtonPrimary, InputCoinWatch, SearchInput} from "../components/styled.tsx";
 import MarketOverview from "../components/MarketOverview.tsx";
+import {useTranslation} from "react-i18next";
 
 
 const Introduction = styled.div`
@@ -91,43 +92,43 @@ const NewsLetterDescription = styled.p`
     margin: 0.5rem 0;
 `;
 
-const Home = () =>{
+const Home = () => {
+    const { t } = useTranslation();
 
     return <main>
         <Introduction>
-            <Title >
-                Track Crypto in Real-Time
-            </Title>
-            <Description>
-                Monitor cryptocurrency prices, market caps, and trends with precision and simplicity.
-            </Description>
-            <SearchInput type="text" placeholder="Search for a cryptocurrency..." />
+            <Title>{t("home.title")}</Title>
+            <Description>{t("home.description")}</Description>
+            <SearchInput type="text" placeholder={t("home.search_placeholder")}/>
         </Introduction>
+
         <StyledMarketOverview>
-            <OverviewSubtitle>Market Overview</OverviewSubtitle>
-            <Description>Real-time data for the top cryptocurrencies by market capitalization.</Description>
-            <MarketOverview />
+            <OverviewSubtitle>{t("home.overview_title")}</OverviewSubtitle>
+            <Description>{t("home.overview_description")}</Description>
+            <MarketOverview/>
         </StyledMarketOverview>
+
         <FeaturesContainer>
             <FeatureItem>
-                <FeatureTitle>Real-Time Data</FeatureTitle>
-                <FeatureDescription>Access up-to-the-minute cryptocurrency prices and market data from multiple exchanges.</FeatureDescription>
+                <FeatureTitle>{t("home.features.realtime.title")}</FeatureTitle>
+                <FeatureDescription>{t("home.features.realtime.desc")}</FeatureDescription>
             </FeatureItem>
             <FeatureItem>
-                <FeatureTitle>Portfolio Tracking</FeatureTitle>
-                <FeatureDescription>Monitor your investments with our intuitive portfolio management tools.</FeatureDescription>
+                <FeatureTitle>{t("home.features.portfolio.title")}</FeatureTitle>
+                <FeatureDescription>{t("home.features.portfolio.desc")}</FeatureDescription>
             </FeatureItem>
             <FeatureItem>
-                <FeatureTitle>Market Insights</FeatureTitle>
-                <FeatureDescription>Get detailed analytics and insights to make informed investment decisions.</FeatureDescription>
+                <FeatureTitle>{t("home.features.insights.title")}</FeatureTitle>
+                <FeatureDescription>{t("home.features.insights.desc")}</FeatureDescription>
             </FeatureItem>
         </FeaturesContainer>
+
         <NewsLetterContainer>
-            <NewsLetterTitle>Stay Updated</NewsLetterTitle>
-            <NewsLetterDescription>Subscribe to our newsletter for the latest crypto news and market updates.</NewsLetterDescription>
-            <div style={{width:'100%',display:"flex",justifyContent:'center',alignItems:'center'}}>
-                <InputCoinWatch width={"25%"} placeholder="Enter your email"/>
-                <ButtonPrimary>Subscribe123</ButtonPrimary>
+            <NewsLetterTitle>{t("home.newsletter.title")}</NewsLetterTitle>
+            <NewsLetterDescription>{t("home.newsletter.desc")}</NewsLetterDescription>
+            <div style={{width: "100%", display: "flex", justifyContent: "center", alignItems: "center"}}>
+                <InputCoinWatch width={"25%"} placeholder={t("home.newsletter.placeholder")}/>
+                <ButtonPrimary>{t("home.newsletter.button")}</ButtonPrimary>
             </div>
         </NewsLetterContainer>
     </main>

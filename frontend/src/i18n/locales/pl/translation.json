@@ -1,0 +1,29 @@
+{
+  "home" : {
+    "title": "Track Crypto in Real-Time",
+    "description": "Monitor cryptocurrency prices, market caps, and trends with precision and simplicity.",
+    "search_placeholder": "Search for a cryptocurrency...",
+    "overview_title": "Market Overview",
+    "overview_description": "Real-time data for the top cryptocurrencies by market capitalization.",
+    "features": {
+      "realtime": {
+        "title": "Real-Time Data",
+        "desc": "Access up-to-the-minute cryptocurrency prices and market data from multiple exchanges."
+      },
+      "portfolio": {
+        "title": "Portfolio Tracking",
+        "desc": "Monitor your investments with our intuitive portfolio management tools."
+      },
+      "insights": {
+        "title": "Market Insights",
+        "desc": "Get detailed analytics and insights to make informed investment decisions."
+      }
+    },
+    "newsletter": {
+      "title": "Stay Updated",
+      "desc": "Subscribe to our newsletter for the latest crypto news and market updates.",
+      "placeholder": "Enter your email",
+      "button": "Subscribe"
+    }
+  }
+}

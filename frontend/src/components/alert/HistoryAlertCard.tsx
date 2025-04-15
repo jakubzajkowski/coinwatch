@@ -66,10 +66,10 @@ const HistoryAlertCard: FC<HistoryAlertCardProps> = ({ alert }) => (
                 <AlertDesc>
                     {(alert?.changePercent as number)<0 ?
                         <div>
-                            Price increased by {Math.abs(alert?.changePercent as number)}%
+                            Price decreased by {Math.abs(alert?.changePercent as number)}%
                         </div>:
                         <div>
-                            Price decreased by {Math.abs(alert?.changePercent as number)}%
+                            Price increased by {Math.abs(alert?.changePercent as number)}%
                         </div>}
                 </AlertDesc>
             </AlertText>

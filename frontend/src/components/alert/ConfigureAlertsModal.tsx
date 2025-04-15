@@ -99,7 +99,7 @@ const ConfigureAlertsModal: FC<ConfigureAlertsModalProps> = ({setIsOpen}) => {
     const [activeTab, setActiveTab] = useState<"subscriptions" | "coins">("coins");
     const [cryptoId, setCryptoId] = useState("");
 
-    const { error, loading, data, refetch } = useQuery<SearchCryptoCurrencyByCryptoIdQuery>(SEARCH_CRYPTO_CURRENCIES_BY_CRYPTO_ID, {
+    const { loading, data, refetch } = useQuery<SearchCryptoCurrencyByCryptoIdQuery>(SEARCH_CRYPTO_CURRENCIES_BY_CRYPTO_ID, {
         variables: {cryptoId: ""}
     });
 
@@ -112,7 +112,7 @@ const ConfigureAlertsModal: FC<ConfigureAlertsModalProps> = ({setIsOpen}) => {
             <ModalWrapper>
                 <ModalTitle>Configure Price Alerts</ModalTitle>
                 <p style={{ marginBottom: "16px", fontSize: "14px", color: "#aaa" }}>
-                    Customize how and when you receive price movement notifications. Our system checks for price changes greater than 1% within a 10-minute window by default.
+                    Customize how and when you receive price movement notifications. Our system checks for price changes greater than specific % within a 3 to 10 minutes windows by default.
                 </p>
 
                 <Tabs>
@@ -127,17 +127,17 @@ const ConfigureAlertsModal: FC<ConfigureAlertsModalProps> = ({setIsOpen}) => {
                         <InputRow>
                             <Input
                                 type="text"
-                                placeholder="Enter symbol (e.g., LINK)"
+                                placeholder="Enter cryptoId (e.g., LINK)"
                                 value={cryptoId}
                                 onChange={(e) => setCryptoId(e.target.value)}
                             />
                             <AddButton onClick={handleSearch}>Search</AddButton>
                         </InputRow>
-                        <SearchedCryptoCurrenciesContainer>
-                            {data?.searchCryptoCurrencyByCryptoId && data.searchCryptoCurrencyByCryptoId.map(({cryptoId,id,imageUrl}) =>
-                                <SearchedCryptoCurrenciesCard cryptoId={cryptoId} id={id} image={imageUrl}/>
+                        {loading ? <div>Loading...</div> : <SearchedCryptoCurrenciesContainer>
+                            {data?.searchCryptoCurrencyByCryptoId && data.searchCryptoCurrencyByCryptoId.map((crypto) =>
+                                <SearchedCryptoCurrenciesCard cryptoId={crypto?.cryptoId as string} id={crypto?.id as string} image={crypto?.imageUrl as string}/>
                             )}
-                        </SearchedCryptoCurrenciesContainer>
+                        </SearchedCryptoCurrenciesContainer>}
                     </>
                 )}
 

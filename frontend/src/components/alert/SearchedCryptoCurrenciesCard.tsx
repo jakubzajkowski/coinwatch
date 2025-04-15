@@ -25,7 +25,7 @@ const Image = styled.img`
 
 interface SearchedCryptoCurrenciesProps {
     cryptoId: string
-    id: number
+    id: string
     image: string
 }
 
