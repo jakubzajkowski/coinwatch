@@ -1,11 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import {IoMdOptions} from "react-icons/io";
 import Stats from '../components/cryptocurrency/Stats';
-
-interface ChangeCellProps {
-    positive: boolean;
-}
+import { useQuery } from '@apollo/client';
+import { PAGINATE_CRYPTO_CURRENCIES } from '../apollo/queries';
+import { PaginateCryptoCurrenciesQuery } from '../graphql/generated';
+import CryptoCurrencyTableRow from '../components/cryptocurrency/CryptoCurrencyTableRow';
+import { ButtonSecondary } from '../components/styled';
 
 const Container = styled.div`
     width: 100%;
@@ -85,32 +86,40 @@ const TableHeader = styled.th`
   font-weight: normal;
   border-bottom: 1px solid rgb(255,255,255,0.4);
 `;
-
 const TableRow = styled.tr`
   &:hover {
     background-color: rgba(180, 180, 180, 0.1);
   }
 `;
 
-const TableCell = styled.td`
-  padding: 12px 15px;
-  border-bottom: 1px solid rgb(255,255,255,0.4);
-  color: ${({theme})=>theme.colors.primary};
-`;
-
-const WatchlistCell = styled(TableCell)`
-  color: ${({theme})=>theme.colors.primary};
-`;
-
-const PriceCell = styled(TableCell)`
-  font-weight: bold;
-`;
-
-const ChangeCell = styled(TableCell)<ChangeCellProps>`
-  color: ${props => props.positive ? '#16c784' : '#ea3943'};
-`;
+const PageButtonsContainer = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`
+const PageInfo = styled.p`
+  color: ${({theme})=>theme.colors.third};
+`
 
 const Cryptocurrency: React.FC = () => {
+  const [page,setPage] = useState<number>(0);
+
+  const { data } = useQuery<PaginateCryptoCurrenciesQuery>(PAGINATE_CRYPTO_CURRENCIES, {
+    variables: { page, size: 10, sort: "id" },
+  });
+
+  const handlePrevious = () => {
+    if (page > 0) setPage(prev => prev - 1);
+  };
+  
+  const handleNext = () => {
+    if (data && page < data.paginateCryptoCurrencies.totalPages) {
+      setPage(prev => prev + 1);
+    }
+  };
+  
+
     return (
         <Container>
             <Header>Cryptocurrency Markets</Header>
@@ -133,39 +142,34 @@ const Cryptocurrency: React.FC = () => {
                     <TableHeader>#</TableHeader>
                     <TableHeader>Add to Watchlist</TableHeader>
                     <TableHeader>Name</TableHeader>
-                    <TableHeader>Layer</TableHeader>
                     <TableHeader>Price</TableHeader>
-                    <TableHeader>1h %</TableHeader>
-                    <TableHeader>24h %</TableHeader>
-                    <TableHeader>7d %</TableHeader>
-                    <TableHeader>M</TableHeader>
+                    <TableHeader>MarketCup</TableHeader>
+                    <TableHeader>Price Change 24h</TableHeader>
+                    <TableHeader>Highest Price 24h</TableHeader>
+                    <TableHeader>Lowest Price 24h </TableHeader>
+                    <TableHeader>MarketCup Rank</TableHeader>
                 </TableRow>
                 </thead>
                 <tbody>
-                <TableRow>
-                    <TableCell>1</TableCell>
-                    <WatchlistCell>☑</WatchlistCell>
-                    <TableCell>Bitcoin BTC</TableCell>
-                    <TableCell>Layer 1</TableCell>
-                    <PriceCell>$51,342.67</PriceCell>
-                    <ChangeCell positive>~ 0.12%</ChangeCell>
-                    <ChangeCell positive>~ 2.34%</ChangeCell>
-                    <ChangeCell positive>~ 5.67%</ChangeCell>
-                    <TableCell></TableCell>
-                </TableRow>
-                <TableRow>
-                    <TableCell>1</TableCell>
-                    <WatchlistCell>☑</WatchlistCell>
-                    <TableCell>Bitcoin BTC</TableCell>
-                    <TableCell>Layer 1</TableCell>
-                    <PriceCell>$51,342.67</PriceCell>
-                    <ChangeCell positive>~ 0.12%</ChangeCell>
-                    <ChangeCell positive>~ 2.34%</ChangeCell>
-                    <ChangeCell positive>~ 5.67%</ChangeCell>
-                    <TableCell></TableCell>
-                </TableRow>
+                  {data?.paginateCryptoCurrencies.content.map((crypto,index)=>{
+                    const cryptoWithIndex = { ...crypto, index };
+                    return <CryptoCurrencyTableRow key={crypto.cryptoId+index} data={cryptoWithIndex} />
+                  })}
                 </tbody>
             </Table>
+            <PageButtonsContainer>
+              <div>
+                  <PageInfo>Showing 10 of {data?.paginateCryptoCurrencies.totalElements} cryptocurrencies</PageInfo>
+              </div>
+              <div>
+                <ButtonSecondary type="button" disabled={page === 0} onClick={handlePrevious}>
+                  Previous
+                </ButtonSecondary>
+                <ButtonSecondary type="button" disabled={page === data?.paginateCryptoCurrencies.totalPages} onClick={handleNext}>
+                  Next
+                </ButtonSecondary>
+              </div>
+            </PageButtonsContainer>
         </Container>
     );
 };

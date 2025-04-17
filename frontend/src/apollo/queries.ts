@@ -122,3 +122,41 @@ export const GET_GLOBAL_MARKET = gql`
         }
     }
 `
+export const PAGINATE_CRYPTO_CURRENCIES = gql`
+    query PaginateCryptoCurrencies($page: Int, $size: Int, $sort: String)  {
+        paginateCryptoCurrencies(page: $page, size: $size, sort: $sort) {
+            totalPages
+            totalElements
+            currentPage
+            content {
+                id
+                cryptoId
+                symbol
+                name
+                imageUrl
+                currentPrice
+                marketCap
+                marketCapRank
+                fullyDilutedValuation
+                totalVolume
+                high24h
+                low24h
+                priceChange24h
+                priceChangePercentage24h
+                marketCapChange24h
+                marketCapChangePercentage24h
+                circulatingSupply
+                totalSupply
+                maxSupply
+                ath
+                athChangePercentage
+                athDate
+                atl
+                atlChangePercentage
+                atlDate
+                lastUpdated
+            }
+        }
+    }
+
+`

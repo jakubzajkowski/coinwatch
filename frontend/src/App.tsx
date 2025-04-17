@@ -21,7 +21,7 @@ import Alerts from "./pages/Alerts.tsx";
 import NotFound from "./pages/404.tsx";
 import SignIn from "./pages/SignIn.tsx";
 import Crypto from "./pages/Crypto.tsx";
-import Cryptocurrency from "./pages/Cryptocurrency.tsx";
+import Cryptocurrency from "./pages/CryptoCurrency.tsx";
 
 function App() {
 

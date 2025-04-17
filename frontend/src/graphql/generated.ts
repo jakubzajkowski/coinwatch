@@ -59,6 +59,14 @@ export type CryptoCurrency = {
   totalVolume?: Maybe<Scalars['Float']['output']>;
 };
 
+export type CryptoCurrencyPage = {
+  __typename?: 'CryptoCurrencyPage';
+  content: Array<CryptoCurrency>;
+  currentPage: Scalars['Int']['output'];
+  totalElements: Scalars['Int']['output'];
+  totalPages: Scalars['Int']['output'];
+};
+
 export type CryptoPriceHistory = {
   __typename?: 'CryptoPriceHistory';
   cryptoId?: Maybe<Scalars['String']['output']>;
@@ -140,6 +148,7 @@ export type Query = {
   getGlobalMarket?: Maybe<GlobalMarket>;
   getSubscriptionByUserId?: Maybe<Array<Maybe<Subscription>>>;
   getUserById?: Maybe<User>;
+  paginateCryptoCurrencies: CryptoCurrencyPage;
   searchCryptoCurrencyByCryptoId?: Maybe<Array<Maybe<CryptoCurrency>>>;
 };
 
@@ -172,6 +181,13 @@ export type QueryGetSubscriptionByUserIdArgs = {
 
 export type QueryGetUserByIdArgs = {
   id: Scalars['ID']['input'];
+};
+
+
+export type QueryPaginateCryptoCurrenciesArgs = {
+  page?: InputMaybe<Scalars['Int']['input']>;
+  size?: InputMaybe<Scalars['Int']['input']>;
+  sort?: InputMaybe<Scalars['String']['input']>;
 };
 
 
@@ -268,6 +284,15 @@ export type GetGlobalMarketQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GetGlobalMarketQuery = { __typename?: 'Query', getGlobalMarket?: { __typename?: 'GlobalMarket', id: string, activeCryptocurrencies: number, upcomingIcos: number, ongoingIcos: number, endedIcos: number, markets: number, marketCapChangePercentage24hUsd: number, updatedAt: number, totalMarketCap: Array<{ __typename?: 'CurrencyValue', currency: string, amount: number }>, totalVolume: Array<{ __typename?: 'CurrencyValue', currency: string, amount: number }>, marketCapPercentage: Array<{ __typename?: 'CurrencyPercentage', currency: string, percentage?: number | null }> } | null };
+
+export type PaginateCryptoCurrenciesQueryVariables = Exact<{
+  page?: InputMaybe<Scalars['Int']['input']>;
+  size?: InputMaybe<Scalars['Int']['input']>;
+  sort?: InputMaybe<Scalars['String']['input']>;
+}>;
+
+
+export type PaginateCryptoCurrenciesQuery = { __typename?: 'Query', paginateCryptoCurrencies: { __typename?: 'CryptoCurrencyPage', totalPages: number, totalElements: number, currentPage: number, content: Array<{ __typename?: 'CryptoCurrency', id: string, cryptoId: string, symbol: string, name: string, imageUrl?: string | null, currentPrice?: number | null, marketCap?: number | null, marketCapRank?: number | null, fullyDilutedValuation?: number | null, totalVolume?: number | null, high24h?: number | null, low24h?: number | null, priceChange24h?: number | null, priceChangePercentage24h?: number | null, marketCapChange24h?: number | null, marketCapChangePercentage24h?: number | null, circulatingSupply?: number | null, totalSupply?: number | null, maxSupply?: number | null, ath?: number | null, athChangePercentage?: number | null, athDate?: string | null, atl?: number | null, atlChangePercentage?: number | null, atlDate?: string | null, lastUpdated?: string | null }> } };
 
 
 export const GetCryptoCurrenciesDocument = gql`
@@ -669,3 +694,75 @@ export type GetGlobalMarketQueryHookResult = ReturnType<typeof useGetGlobalMarke
 export type GetGlobalMarketLazyQueryHookResult = ReturnType<typeof useGetGlobalMarketLazyQuery>;
 export type GetGlobalMarketSuspenseQueryHookResult = ReturnType<typeof useGetGlobalMarketSuspenseQuery>;
 export type GetGlobalMarketQueryResult = Apollo.QueryResult<GetGlobalMarketQuery, GetGlobalMarketQueryVariables>;
+export const PaginateCryptoCurrenciesDocument = gql`
+    query PaginateCryptoCurrencies($page: Int, $size: Int, $sort: String) {
+  paginateCryptoCurrencies(page: $page, size: $size, sort: $sort) {
+    totalPages
+    totalElements
+    currentPage
+    content {
+      id
+      cryptoId
+      symbol
+      name
+      imageUrl
+      currentPrice
+      marketCap
+      marketCapRank
+      fullyDilutedValuation
+      totalVolume
+      high24h
+      low24h
+      priceChange24h
+      priceChangePercentage24h
+      marketCapChange24h
+      marketCapChangePercentage24h
+      circulatingSupply
+      totalSupply
+      maxSupply
+      ath
+      athChangePercentage
+      athDate
+      atl
+      atlChangePercentage
+      atlDate
+      lastUpdated
+    }
+  }
+}
+    `;
+
+/**
+ * __usePaginateCryptoCurrenciesQuery__
+ *
+ * To run a query within a React component, call `usePaginateCryptoCurrenciesQuery` and pass it any options that fit your needs.
+ * When your component renders, `usePaginateCryptoCurrenciesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = usePaginateCryptoCurrenciesQuery({
+ *   variables: {
+ *      page: // value for 'page'
+ *      size: // value for 'size'
+ *      sort: // value for 'sort'
+ *   },
+ * });
+ */
+export function usePaginateCryptoCurrenciesQuery(baseOptions?: Apollo.QueryHookOptions<PaginateCryptoCurrenciesQuery, PaginateCryptoCurrenciesQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<PaginateCryptoCurrenciesQuery, PaginateCryptoCurrenciesQueryVariables>(PaginateCryptoCurrenciesDocument, options);
+      }
+export function usePaginateCryptoCurrenciesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<PaginateCryptoCurrenciesQuery, PaginateCryptoCurrenciesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<PaginateCryptoCurrenciesQuery, PaginateCryptoCurrenciesQueryVariables>(PaginateCryptoCurrenciesDocument, options);
+        }
+export function usePaginateCryptoCurrenciesSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<PaginateCryptoCurrenciesQuery, PaginateCryptoCurrenciesQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<PaginateCryptoCurrenciesQuery, PaginateCryptoCurrenciesQueryVariables>(PaginateCryptoCurrenciesDocument, options);
+        }
+export type PaginateCryptoCurrenciesQueryHookResult = ReturnType<typeof usePaginateCryptoCurrenciesQuery>;
+export type PaginateCryptoCurrenciesLazyQueryHookResult = ReturnType<typeof usePaginateCryptoCurrenciesLazyQuery>;
+export type PaginateCryptoCurrenciesSuspenseQueryHookResult = ReturnType<typeof usePaginateCryptoCurrenciesSuspenseQuery>;
+export type PaginateCryptoCurrenciesQueryResult = Apollo.QueryResult<PaginateCryptoCurrenciesQuery, PaginateCryptoCurrenciesQueryVariables>;
