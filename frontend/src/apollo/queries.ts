@@ -95,3 +95,30 @@ export const MUTATION_DELETE_SUBSCRIPTION = gql`
         deleteSubscription(userId: $userId, cryptoId: $cryptoId)
     }
 `
+
+export const GET_GLOBAL_MARKET = gql`
+    query GetGlobalMarket {
+        getGlobalMarket {
+            id
+            activeCryptocurrencies
+            upcomingIcos
+            ongoingIcos
+            endedIcos
+            markets
+            marketCapChangePercentage24hUsd
+            updatedAt
+            totalMarketCap {
+                currency
+                amount
+            }
+            totalVolume {
+                currency
+                amount
+            }
+            marketCapPercentage {
+                currency
+                percentage
+            }
+        }
+    }
+`

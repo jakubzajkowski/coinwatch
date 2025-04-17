@@ -68,11 +68,38 @@ export type CryptoPriceHistory = {
   symbol?: Maybe<Scalars['String']['output']>;
 };
 
+export type CurrencyPercentage = {
+  __typename?: 'CurrencyPercentage';
+  currency: Scalars['String']['output'];
+  percentage?: Maybe<Scalars['Float']['output']>;
+};
+
+export type CurrencyValue = {
+  __typename?: 'CurrencyValue';
+  amount: Scalars['Float']['output'];
+  currency: Scalars['String']['output'];
+};
+
 export enum ExperienceLevel {
   Beginner = 'BEGINNER',
   Expert = 'EXPERT',
   Intermediate = 'INTERMEDIATE'
 }
+
+export type GlobalMarket = {
+  __typename?: 'GlobalMarket';
+  activeCryptocurrencies: Scalars['Int']['output'];
+  endedIcos: Scalars['Int']['output'];
+  id: Scalars['ID']['output'];
+  marketCapChangePercentage24hUsd: Scalars['Float']['output'];
+  marketCapPercentage: Array<CurrencyPercentage>;
+  markets: Scalars['Int']['output'];
+  ongoingIcos: Scalars['Int']['output'];
+  totalMarketCap: Array<CurrencyValue>;
+  totalVolume: Array<CurrencyValue>;
+  upcomingIcos: Scalars['Int']['output'];
+  updatedAt: Scalars['Float']['output'];
+};
 
 export enum Interest {
   Bitcoin = 'BITCOIN',
@@ -110,6 +137,7 @@ export type Query = {
   getCryptoCurrencies?: Maybe<Array<Maybe<CryptoCurrency>>>;
   getCryptoCurrencyByCryptoId?: Maybe<CryptoCurrency>;
   getCryptoPriceHistory?: Maybe<Array<Maybe<CryptoPriceHistory>>>;
+  getGlobalMarket?: Maybe<GlobalMarket>;
   getSubscriptionByUserId?: Maybe<Array<Maybe<Subscription>>>;
   getUserById?: Maybe<User>;
   searchCryptoCurrencyByCryptoId?: Maybe<Array<Maybe<CryptoCurrency>>>;
@@ -235,6 +263,11 @@ export type DeleteSubscriptionMutationVariables = Exact<{
 
 
 export type DeleteSubscriptionMutation = { __typename?: 'Mutation', deleteSubscription?: boolean | null };
+
+export type GetGlobalMarketQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetGlobalMarketQuery = { __typename?: 'Query', getGlobalMarket?: { __typename?: 'GlobalMarket', id: string, activeCryptocurrencies: number, upcomingIcos: number, ongoingIcos: number, endedIcos: number, markets: number, marketCapChangePercentage24hUsd: number, updatedAt: number, totalMarketCap: Array<{ __typename?: 'CurrencyValue', currency: string, amount: number }>, totalVolume: Array<{ __typename?: 'CurrencyValue', currency: string, amount: number }>, marketCapPercentage: Array<{ __typename?: 'CurrencyPercentage', currency: string, percentage?: number | null }> } | null };
 
 
 export const GetCryptoCurrenciesDocument = gql`
@@ -578,3 +611,61 @@ export function useDeleteSubscriptionMutation(baseOptions?: Apollo.MutationHookO
 export type DeleteSubscriptionMutationHookResult = ReturnType<typeof useDeleteSubscriptionMutation>;
 export type DeleteSubscriptionMutationResult = Apollo.MutationResult<DeleteSubscriptionMutation>;
 export type DeleteSubscriptionMutationOptions = Apollo.BaseMutationOptions<DeleteSubscriptionMutation, DeleteSubscriptionMutationVariables>;
+export const GetGlobalMarketDocument = gql`
+    query GetGlobalMarket {
+  getGlobalMarket {
+    id
+    activeCryptocurrencies
+    upcomingIcos
+    ongoingIcos
+    endedIcos
+    markets
+    marketCapChangePercentage24hUsd
+    updatedAt
+    totalMarketCap {
+      currency
+      amount
+    }
+    totalVolume {
+      currency
+      amount
+    }
+    marketCapPercentage {
+      currency
+      percentage
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetGlobalMarketQuery__
+ *
+ * To run a query within a React component, call `useGetGlobalMarketQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetGlobalMarketQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetGlobalMarketQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetGlobalMarketQuery(baseOptions?: Apollo.QueryHookOptions<GetGlobalMarketQuery, GetGlobalMarketQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetGlobalMarketQuery, GetGlobalMarketQueryVariables>(GetGlobalMarketDocument, options);
+      }
+export function useGetGlobalMarketLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetGlobalMarketQuery, GetGlobalMarketQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetGlobalMarketQuery, GetGlobalMarketQueryVariables>(GetGlobalMarketDocument, options);
+        }
+export function useGetGlobalMarketSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetGlobalMarketQuery, GetGlobalMarketQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetGlobalMarketQuery, GetGlobalMarketQueryVariables>(GetGlobalMarketDocument, options);
+        }
+export type GetGlobalMarketQueryHookResult = ReturnType<typeof useGetGlobalMarketQuery>;
+export type GetGlobalMarketLazyQueryHookResult = ReturnType<typeof useGetGlobalMarketLazyQuery>;
+export type GetGlobalMarketSuspenseQueryHookResult = ReturnType<typeof useGetGlobalMarketSuspenseQuery>;
+export type GetGlobalMarketQueryResult = Apollo.QueryResult<GetGlobalMarketQuery, GetGlobalMarketQueryVariables>;

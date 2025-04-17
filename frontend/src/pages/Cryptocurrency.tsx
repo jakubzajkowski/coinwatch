@@ -1,12 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
 import {IoMdOptions} from "react-icons/io";
+import Stats from '../components/cryptocurrency/Stats';
 
 interface ChangeCellProps {
-    positive: boolean;
-}
-
-interface StatChangeProps {
     positive: boolean;
 }
 
@@ -30,40 +27,6 @@ const Header = styled.h1`
 const SubHeader = styled.p`
   color: ${({theme})=>theme.colors.third};
   margin-bottom: 30px;
-`;
-
-const StatsContainer = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
-  margin-bottom: 30px;
-`;
-
-const StatCard = styled.div`
-  border: 1px solid rgb(255,255,255,0.4);
-  border-radius: 8px;
-  padding: 15px;
-  flex: 1;
-  min-width: 200px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-`;
-
-const StatTitle = styled.h3`
-  font-size: 14px;
-  color: ${({theme})=>theme.colors.third};
-  margin: 0 0 10px 0;
-`;
-
-const StatValue = styled.p`
-  font-size: 24px;
-  font-weight: bold;
-  margin: 0 0 5px 0;
-  color: ${({theme})=>theme.colors.primary};
-`;
-
-const StatChange = styled.span<StatChangeProps>`
-  color: ${props => props.positive ? '#16c784' : '#ea3943'};
-  font-size: 14px;
 `;
 
 const Divider = styled.hr`
@@ -153,37 +116,7 @@ const Cryptocurrency: React.FC = () => {
             <Header>Cryptocurrency Markets</Header>
             <SubHeader>Track prices, market cap, volume, and performance of thousands of cryptocurrencies</SubHeader>
 
-            <StatsContainer>
-                <StatCard>
-                    <StatTitle>Market Cap</StatTitle>
-                    <StatValue>$2.43T</StatValue>
-                    <StatChange positive>↑ 1.9% 24h</StatChange>
-                </StatCard>
-
-                <StatCard>
-                    <StatTitle>24h Volume</StatTitle>
-                    <StatValue>$98.7B</StatValue>
-                    <StatChange positive>↑ 13.6% 24h</StatChange>
-                </StatCard>
-
-                <StatCard>
-                    <StatTitle>BTC Dominance</StatTitle>
-                    <StatValue>48.2%</StatValue>
-                    <StatChange positive>↑ 1.6% 24h</StatChange>
-                </StatCard>
-
-                <StatCard>
-                    <StatTitle>ETH Dominance</StatTitle>
-                    <StatValue>18.7%</StatValue>
-                    <StatChange positive={false}>↓ -0.5% 24h</StatChange>
-                </StatCard>
-
-                <StatCard>
-                    <StatTitle>Cryptocurrencies</StatTitle>
-                    <StatValue>10,482</StatValue>
-                    <StatChange positive>↑ 13.8% new today</StatChange>
-                </StatCard>
-            </StatsContainer>
+            <Stats />
 
             <Divider />
 
