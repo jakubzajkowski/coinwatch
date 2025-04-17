@@ -1,5 +1,5 @@
 --crypto_price_history timescaledb params
-SELECT create_hypertable('crypto_price_history', 'recorded_at');
+SELECT create_hypertable('crypto_price_history', 'recorded_at','crypto_id',5);
 
 ALTER TABLE crypto_price_history SET (
     timescaledb.compress,
@@ -12,7 +12,7 @@ SELECT add_compression_policy('crypto_price_history', INTERVAL '7 days');
 
 
 --alerts timescaledb params
-SELECT create_hypertable('alerts', 'created_at');
+SELECT create_hypertable('alerts', 'created_at','user_id',5);
 
 ALTER TABLE alerts SET (
     timescaledb.compress,
