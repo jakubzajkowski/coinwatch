@@ -107,9 +107,17 @@ type CurrencyPercentage {
     percentage: Float
 }
 
+type CryptoCurrencyPage {
+    content: [CryptoCurrency!]!
+    totalPages: Int!
+    totalElements: Int!
+    currentPage: Int!
+}
+
 
 type Query {
     getAlerts: [Alert]
+    paginateCryptoCurrencies(page: Int = 0, size: Int = 10, sort: String = "id"): CryptoCurrencyPage!
     getGlobalMarket: GlobalMarket
     getAlertByUserId(userId: ID!): [Alert]
     getSubscriptionByUserId(userId: ID!): [Subscription]
