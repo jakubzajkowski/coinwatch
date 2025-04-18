@@ -6,6 +6,7 @@ import {GetAlertByUserIdQuery} from "../../graphql/generated.ts";
 import {GET_ALERT_BY_USER_ID} from "../../apollo/queries.ts";
 import {useSelector} from "react-redux";
 import {RootState} from "../../redux/store.ts";
+import QueryBoundary from "../QueryBoundary.tsx";
 
 export interface Alert {
     id: string; symbol: string; changePercent?: number | null | undefined; oldPrice?: number | null | undefined; newPrice?: number | null | undefined; createdAt?: string | null
@@ -83,13 +84,11 @@ const CryptoAlertsComponent: FC = () => {
                 <TabButton active={activeTab === 'decrease'} onClick={() => handleTabClick('decrease')}>Price Decrease</TabButton>
             </TabList>
 
-            {loading && <div>Loading history alerts</div>}
-
-            {error && <div>Error fetching history alerts</div>}
-
-            {filteredAlerts?.slice().reverse().map((alert, i) => (
-                <HistoryAlertCard key={i} alert={alert} />
-            ))}
+            <QueryBoundary error={error} loading={loading}>
+                {filteredAlerts?.slice().reverse().map((alert, i) => (
+                    <HistoryAlertCard key={i} alert={alert} />
+                ))}
+            </QueryBoundary>
 
         </Container>
     );

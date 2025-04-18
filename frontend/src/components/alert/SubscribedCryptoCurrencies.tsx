@@ -5,6 +5,7 @@ import {useSelector} from "react-redux";
 import {RootState} from "../../redux/store.ts";
 import {GetSubscriptionByUserIdQuery} from "../../graphql/generated.ts";
 import {TiDelete} from "react-icons/ti";
+import QueryBoundary from "../QueryBoundary.tsx";
 
 const Container = styled.div`
     width: 100%;
@@ -59,31 +60,23 @@ const SubscribedCryptoCurrencies = () => {
         }
     };
 
-    console.log(data)
-
-    if (error) return <div>
-        Error
-    </div>
-
-    if (loading) return <div>
-        Loading...
-    </div>
-
-    return (data?.getSubscriptionByUserId?.length==0 ? <Title>You have no subscribed cryptocurrencies</Title> : <Container>
-        <Title>Your subscribed cryptocurrencies</Title>
-        <Description>You'll receive alerts for these cryptocurrencies</Description>
-        <SubscribedCryptos>
-            {data?.getSubscriptionByUserId && data.getSubscriptionByUserId.map((crypto)=>{
-                return <SubscribedCryptoCard>
-                    <div style={{display: "flex",justifyContent:"center",alignItems:"center",gap:"0.5rem"}}>
-                        <img style={{height:"30px",width:"30px"}} src={crypto?.cryptoCurrency?.imageUrl as string}/>
-                        <p style={{display:"inline"}}>{crypto?.cryptoCurrency?.cryptoId} ({crypto?.cryptoCurrency?.symbol})</p>
-                    </div>
-                    <TiDelete onClick={()=>handleDelete(crypto?.cryptoCurrency?.id as string)} style={{height:"30px",width:"30px",cursor:"pointer"}}/>
-                </SubscribedCryptoCard>
-            })}
-        </SubscribedCryptos>
-    </Container>)
+    return <QueryBoundary error={error} loading={loading}> 
+            (data?.getSubscriptionByUserId?.length==0 ? <Title>You have no subscribed cryptocurrencies</Title> : <Container>
+            <Title>Your subscribed cryptocurrencies</Title>
+            <Description>You'll receive alerts for these cryptocurrencies</Description>
+            <SubscribedCryptos>
+                {data?.getSubscriptionByUserId && data.getSubscriptionByUserId.map((crypto)=>{
+                    return <SubscribedCryptoCard>
+                        <div style={{display: "flex",justifyContent:"center",alignItems:"center",gap:"0.5rem"}}>
+                            <img style={{height:"30px",width:"30px"}} src={crypto?.cryptoCurrency?.imageUrl as string}/>
+                            <p style={{display:"inline"}}>{crypto?.cryptoCurrency?.cryptoId} ({crypto?.cryptoCurrency?.symbol})</p>
+                        </div>
+                        <TiDelete onClick={()=>handleDelete(crypto?.cryptoCurrency?.id as string)} style={{height:"30px",width:"30px",cursor:"pointer"}}/>
+                    </SubscribedCryptoCard>
+                })}
+            </SubscribedCryptos>
+        </Container>)
+    </QueryBoundary>
 }
 
 export default SubscribedCryptoCurrencies;

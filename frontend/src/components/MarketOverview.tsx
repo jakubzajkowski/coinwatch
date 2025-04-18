@@ -6,6 +6,7 @@ import {GET_CURRENCIES_FOR_MARKETOVERVIEW} from "../apollo/queries.ts";
 import { FaCaretUp } from "react-icons/fa";
 import { FaCaretDown } from "react-icons/fa";
 import {LinkCoinWatch} from "./styled.tsx";
+import QueryBoundary from "./QueryBoundary.tsx";
 
 const MarketOverviewTable = styled.div`
     width: 100%;
@@ -50,43 +51,43 @@ const MarketOverview = () => {
     const { loading, error, data } = useQuery<GetCryptoCurrenciesQuery>(GET_CURRENCIES_FOR_MARKETOVERVIEW, {
         variables: { limit: 10, orderBy: "id" },
     });
-
-    if (loading) return <div>Loading...</div>
-    if (error) return <div>Error: {error.message}</div>;
+    
     return (
-        <MarketOverviewTable>
-            <MarketOverviewRow>
-                <MarketOverviewHeader>#</MarketOverviewHeader>
-                <MarketOverviewHeader>Name</MarketOverviewHeader>
-                <MarketOverviewHeader>Price <FaSort /></MarketOverviewHeader>
-                <MarketOverviewHeader>24h % <FaSort /></MarketOverviewHeader>
-                <MarketOverviewHeader>Market Cap <FaSort /></MarketOverviewHeader>
-                <MarketOverviewHeader>Volume (24h) <FaSort /></MarketOverviewHeader>
-            </MarketOverviewRow>
-            {data && data.getCryptoCurrencies && data?.getCryptoCurrencies.map((crypto, index) => (
-                <LinkCoinWatch to={`/crypto/${crypto?.cryptoId}`} >
-                    <MarketOverviewRow key={crypto?.id}>
-                        <MarketOverviewCell>{index + 1}</MarketOverviewCell>
-                        <MarketOverviewCell><CryptoImage src={crypto?.imageUrl as string}/>{crypto?.name}</MarketOverviewCell>
-                        <MarketOverviewCell>${crypto?.currentPrice}</MarketOverviewCell>
-                        <MarketOverviewCell>
-                            {(crypto?.priceChangePercentage24h as number)>0 ?
-                                <div>
-                                    <FaCaretUp color='green' />
-                                    {Math.abs(crypto?.priceChangePercentage24h as number)}%
-                                </div>:
-                                <div>
-                                    <FaCaretDown color='red' />
-                                    {Math.abs(crypto?.priceChangePercentage24h as number)}%
-                                </div>
-                            }
-                        </MarketOverviewCell>
-                        <MarketOverviewCell>${crypto?.marketCap}</MarketOverviewCell>
-                        <MarketOverviewCell>${crypto?.totalVolume}</MarketOverviewCell>
-                    </MarketOverviewRow>
-                </LinkCoinWatch>
-            ))}
-        </MarketOverviewTable>
+        <QueryBoundary loading={loading} error={error}>
+            <MarketOverviewTable>
+                <MarketOverviewRow>
+                    <MarketOverviewHeader>#</MarketOverviewHeader>
+                    <MarketOverviewHeader>Name</MarketOverviewHeader>
+                    <MarketOverviewHeader>Price <FaSort /></MarketOverviewHeader>
+                    <MarketOverviewHeader>24h % <FaSort /></MarketOverviewHeader>
+                    <MarketOverviewHeader>Market Cap <FaSort /></MarketOverviewHeader>
+                    <MarketOverviewHeader>Volume (24h) <FaSort /></MarketOverviewHeader>
+                </MarketOverviewRow>
+                {data && data.getCryptoCurrencies && data?.getCryptoCurrencies.map((crypto, index) => (
+                    <LinkCoinWatch to={`/crypto/${crypto?.cryptoId}`} >
+                        <MarketOverviewRow key={crypto?.id}>
+                            <MarketOverviewCell>{index + 1}</MarketOverviewCell>
+                            <MarketOverviewCell><CryptoImage src={crypto?.imageUrl as string}/>{crypto?.name}</MarketOverviewCell>
+                            <MarketOverviewCell>${crypto?.currentPrice}</MarketOverviewCell>
+                            <MarketOverviewCell>
+                                {(crypto?.priceChangePercentage24h as number)>0 ?
+                                    <div>
+                                        <FaCaretUp color='green' />
+                                        {Math.abs(crypto?.priceChangePercentage24h as number)}%
+                                    </div>:
+                                    <div>
+                                        <FaCaretDown color='red' />
+                                        {Math.abs(crypto?.priceChangePercentage24h as number)}%
+                                    </div>
+                                }
+                            </MarketOverviewCell>
+                            <MarketOverviewCell>${crypto?.marketCap}</MarketOverviewCell>
+                            <MarketOverviewCell>${crypto?.totalVolume}</MarketOverviewCell>
+                        </MarketOverviewRow>
+                    </LinkCoinWatch>
+                ))}
+            </MarketOverviewTable>
+        </QueryBoundary>
     );
 };
 

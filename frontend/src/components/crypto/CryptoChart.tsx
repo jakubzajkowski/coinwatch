@@ -4,6 +4,7 @@ import {GetCryptoPriceHistoryQuery} from "../../graphql/generated.ts";
 import {GET_CRYPTO_PRICE_HISTORY_FOR_CRYPTO} from "../../apollo/queries.ts";
 import {CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis} from "recharts";
 import styled from "styled-components";
+import QueryBoundary from "../QueryBoundary.tsx";
 
 interface CryptoChartProps {
     cryptoId: string
@@ -39,10 +40,6 @@ const CryptoChart : FC<CryptoChartProps> = ({cryptoId}) =>{
         variables:{cryptoId:cryptoId}
     })
 
-    if (error) return <div>Error</div>
-
-    if (loading) return <div>Loading</div>
-
     const reducedData = data?.getCryptoPriceHistory
         ?.filter((_, index) => index % 10 === 0)
         ?.map(entry => {
@@ -62,17 +59,19 @@ const CryptoChart : FC<CryptoChartProps> = ({cryptoId}) =>{
             };
         }) || [];
 
-    return <ResponsiveContainer width="100%" height={300}>
-        <LineChart data={reducedData}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="recordedAt"
-                   tickFormatter={(time) => time}
-            />
-            <YAxis />
-            <Tooltip content={<CustomTooltip />} />
-            <Line type="monotone" dataKey="price" dot={false} stroke="#8884d8" strokeWidth={3}  />
-        </LineChart>
-    </ResponsiveContainer>
+    return <QueryBoundary loading={loading} error={error}>
+        <ResponsiveContainer width="100%" height={300}>
+            <LineChart data={reducedData}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="recordedAt"
+                    tickFormatter={(time) => time}
+                />
+                <YAxis />
+                <Tooltip content={<CustomTooltip />} />
+                <Line type="monotone" dataKey="price" dot={false} stroke="#8884d8" strokeWidth={3}  />
+            </LineChart>
+        </ResponsiveContainer>
+    </QueryBoundary>
 };
 
 

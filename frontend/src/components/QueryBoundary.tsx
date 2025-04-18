@@ -9,8 +9,9 @@ type QueryBoundaryProps = {
 
 const BoundaryMessage = styled.p`
   font-weight:bold;
-  padding: 1rem;
+  padding: 2rem 1rem;
   font-size:1.2rem;
+  color: ${({theme})=>theme.colors.primary};
 `
 
 const QueryBoundary = ({ loading, error, children }: QueryBoundaryProps) => {

@@ -30,7 +30,7 @@ const Title = styled.h2`
 const LiveAlerts: FC = () => {
     const [alerts, setAlerts] = useState<CryptoAlert[]>([]);
     const { subscribe, unsubscribe, connected } = useWebSocketClient(import.meta.env.VITE_WS_API_URL);
-    const { user} = useSelector((state: RootState) => state.auth);
+    const { user } = useSelector((state: RootState) => state.auth);
 
     useEffect(() => {
         let subscription: StompSubscription | null = null;
