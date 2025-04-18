@@ -1,13 +1,26 @@
 import {FaArrowLeft} from "react-icons/fa";
 import styled from "styled-components";
-import {LinkCoinWatch} from "./styled.tsx";
+import { FC } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Container = styled.div`
-color: white !important`
+    color: white !important;
+    display:flex;
+    align-items:center;
+    gap:0.4rem;
+    cursor: pointer;
+`
 
-const BackToHome = () =>{
-    return <Container>
-        <FaArrowLeft style={{margin:"0 1rem 0 0"}}/><LinkCoinWatch to={"/"} style={{display:"inline"}}>Back to Home</LinkCoinWatch>
+const BackToHome : FC = () =>{
+    const navigate = useNavigate();
+
+    const handleBack = () => {
+        navigate(-1);
+    };
+
+    return <Container onClick={handleBack}>
+      <FaArrowLeft />
+      Go back to previous page
     </Container>
 }
 
