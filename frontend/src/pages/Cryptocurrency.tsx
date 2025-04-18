@@ -7,9 +7,11 @@ import { PAGINATE_CRYPTO_CURRENCIES } from '../apollo/queries';
 import { PaginateCryptoCurrenciesQuery } from '../graphql/generated';
 import CryptoCurrencyTableRow from '../components/cryptocurrency/CryptoCurrencyTableRow';
 import { ButtonSecondary } from '../components/styled';
+import QueryBoundary from '../components/QueryBoundary';
 
 const Container = styled.div`
     width: 100%;
+    min-height: 100vh;
     display: flex;
     justify-content: center;
     flex-direction: column;
@@ -105,7 +107,7 @@ const PageInfo = styled.p`
 const Cryptocurrency: React.FC = () => {
   const [page,setPage] = useState<number>(0);
 
-  const { data } = useQuery<PaginateCryptoCurrenciesQuery>(PAGINATE_CRYPTO_CURRENCIES, {
+  const { data, loading, error } = useQuery<PaginateCryptoCurrenciesQuery>(PAGINATE_CRYPTO_CURRENCIES, {
     variables: { page, size: 10, sort: "id" },
   });
 
@@ -151,10 +153,12 @@ const Cryptocurrency: React.FC = () => {
                 </TableRow>
                 </thead>
                 <tbody>
-                  {data?.paginateCryptoCurrencies.content.map((crypto,index)=>{
-                    const cryptoWithIndex = { ...crypto, index };
-                    return <CryptoCurrencyTableRow key={crypto.cryptoId+index} data={cryptoWithIndex} />
-                  })}
+                  <QueryBoundary loading={loading} error={error}>
+                    {data?.paginateCryptoCurrencies.content.map((crypto,index)=>{
+                      const cryptoWithIndex = { ...crypto, index };
+                      return <CryptoCurrencyTableRow key={crypto.cryptoId+index} data={cryptoWithIndex} />
+                    })}
+                  </QueryBoundary>
                 </tbody>
             </Table>
             <PageButtonsContainer>

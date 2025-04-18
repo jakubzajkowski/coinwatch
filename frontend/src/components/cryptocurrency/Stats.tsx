@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { GET_GLOBAL_MARKET } from "../../apollo/queries";
 import { GetGlobalMarketQuery } from "../../graphql/generated";
 import formatNumber from "../../utils/formatNumber";
+import QueryBoundary from "../QueryBoundary";
 
 interface StatChangeProps {
     positive: boolean;
@@ -46,42 +47,36 @@ const StatChange = styled.span<StatChangeProps>`
 const Stats : FC = () => {
     const {error,loading,data} = useQuery<GetGlobalMarketQuery>(GET_GLOBAL_MARKET);
 
-    if(loading) return <StatsContainer>
-        Loading...
-    </StatsContainer>
+    return <QueryBoundary loading={loading} error={error}>
+        <StatsContainer>
+          <StatCard>
+              <StatTitle>Market Cap</StatTitle>
+              <StatValue>${formatNumber(data?.getGlobalMarket?.totalMarketCap[0].amount as number)}</StatValue>
+              {
+                  data?.getGlobalMarket?.marketCapChangePercentage24hUsd as number > 0 ?
+                  <StatChange positive>↑ {data?.getGlobalMarket?.marketCapChangePercentage24hUsd.toFixed(2)}% 24h</StatChange> 
+                  :
+                  <StatChange positive={false}>↓ {data?.getGlobalMarket?.marketCapChangePercentage24hUsd.toFixed(2)}% 24h</StatChange>
+              }
+          </StatCard>
 
-    if(error) return <StatsContainer>
-        Error
-    </StatsContainer>
+          <StatCard>
+              <StatTitle>Total Volume</StatTitle>
+              <StatValue>${formatNumber(data?.getGlobalMarket?.totalVolume[0].amount as number)}</StatValue>
+          </StatCard>
 
-    return <StatsContainer>
-    <StatCard>
-        <StatTitle>Market Cap</StatTitle>
-        <StatValue>${formatNumber(data?.getGlobalMarket?.totalMarketCap[0].amount as number)}</StatValue>
-        {
-            data?.getGlobalMarket?.marketCapChangePercentage24hUsd as number > 0 ?
-            <StatChange positive>↑ {data?.getGlobalMarket?.marketCapChangePercentage24hUsd.toFixed(2)}% 24h</StatChange> 
-            :
-            <StatChange positive={false}>↓ {data?.getGlobalMarket?.marketCapChangePercentage24hUsd.toFixed(2)}% 24h</StatChange>
-        }
-    </StatCard>
-
-    <StatCard>
-        <StatTitle>Total Volume</StatTitle>
-        <StatValue>${formatNumber(data?.getGlobalMarket?.totalVolume[0].amount as number)}</StatValue>
-    </StatCard>
-
-    <StatCard>
-        <StatTitle>Active Cryptocurrencies</StatTitle>
-        <StatValue>${formatNumber(data?.getGlobalMarket?.activeCryptocurrencies as number)}</StatValue>
-    </StatCard>
+          <StatCard>
+              <StatTitle>Active Cryptocurrencies</StatTitle>
+              <StatValue>${formatNumber(data?.getGlobalMarket?.activeCryptocurrencies as number)}</StatValue>
+          </StatCard>
 
 
-    <StatCard>
-        <StatTitle>Total Markets</StatTitle>
-        <StatValue>${formatNumber(data?.getGlobalMarket?.markets as number)}</StatValue>
-    </StatCard>
-</StatsContainer>
+          <StatCard>
+              <StatTitle>Total Markets</StatTitle>
+              <StatValue>${formatNumber(data?.getGlobalMarket?.markets as number)}</StatValue>
+          </StatCard>
+        </StatsContainer>
+      </QueryBoundary>
 }
 
 export default Stats;
