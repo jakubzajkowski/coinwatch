@@ -45,7 +45,7 @@ services:
 
   app:
     build:
-      context: .
+      context: ../coinwatch
       dockerfile: Dockerfile
     container_name: coinwatch-springboot
     depends_on:
@@ -71,8 +71,6 @@ services:
       - "5173:5173"
     depends_on:
       - app
-    volumes:
-      - ../frontend:/app
 
 volumes:
   pgdata:
