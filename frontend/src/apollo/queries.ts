@@ -80,6 +80,39 @@ export const SEARCH_CRYPTO_CURRENCIES_BY_CRYPTO_ID = gql`
     }
 `
 
+export const SEARCH_CRYPTO_CURRENCIES_BY_CRYPTO_ID_CRYPTOCURRENCIES = gql`
+    query searchCryptoCurrencyByCryptoIdCryptoCurrencies($cryptoId: String!){
+        searchCryptoCurrencyByCryptoId(cryptoId: $cryptoId) {
+                id
+                cryptoId
+                symbol
+                name
+                imageUrl
+                currentPrice
+                marketCap
+                marketCapRank
+                fullyDilutedValuation
+                totalVolume
+                high24h
+                low24h
+                priceChange24h
+                priceChangePercentage24h
+                marketCapChange24h
+                marketCapChangePercentage24h
+                circulatingSupply
+                totalSupply
+                maxSupply
+                ath
+                athChangePercentage
+                athDate
+                atl
+                atlChangePercentage
+                atlDate
+                lastUpdated
+        }
+    }
+`
+
 
 
 export const MUTATION_ADD_SUBSCRIPTION = gql`

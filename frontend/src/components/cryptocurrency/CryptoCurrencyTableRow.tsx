@@ -1,10 +1,6 @@
 import { FC } from "react";
 import styled from "styled-components";
 
-interface ChangeCellProps {
-    positive: boolean;
-}
-
 interface CryptoCurrencyTableRow {
     index: number
     cryptoId?: string | null
@@ -41,18 +37,14 @@ const PriceCell = styled(TableCell)`
   font-weight: bold;
 `;
 
-const ChangeCell = styled(TableCell)<ChangeCellProps>`
-  color: ${props => props.positive ? '#16c784' : '#ea3943'};
-`;
-
 const CryptoCurrencyTableRow : FC<CryptoCurrencyTableRowProps> = ({data}) => {
     return <TableRow>
         <TableCell>{data.index++}</TableCell>
         <WatchlistCell>☑</WatchlistCell>
         <TableCell>{data.cryptoId}</TableCell>
-        <TableCell>{data.currentPrice}$</TableCell>
-        <PriceCell>{data.marketCap}$</PriceCell>
-        <ChangeCell positive>{data.priceChange24h}%</ChangeCell>
+        <PriceCell>{data.currentPrice}$</PriceCell>
+        <TableCell>{data.marketCap}$</TableCell>
+        <TableCell>{data.priceChange24h}$</TableCell>
         <TableCell>{data.high24h}$</TableCell>
         <TableCell>{data.low24h}$</TableCell>
         <TableCell>{data.marketCapRank}</TableCell>

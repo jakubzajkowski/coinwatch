@@ -1,13 +1,14 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import {IoMdOptions} from "react-icons/io";
 import Stats from '../components/cryptocurrency/Stats';
-import { useQuery } from '@apollo/client';
-import { PAGINATE_CRYPTO_CURRENCIES } from '../apollo/queries';
-import { PaginateCryptoCurrenciesQuery } from '../graphql/generated';
+import { useLazyQuery, useQuery } from '@apollo/client';
+import { PAGINATE_CRYPTO_CURRENCIES, SEARCH_CRYPTO_CURRENCIES_BY_CRYPTO_ID_CRYPTOCURRENCIES } from '../apollo/queries';
+import { PaginateCryptoCurrenciesQuery, SearchCryptoCurrencyByCryptoIdCryptoCurrenciesQuery } from '../graphql/generated';
 import CryptoCurrencyTableRow from '../components/cryptocurrency/CryptoCurrencyTableRow';
 import { ButtonSecondary } from '../components/styled';
 import QueryBoundary from '../components/QueryBoundary';
+import { useDebounce } from '../hooks/useBebounce';
 
 const Container = styled.div`
     width: 100%;
@@ -106,20 +107,44 @@ const PageInfo = styled.p`
 
 const Cryptocurrency: React.FC = () => {
   const [page,setPage] = useState<number>(0);
+  const [search, setSearch] = useState('');
+  const debouncedSearch = useDebounce(search, 300);
+  const isSearching = debouncedSearch.trim().length > 1;
 
-  const { data, loading, error } = useQuery<PaginateCryptoCurrenciesQuery>(PAGINATE_CRYPTO_CURRENCIES, {
+  const { data: paginateData, loading: paginateLoading, error: paginateError } = useQuery<PaginateCryptoCurrenciesQuery>(PAGINATE_CRYPTO_CURRENCIES, {
     variables: { page, size: 10, sort: "id" },
   });
+
+  const [fetchSearch, { data: searchData, loading: searchLoading, error: searchError }] =useLazyQuery<SearchCryptoCurrencyByCryptoIdCryptoCurrenciesQuery>(SEARCH_CRYPTO_CURRENCIES_BY_CRYPTO_ID_CRYPTOCURRENCIES);
+
+  useEffect(() => {
+    if (debouncedSearch.trim().length > 1) {
+      fetchSearch({ variables: { cryptoId: debouncedSearch.trim() } });
+    }
+  }, [debouncedSearch]);
 
   const handlePrevious = () => {
     if (page > 0) setPage(prev => prev - 1);
   };
+
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearch(e.target.value);
+  }
   
   const handleNext = () => {
-    if (data && page < data.paginateCryptoCurrencies.totalPages) {
+    if (paginateData && page < paginateData.paginateCryptoCurrencies.totalPages) {
       setPage(prev => prev + 1);
     }
   };
+
+
+  const cryptoData = isSearching
+  ? searchData?.searchCryptoCurrencyByCryptoId ?? []
+  : paginateData?.paginateCryptoCurrencies.content ?? [];
+  const totalElements = isSearching
+  ? cryptoData.length
+  : paginateData?.paginateCryptoCurrencies.totalElements ?? 0;
+  const totalPages = paginateData?.paginateCryptoCurrencies.totalPages ?? 1;
   
 
     return (
@@ -134,7 +159,7 @@ const Cryptocurrency: React.FC = () => {
             <SectionHeader>All Cryptocurrencies</SectionHeader>
 
             <FiltersSearch>
-                <SearchInput placeholder="Search for a cryptocurrency..." />
+                <SearchInput onChange={(e)=>handleSearch(e)} placeholder="Search for a cryptocurrency..." />
                 <Filter><IoMdOptions />Filters</Filter>
             </FiltersSearch>
 
@@ -153,27 +178,29 @@ const Cryptocurrency: React.FC = () => {
                 </TableRow>
                 </thead>
                 <tbody>
-                  <QueryBoundary loading={loading} error={error}>
-                    {data?.paginateCryptoCurrencies.content.map((crypto,index)=>{
-                      const cryptoWithIndex = { ...crypto, index };
-                      return <CryptoCurrencyTableRow key={crypto.cryptoId+index} data={cryptoWithIndex} />
-                    })}
-                  </QueryBoundary>
+                <QueryBoundary loading={searchLoading || paginateLoading} error={searchError || paginateError}>
+                  {cryptoData && cryptoData.map((crypto, index) => {
+                    const cryptoWithIndex = { ...crypto, index };
+                    return <CryptoCurrencyTableRow key={crypto?.cryptoId as string + index} data={cryptoWithIndex} />;
+                  })}
+                </QueryBoundary>
                 </tbody>
             </Table>
-            <PageButtonsContainer>
-              <div>
-                  <PageInfo>Showing 10 of {data?.paginateCryptoCurrencies.totalElements} cryptocurrencies</PageInfo>
-              </div>
-              <div>
-                <ButtonSecondary type="button" disabled={page === 0} onClick={handlePrevious}>
-                  Previous
-                </ButtonSecondary>
-                <ButtonSecondary type="button" disabled={page === data?.paginateCryptoCurrencies.totalPages} onClick={handleNext}>
-                  Next
-                </ButtonSecondary>
-              </div>
-            </PageButtonsContainer>
+            {!isSearching && (
+              <PageButtonsContainer>
+                <div>
+                  <PageInfo>Showing 10 of {totalElements} cryptocurrencies</PageInfo>
+                </div>
+                <div>
+                  <ButtonSecondary type="button" disabled={page === 0} onClick={handlePrevious}>
+                    Previous
+                  </ButtonSecondary>
+                  <ButtonSecondary type="button" disabled={page === totalPages} onClick={handleNext}>
+                    Next
+                  </ButtonSecondary>
+                </div>
+              </PageButtonsContainer>
+            )}
         </Container>
     );
 };

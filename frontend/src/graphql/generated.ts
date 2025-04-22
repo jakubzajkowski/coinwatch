@@ -264,6 +264,13 @@ export type SearchCryptoCurrencyByCryptoIdQueryVariables = Exact<{
 
 export type SearchCryptoCurrencyByCryptoIdQuery = { __typename?: 'Query', searchCryptoCurrencyByCryptoId?: Array<{ __typename?: 'CryptoCurrency', id: string, cryptoId: string, symbol: string, name: string, imageUrl?: string | null } | null> | null };
 
+export type SearchCryptoCurrencyByCryptoIdCryptoCurrenciesQueryVariables = Exact<{
+  cryptoId: Scalars['String']['input'];
+}>;
+
+
+export type SearchCryptoCurrencyByCryptoIdCryptoCurrenciesQuery = { __typename?: 'Query', searchCryptoCurrencyByCryptoId?: Array<{ __typename?: 'CryptoCurrency', id: string, cryptoId: string, symbol: string, name: string, imageUrl?: string | null, currentPrice?: number | null, marketCap?: number | null, marketCapRank?: number | null, fullyDilutedValuation?: number | null, totalVolume?: number | null, high24h?: number | null, low24h?: number | null, priceChange24h?: number | null, priceChangePercentage24h?: number | null, marketCapChange24h?: number | null, marketCapChangePercentage24h?: number | null, circulatingSupply?: number | null, totalSupply?: number | null, maxSupply?: number | null, ath?: number | null, athChangePercentage?: number | null, athDate?: string | null, atl?: number | null, atlChangePercentage?: number | null, atlDate?: string | null, lastUpdated?: string | null } | null> | null };
+
 export type AddSubscriptionMutationVariables = Exact<{
   userId: Scalars['ID']['input'];
   cryptoId: Scalars['ID']['input'];
@@ -570,6 +577,71 @@ export type SearchCryptoCurrencyByCryptoIdQueryHookResult = ReturnType<typeof us
 export type SearchCryptoCurrencyByCryptoIdLazyQueryHookResult = ReturnType<typeof useSearchCryptoCurrencyByCryptoIdLazyQuery>;
 export type SearchCryptoCurrencyByCryptoIdSuspenseQueryHookResult = ReturnType<typeof useSearchCryptoCurrencyByCryptoIdSuspenseQuery>;
 export type SearchCryptoCurrencyByCryptoIdQueryResult = Apollo.QueryResult<SearchCryptoCurrencyByCryptoIdQuery, SearchCryptoCurrencyByCryptoIdQueryVariables>;
+export const SearchCryptoCurrencyByCryptoIdCryptoCurrenciesDocument = gql`
+    query searchCryptoCurrencyByCryptoIdCryptoCurrencies($cryptoId: String!) {
+  searchCryptoCurrencyByCryptoId(cryptoId: $cryptoId) {
+    id
+    cryptoId
+    symbol
+    name
+    imageUrl
+    currentPrice
+    marketCap
+    marketCapRank
+    fullyDilutedValuation
+    totalVolume
+    high24h
+    low24h
+    priceChange24h
+    priceChangePercentage24h
+    marketCapChange24h
+    marketCapChangePercentage24h
+    circulatingSupply
+    totalSupply
+    maxSupply
+    ath
+    athChangePercentage
+    athDate
+    atl
+    atlChangePercentage
+    atlDate
+    lastUpdated
+  }
+}
+    `;
+
+/**
+ * __useSearchCryptoCurrencyByCryptoIdCryptoCurrenciesQuery__
+ *
+ * To run a query within a React component, call `useSearchCryptoCurrencyByCryptoIdCryptoCurrenciesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSearchCryptoCurrencyByCryptoIdCryptoCurrenciesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSearchCryptoCurrencyByCryptoIdCryptoCurrenciesQuery({
+ *   variables: {
+ *      cryptoId: // value for 'cryptoId'
+ *   },
+ * });
+ */
+export function useSearchCryptoCurrencyByCryptoIdCryptoCurrenciesQuery(baseOptions: Apollo.QueryHookOptions<SearchCryptoCurrencyByCryptoIdCryptoCurrenciesQuery, SearchCryptoCurrencyByCryptoIdCryptoCurrenciesQueryVariables> & ({ variables: SearchCryptoCurrencyByCryptoIdCryptoCurrenciesQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<SearchCryptoCurrencyByCryptoIdCryptoCurrenciesQuery, SearchCryptoCurrencyByCryptoIdCryptoCurrenciesQueryVariables>(SearchCryptoCurrencyByCryptoIdCryptoCurrenciesDocument, options);
+      }
+export function useSearchCryptoCurrencyByCryptoIdCryptoCurrenciesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SearchCryptoCurrencyByCryptoIdCryptoCurrenciesQuery, SearchCryptoCurrencyByCryptoIdCryptoCurrenciesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<SearchCryptoCurrencyByCryptoIdCryptoCurrenciesQuery, SearchCryptoCurrencyByCryptoIdCryptoCurrenciesQueryVariables>(SearchCryptoCurrencyByCryptoIdCryptoCurrenciesDocument, options);
+        }
+export function useSearchCryptoCurrencyByCryptoIdCryptoCurrenciesSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<SearchCryptoCurrencyByCryptoIdCryptoCurrenciesQuery, SearchCryptoCurrencyByCryptoIdCryptoCurrenciesQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<SearchCryptoCurrencyByCryptoIdCryptoCurrenciesQuery, SearchCryptoCurrencyByCryptoIdCryptoCurrenciesQueryVariables>(SearchCryptoCurrencyByCryptoIdCryptoCurrenciesDocument, options);
+        }
+export type SearchCryptoCurrencyByCryptoIdCryptoCurrenciesQueryHookResult = ReturnType<typeof useSearchCryptoCurrencyByCryptoIdCryptoCurrenciesQuery>;
+export type SearchCryptoCurrencyByCryptoIdCryptoCurrenciesLazyQueryHookResult = ReturnType<typeof useSearchCryptoCurrencyByCryptoIdCryptoCurrenciesLazyQuery>;
+export type SearchCryptoCurrencyByCryptoIdCryptoCurrenciesSuspenseQueryHookResult = ReturnType<typeof useSearchCryptoCurrencyByCryptoIdCryptoCurrenciesSuspenseQuery>;
+export type SearchCryptoCurrencyByCryptoIdCryptoCurrenciesQueryResult = Apollo.QueryResult<SearchCryptoCurrencyByCryptoIdCryptoCurrenciesQuery, SearchCryptoCurrencyByCryptoIdCryptoCurrenciesQueryVariables>;
 export const AddSubscriptionDocument = gql`
     mutation AddSubscription($userId: ID!, $cryptoId: ID!) {
   addSubscription(userId: $userId, cryptoId: $cryptoId) {
