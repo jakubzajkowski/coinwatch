@@ -1,4 +1,4 @@
-package org.example.coinwatch;
+package org.example.coinwatch.scheduler;
 
 import org.example.coinwatch.dto.CryptoCurrencyDTO;
 import org.example.coinwatch.dto.GlobalMarketDTO;

@@ -16,7 +16,7 @@ public class CryptoPriceHistoryService {
     private CryptoPriceHistoryRepository cryptoPriceHistoryRepository;
 
     @Transactional
-    public void saveCyrrencyPrice(CryptoCurrencyDTO cryptoCurrencyDTO){
+    public void saveCurrencyPrice(CryptoCurrencyDTO cryptoCurrencyDTO){
         CryptoPriceHistory cryptoPriceHistory = new CryptoPriceHistory(
                 cryptoCurrencyDTO.getId(),
                 cryptoCurrencyDTO.getSymbol(),
