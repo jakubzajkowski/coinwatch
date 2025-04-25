@@ -17,7 +17,7 @@ CREATE TABLE users (
 
 -- User Interests Table
 CREATE TABLE user_interests (
-                                user_id BIGINT PRIMARY KEY,
+                                user_id BIGINT,
                                 interests VARCHAR(255) NOT NULL,
                                 CONSTRAINT fk_user FOREIGN KEY (user_id) REFERENCES users(id)
 );

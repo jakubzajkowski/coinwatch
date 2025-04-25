@@ -1,7 +1,11 @@
 package org.example.coinwatch.service;
 
+import org.example.coinwatch.entity.CryptoCurrency;
+import org.example.coinwatch.entity.User;
 import org.example.coinwatch.entity.UserFavoriteCrypto;
+import org.example.coinwatch.respository.CryptoCurrencyRepository;
 import org.example.coinwatch.respository.UserFavoriteCryptoRepository;
+import org.example.coinwatch.respository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,8 +20,12 @@ public class UserFavoriteCryptoService {
     @Autowired
     private UserFavoriteCryptoRepository userFavoriteCryptoRepository;
 
+    @Autowired
+    private CryptoCurrencyRepository cryptoCurrencyRepository;
 
-    // Dodanie nowej ulubionej kryptowaluty dla użytkownika
+    @Autowired
+    private UserRepository userRepository;
+
     @Transactional
     public UserFavoriteCrypto addFavoriteCrypto(Long userId, Long cryptoCurrencyId) {
         Optional<UserFavoriteCrypto> existingFavorite = userFavoriteCryptoRepository.findByUserIdAndCryptoCurrencyId(userId, cryptoCurrencyId);
@@ -25,15 +33,20 @@ public class UserFavoriteCryptoService {
             throw new IllegalArgumentException("User has already added this cryptocurrency as a favorite");
         }
 
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+
+        CryptoCurrency cryptoCurrency = cryptoCurrencyRepository.findById(cryptoCurrencyId)
+                .orElseThrow(() -> new IllegalArgumentException("CryptoCurrency not found"));
+
         UserFavoriteCrypto favorite = new UserFavoriteCrypto();
-        favorite.setUserId(userId);
-        favorite.setCryptoCurrencyId(cryptoCurrencyId);
+        favorite.setUser(user);
+        favorite.setCryptoCurrency(cryptoCurrency);
         favorite.setAddedAt(ZonedDateTime.now());
 
         return userFavoriteCryptoRepository.save(favorite);
     }
 
-    // Usuwanie ulubionej kryptowaluty użytkownika
     @Transactional
     public void removeFavoriteCrypto(Long userId, Long cryptoCurrencyId) {
         Optional<UserFavoriteCrypto> existingFavorite = userFavoriteCryptoRepository.findByUserIdAndCryptoCurrencyId(userId, cryptoCurrencyId);
@@ -43,12 +56,10 @@ public class UserFavoriteCryptoService {
         userFavoriteCryptoRepository.delete(existingFavorite.get());
     }
 
-    // Pobranie wszystkich ulubionych kryptowalut dla danego użytkownika
     public List<UserFavoriteCrypto> getUserFavoriteCryptos(Long userId) {
         return userFavoriteCryptoRepository.findByUserId(userId);
     }
-
-    // Sprawdzanie, czy użytkownik ma daną kryptowalutę w swoich ulubionych
+    
     public boolean isCryptoFavorite(Long userId, Long cryptoCurrencyId) {
         return userFavoriteCryptoRepository.findByUserIdAndCryptoCurrencyId(userId, cryptoCurrencyId).isPresent();
     }

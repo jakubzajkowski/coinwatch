@@ -6,11 +6,6 @@ enum Interest {
     BITCOIN, TRADING, ETHEREUM, MINING, DEFI, STAKING, NFTS, NEWS
 }
 
-type Mutation {
-    addSubscription(userId: ID!, cryptoId: ID!): Subscription
-    deleteSubscription(userId: ID!, cryptoId: ID!): Boolean
-}
-
 type Subscription {
     id: ID
     user: User
@@ -97,6 +92,13 @@ type GlobalMarket {
     updatedAt: Float!
 }
 
+type UserFavoriteCrypto {
+    id: ID!
+    user: User!
+    cryptoCurrency: CryptoCurrency!
+    addedAt: String!
+}
+
 type CurrencyValue {
     currency: String!
     amount: Float!
@@ -114,8 +116,15 @@ type CryptoCurrencyPage {
     currentPage: Int!
 }
 
+type Mutation {
+    addSubscription(userId: ID!, cryptoId: ID!): Subscription
+    deleteSubscription(userId: ID!, cryptoId: ID!): Boolean
+    addFavoriteCrypto(userId: ID!, cryptoCurrencyId: ID!): UserFavoriteCrypto
+    removeFavoriteCrypto(userId: ID!, cryptoCurrencyId: ID!): Boolean
+}
 
 type Query {
+    getUserFavoriteCryptos(userId: ID): [UserFavoriteCrypto]
     getAlerts: [Alert]
     paginateCryptoCurrencies(page: Int = 0, size: Int = 10, sort: String = "id"): CryptoCurrencyPage!
     getGlobalMarket: GlobalMarket
