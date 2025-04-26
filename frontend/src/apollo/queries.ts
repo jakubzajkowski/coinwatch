@@ -191,5 +191,10 @@ export const PAGINATE_CRYPTO_CURRENCIES = gql`
             }
         }
     }
+`
 
+export const IS_CRYPTO_FAVORITE = gql`
+    query GetUserFavoriteCryptos($userId: ID!, $cryptoCurrencyId: ID!) {
+        isCryptoFavorite(userId: $userId, cryptoCurrencyId: $cryptoCurrencyId)
+    }
 `

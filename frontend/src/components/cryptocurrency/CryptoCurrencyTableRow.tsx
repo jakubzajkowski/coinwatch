@@ -1,7 +1,14 @@
 import { FC } from "react";
 import styled from "styled-components";
+import { MdFavoriteBorder, MdFavorite } from "react-icons/md";
+import { useQuery } from "@apollo/client";
+import { IS_CRYPTO_FAVORITE } from "../../apollo/queries";
+import QueryBoundary from "../QueryBoundary";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/store";
 
 interface CryptoCurrencyTableRow {
+    id?: string | null
     index: number
     cryptoId?: string | null
     currentPrice?: number | null
@@ -38,9 +45,23 @@ const PriceCell = styled(TableCell)`
 `;
 
 const CryptoCurrencyTableRow : FC<CryptoCurrencyTableRowProps> = ({data}) => {
+    const {user} = useSelector((state:RootState)=>state.auth)
+    const {error,data: favoriteData,loading} = useQuery(IS_CRYPTO_FAVORITE,{
+      variables:{
+        userId: user?.id,
+        cryptoCurrencyId: data.id
+      }
+    });
+
+    const isCryptoFavorite = favoriteData?.isCryptoFavorite;
+
     return <TableRow>
         <TableCell>{data.index++}</TableCell>
-        <WatchlistCell>☑</WatchlistCell>
+        <WatchlistCell>
+          <QueryBoundary error={error} loading={loading}>
+            {isCryptoFavorite ? <MdFavorite /> : <MdFavoriteBorder />}
+          </QueryBoundary>
+        </WatchlistCell>
         <TableCell>{data.cryptoId}</TableCell>
         <PriceCell>{data.currentPrice}$</PriceCell>
         <TableCell>{data.marketCap}$</TableCell>

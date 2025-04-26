@@ -122,8 +122,16 @@ export enum Interest {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  addFavoriteCrypto?: Maybe<UserFavoriteCrypto>;
   addSubscription?: Maybe<Subscription>;
   deleteSubscription?: Maybe<Scalars['Boolean']['output']>;
+  removeFavoriteCrypto?: Maybe<Scalars['Boolean']['output']>;
+};
+
+
+export type MutationAddFavoriteCryptoArgs = {
+  cryptoCurrencyId: Scalars['ID']['input'];
+  userId: Scalars['ID']['input'];
 };
 
 
@@ -138,6 +146,12 @@ export type MutationDeleteSubscriptionArgs = {
   userId: Scalars['ID']['input'];
 };
 
+
+export type MutationRemoveFavoriteCryptoArgs = {
+  cryptoCurrencyId: Scalars['ID']['input'];
+  userId: Scalars['ID']['input'];
+};
+
 export type Query = {
   __typename?: 'Query';
   getAlertByUserId?: Maybe<Array<Maybe<Alert>>>;
@@ -148,6 +162,8 @@ export type Query = {
   getGlobalMarket?: Maybe<GlobalMarket>;
   getSubscriptionByUserId?: Maybe<Array<Maybe<Subscription>>>;
   getUserById?: Maybe<User>;
+  getUserFavoriteCryptos?: Maybe<Array<Maybe<UserFavoriteCrypto>>>;
+  isCryptoFavorite: Scalars['Boolean']['output'];
   paginateCryptoCurrencies: CryptoCurrencyPage;
   searchCryptoCurrencyByCryptoId?: Maybe<Array<Maybe<CryptoCurrency>>>;
 };
@@ -181,6 +197,17 @@ export type QueryGetSubscriptionByUserIdArgs = {
 
 export type QueryGetUserByIdArgs = {
   id: Scalars['ID']['input'];
+};
+
+
+export type QueryGetUserFavoriteCryptosArgs = {
+  userId?: InputMaybe<Scalars['ID']['input']>;
+};
+
+
+export type QueryIsCryptoFavoriteArgs = {
+  cryptoCurrencyId: Scalars['ID']['input'];
+  userId: Scalars['ID']['input'];
 };
 
 
@@ -219,6 +246,14 @@ export type User = {
   preferredCurrency: Scalars['String']['output'];
   receiveUpdates: Scalars['Boolean']['output'];
   subscriptions: Array<Subscription>;
+};
+
+export type UserFavoriteCrypto = {
+  __typename?: 'UserFavoriteCrypto';
+  addedAt: Scalars['String']['output'];
+  cryptoCurrency: CryptoCurrency;
+  id: Scalars['ID']['output'];
+  user: User;
 };
 
 export type GetCryptoCurrenciesQueryVariables = Exact<{
@@ -300,6 +335,14 @@ export type PaginateCryptoCurrenciesQueryVariables = Exact<{
 
 
 export type PaginateCryptoCurrenciesQuery = { __typename?: 'Query', paginateCryptoCurrencies: { __typename?: 'CryptoCurrencyPage', totalPages: number, totalElements: number, currentPage: number, content: Array<{ __typename?: 'CryptoCurrency', id: string, cryptoId: string, symbol: string, name: string, imageUrl?: string | null, currentPrice?: number | null, marketCap?: number | null, marketCapRank?: number | null, fullyDilutedValuation?: number | null, totalVolume?: number | null, high24h?: number | null, low24h?: number | null, priceChange24h?: number | null, priceChangePercentage24h?: number | null, marketCapChange24h?: number | null, marketCapChangePercentage24h?: number | null, circulatingSupply?: number | null, totalSupply?: number | null, maxSupply?: number | null, ath?: number | null, athChangePercentage?: number | null, athDate?: string | null, atl?: number | null, atlChangePercentage?: number | null, atlDate?: string | null, lastUpdated?: string | null }> } };
+
+export type GetUserFavoriteCryptosQueryVariables = Exact<{
+  userId: Scalars['ID']['input'];
+  cryptoCurrencyId: Scalars['ID']['input'];
+}>;
+
+
+export type GetUserFavoriteCryptosQuery = { __typename?: 'Query', isCryptoFavorite: boolean };
 
 
 export const GetCryptoCurrenciesDocument = gql`
@@ -838,3 +881,42 @@ export type PaginateCryptoCurrenciesQueryHookResult = ReturnType<typeof usePagin
 export type PaginateCryptoCurrenciesLazyQueryHookResult = ReturnType<typeof usePaginateCryptoCurrenciesLazyQuery>;
 export type PaginateCryptoCurrenciesSuspenseQueryHookResult = ReturnType<typeof usePaginateCryptoCurrenciesSuspenseQuery>;
 export type PaginateCryptoCurrenciesQueryResult = Apollo.QueryResult<PaginateCryptoCurrenciesQuery, PaginateCryptoCurrenciesQueryVariables>;
+export const GetUserFavoriteCryptosDocument = gql`
+    query GetUserFavoriteCryptos($userId: ID!, $cryptoCurrencyId: ID!) {
+  isCryptoFavorite(userId: $userId, cryptoCurrencyId: $cryptoCurrencyId)
+}
+    `;
+
+/**
+ * __useGetUserFavoriteCryptosQuery__
+ *
+ * To run a query within a React component, call `useGetUserFavoriteCryptosQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetUserFavoriteCryptosQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetUserFavoriteCryptosQuery({
+ *   variables: {
+ *      userId: // value for 'userId'
+ *      cryptoCurrencyId: // value for 'cryptoCurrencyId'
+ *   },
+ * });
+ */
+export function useGetUserFavoriteCryptosQuery(baseOptions: Apollo.QueryHookOptions<GetUserFavoriteCryptosQuery, GetUserFavoriteCryptosQueryVariables> & ({ variables: GetUserFavoriteCryptosQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetUserFavoriteCryptosQuery, GetUserFavoriteCryptosQueryVariables>(GetUserFavoriteCryptosDocument, options);
+      }
+export function useGetUserFavoriteCryptosLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetUserFavoriteCryptosQuery, GetUserFavoriteCryptosQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetUserFavoriteCryptosQuery, GetUserFavoriteCryptosQueryVariables>(GetUserFavoriteCryptosDocument, options);
+        }
+export function useGetUserFavoriteCryptosSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetUserFavoriteCryptosQuery, GetUserFavoriteCryptosQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetUserFavoriteCryptosQuery, GetUserFavoriteCryptosQueryVariables>(GetUserFavoriteCryptosDocument, options);
+        }
+export type GetUserFavoriteCryptosQueryHookResult = ReturnType<typeof useGetUserFavoriteCryptosQuery>;
+export type GetUserFavoriteCryptosLazyQueryHookResult = ReturnType<typeof useGetUserFavoriteCryptosLazyQuery>;
+export type GetUserFavoriteCryptosSuspenseQueryHookResult = ReturnType<typeof useGetUserFavoriteCryptosSuspenseQuery>;
+export type GetUserFavoriteCryptosQueryResult = Apollo.QueryResult<GetUserFavoriteCryptosQuery, GetUserFavoriteCryptosQueryVariables>;

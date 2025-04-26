@@ -167,7 +167,7 @@ const Cryptocurrency: React.FC = () => {
                 <thead>
                 <TableRow>
                     <TableHeader>#</TableHeader>
-                    <TableHeader>Add to Watchlist</TableHeader>
+                    <TableHeader>Add to Favorites</TableHeader>
                     <TableHeader>Name</TableHeader>
                     <TableHeader>Price</TableHeader>
                     <TableHeader>MarketCup</TableHeader>
