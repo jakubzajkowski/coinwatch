@@ -124,6 +124,7 @@ type Mutation {
 }
 
 type Query {
+    isCryptoFavorite(userId: ID!, cryptoCurrencyId: ID!): Boolean!
     getUserFavoriteCryptos(userId: ID): [UserFavoriteCrypto]
     getAlerts: [Alert]
     paginateCryptoCurrencies(page: Int = 0, size: Int = 10, sort: String = "id"): CryptoCurrencyPage!

@@ -31,4 +31,9 @@ public class UserFavoriteCryptoController {
     public List<UserFavoriteCrypto> getUserFavoriteCryptos(@Argument Long userId) {
         return userFavoriteCryptoService.getUserFavoriteCryptos(userId);
     }
+
+    @QueryMapping
+    public boolean isCryptoFavorite(@Argument Long userId, @Argument Long cryptoCurrencyId) {
+        return userFavoriteCryptoService.isCryptoFavorite(userId, cryptoCurrencyId);
+    }
 }

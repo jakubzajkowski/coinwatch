@@ -2,11 +2,12 @@ package org.example.coinwatch.entity;
 
 import jakarta.persistence.*;
 
+import java.io.Serializable;
 import java.time.ZonedDateTime;
 
 @Entity
 @Table(name = "user_favorite_cryptos")
-public class UserFavoriteCrypto {
+public class UserFavoriteCrypto implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

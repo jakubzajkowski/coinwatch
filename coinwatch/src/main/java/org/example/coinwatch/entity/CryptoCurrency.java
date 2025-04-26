@@ -99,6 +99,18 @@ public class CryptoCurrency implements Serializable {
     @OneToMany(mappedBy = "cryptoCurrency", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private Set<Alert> alerts = new HashSet<>();
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "cryptoCurrency", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    private Set<UserFavoriteCrypto> userFavoriteCryptos  = new HashSet<>();
+
+    public Set<UserFavoriteCrypto> getUserFavoriteCryptos() {
+        return userFavoriteCryptos;
+    }
+
+    public void setUserFavoriteCryptos(Set<UserFavoriteCrypto> userFavoriteCryptos) {
+        this.userFavoriteCryptos = userFavoriteCryptos;
+    }
+
     public Set<Alert> getAlerts() {
         return alerts;
     }
