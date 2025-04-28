@@ -181,7 +181,7 @@ const Cryptocurrency: React.FC = () => {
                 <QueryBoundary loading={searchLoading || paginateLoading} error={searchError || paginateError}>
                   {cryptoData && cryptoData.map((crypto, index) => {
                     const cryptoWithIndex = { ...crypto, index };
-                    return <CryptoCurrencyTableRow key={crypto?.cryptoId as string + index} data={cryptoWithIndex} />;
+                    return <CryptoCurrencyTableRow key={crypto?.cryptoId as string + index} data={cryptoWithIndex} />
                   })}
                 </QueryBoundary>
                 </tbody>
@@ -189,7 +189,7 @@ const Cryptocurrency: React.FC = () => {
             {!isSearching && (
               <PageButtonsContainer>
                 <div>
-                  <PageInfo>Showing 10 of {totalElements} cryptocurrencies</PageInfo>
+                  <PageInfo>Showing 10 of {totalElements} cryptocurrencies page {page}</PageInfo>
                 </div>
                 <div>
                   <ButtonSecondary type="button" disabled={page === 0} onClick={handlePrevious}>

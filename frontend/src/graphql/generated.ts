@@ -344,6 +344,22 @@ export type GetUserFavoriteCryptosQueryVariables = Exact<{
 
 export type GetUserFavoriteCryptosQuery = { __typename?: 'Query', isCryptoFavorite: boolean };
 
+export type AddFavoriteCryptoMutationVariables = Exact<{
+  userId: Scalars['ID']['input'];
+  cryptoCurrencyId: Scalars['ID']['input'];
+}>;
+
+
+export type AddFavoriteCryptoMutation = { __typename?: 'Mutation', addFavoriteCrypto?: { __typename?: 'UserFavoriteCrypto', id: string, addedAt: string } | null };
+
+export type RemoveFavoriteCryptoMutationVariables = Exact<{
+  userId: Scalars['ID']['input'];
+  cryptoCurrencyId: Scalars['ID']['input'];
+}>;
+
+
+export type RemoveFavoriteCryptoMutation = { __typename?: 'Mutation', removeFavoriteCrypto?: boolean | null };
+
 
 export const GetCryptoCurrenciesDocument = gql`
     query getCryptoCurrencies($limit: Int!, $orderBy: String!) {
@@ -920,3 +936,70 @@ export type GetUserFavoriteCryptosQueryHookResult = ReturnType<typeof useGetUser
 export type GetUserFavoriteCryptosLazyQueryHookResult = ReturnType<typeof useGetUserFavoriteCryptosLazyQuery>;
 export type GetUserFavoriteCryptosSuspenseQueryHookResult = ReturnType<typeof useGetUserFavoriteCryptosSuspenseQuery>;
 export type GetUserFavoriteCryptosQueryResult = Apollo.QueryResult<GetUserFavoriteCryptosQuery, GetUserFavoriteCryptosQueryVariables>;
+export const AddFavoriteCryptoDocument = gql`
+    mutation AddFavoriteCrypto($userId: ID!, $cryptoCurrencyId: ID!) {
+  addFavoriteCrypto(userId: $userId, cryptoCurrencyId: $cryptoCurrencyId) {
+    id
+    addedAt
+  }
+}
+    `;
+export type AddFavoriteCryptoMutationFn = Apollo.MutationFunction<AddFavoriteCryptoMutation, AddFavoriteCryptoMutationVariables>;
+
+/**
+ * __useAddFavoriteCryptoMutation__
+ *
+ * To run a mutation, you first call `useAddFavoriteCryptoMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAddFavoriteCryptoMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [addFavoriteCryptoMutation, { data, loading, error }] = useAddFavoriteCryptoMutation({
+ *   variables: {
+ *      userId: // value for 'userId'
+ *      cryptoCurrencyId: // value for 'cryptoCurrencyId'
+ *   },
+ * });
+ */
+export function useAddFavoriteCryptoMutation(baseOptions?: Apollo.MutationHookOptions<AddFavoriteCryptoMutation, AddFavoriteCryptoMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<AddFavoriteCryptoMutation, AddFavoriteCryptoMutationVariables>(AddFavoriteCryptoDocument, options);
+      }
+export type AddFavoriteCryptoMutationHookResult = ReturnType<typeof useAddFavoriteCryptoMutation>;
+export type AddFavoriteCryptoMutationResult = Apollo.MutationResult<AddFavoriteCryptoMutation>;
+export type AddFavoriteCryptoMutationOptions = Apollo.BaseMutationOptions<AddFavoriteCryptoMutation, AddFavoriteCryptoMutationVariables>;
+export const RemoveFavoriteCryptoDocument = gql`
+    mutation RemoveFavoriteCrypto($userId: ID!, $cryptoCurrencyId: ID!) {
+  removeFavoriteCrypto(userId: $userId, cryptoCurrencyId: $cryptoCurrencyId)
+}
+    `;
+export type RemoveFavoriteCryptoMutationFn = Apollo.MutationFunction<RemoveFavoriteCryptoMutation, RemoveFavoriteCryptoMutationVariables>;
+
+/**
+ * __useRemoveFavoriteCryptoMutation__
+ *
+ * To run a mutation, you first call `useRemoveFavoriteCryptoMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRemoveFavoriteCryptoMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [removeFavoriteCryptoMutation, { data, loading, error }] = useRemoveFavoriteCryptoMutation({
+ *   variables: {
+ *      userId: // value for 'userId'
+ *      cryptoCurrencyId: // value for 'cryptoCurrencyId'
+ *   },
+ * });
+ */
+export function useRemoveFavoriteCryptoMutation(baseOptions?: Apollo.MutationHookOptions<RemoveFavoriteCryptoMutation, RemoveFavoriteCryptoMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<RemoveFavoriteCryptoMutation, RemoveFavoriteCryptoMutationVariables>(RemoveFavoriteCryptoDocument, options);
+      }
+export type RemoveFavoriteCryptoMutationHookResult = ReturnType<typeof useRemoveFavoriteCryptoMutation>;
+export type RemoveFavoriteCryptoMutationResult = Apollo.MutationResult<RemoveFavoriteCryptoMutation>;
+export type RemoveFavoriteCryptoMutationOptions = Apollo.BaseMutationOptions<RemoveFavoriteCryptoMutation, RemoveFavoriteCryptoMutationVariables>;

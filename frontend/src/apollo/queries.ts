@@ -198,3 +198,18 @@ export const IS_CRYPTO_FAVORITE = gql`
         isCryptoFavorite(userId: $userId, cryptoCurrencyId: $cryptoCurrencyId)
     }
 `
+
+export const ADD_FAVORITE_CRYPTO = gql`
+    mutation AddFavoriteCrypto($userId: ID!, $cryptoCurrencyId: ID!) {
+        addFavoriteCrypto(userId: $userId, cryptoCurrencyId: $cryptoCurrencyId) {
+            id
+            addedAt
+        }
+    }
+`
+
+export const REMOVE_FAVORITE_CRYPTO = gql`
+    mutation RemoveFavoriteCrypto($userId: ID!, $cryptoCurrencyId: ID!) {
+        removeFavoriteCrypto(userId: $userId, cryptoCurrencyId: $cryptoCurrencyId)
+    }
+`
