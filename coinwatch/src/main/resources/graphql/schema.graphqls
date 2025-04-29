@@ -136,4 +136,5 @@ type Query {
     searchCryptoCurrencyByCryptoId(cryptoId: String!): [CryptoCurrency]
     getCryptoCurrencies(limit: Int, orderBy: String): [CryptoCurrency]
     getCryptoPriceHistory(cryptoId: String!): [CryptoPriceHistory]
+    getCryptoPriceHistoryByRange(cryptoId: String!, range: String!): [CryptoPriceHistory]
 }

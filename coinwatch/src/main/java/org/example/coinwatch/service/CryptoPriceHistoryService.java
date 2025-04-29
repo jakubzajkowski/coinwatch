@@ -9,6 +9,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class CryptoPriceHistoryService {
     private static final Logger logger = LoggerFactory.getLogger(CryptoPriceHistoryService.class);
@@ -23,5 +25,9 @@ public class CryptoPriceHistoryService {
                 cryptoCurrencyDTO.getCurrentPrice()
         );
         cryptoPriceHistoryRepository.save(cryptoPriceHistory);
+    }
+
+    public List<CryptoPriceHistory> getByCryptoIdAndRange(String cryptoId, String range){
+        return cryptoPriceHistoryRepository.findByCryptoIdAndRange(cryptoId,range).orElseThrow(()->new RuntimeException("Range doesn't exists"));
     }
 }
