@@ -159,6 +159,7 @@ export type Query = {
   getCryptoCurrencies?: Maybe<Array<Maybe<CryptoCurrency>>>;
   getCryptoCurrencyByCryptoId?: Maybe<CryptoCurrency>;
   getCryptoPriceHistory?: Maybe<Array<Maybe<CryptoPriceHistory>>>;
+  getCryptoPriceHistoryByRange?: Maybe<Array<Maybe<CryptoPriceHistory>>>;
   getGlobalMarket?: Maybe<GlobalMarket>;
   getSubscriptionByUserId?: Maybe<Array<Maybe<Subscription>>>;
   getUserById?: Maybe<User>;
@@ -187,6 +188,12 @@ export type QueryGetCryptoCurrencyByCryptoIdArgs = {
 
 export type QueryGetCryptoPriceHistoryArgs = {
   cryptoId: Scalars['String']['input'];
+};
+
+
+export type QueryGetCryptoPriceHistoryByRangeArgs = {
+  cryptoId: Scalars['String']['input'];
+  range: Scalars['String']['input'];
 };
 
 
@@ -277,6 +284,14 @@ export type GetCryptoPriceHistoryQueryVariables = Exact<{
 
 
 export type GetCryptoPriceHistoryQuery = { __typename?: 'Query', getCryptoPriceHistory?: Array<{ __typename?: 'CryptoPriceHistory', price?: number | null, recordedAt?: string | null } | null> | null };
+
+export type GetCryptoPriceHistoryByRangeQueryVariables = Exact<{
+  cryptoId: Scalars['String']['input'];
+  range: Scalars['String']['input'];
+}>;
+
+
+export type GetCryptoPriceHistoryByRangeQuery = { __typename?: 'Query', getCryptoPriceHistoryByRange?: Array<{ __typename?: 'CryptoPriceHistory', price?: number | null, recordedAt?: string | null } | null> | null };
 
 export type GetAlertByUserIdQueryVariables = Exact<{
   userId: Scalars['ID']['input'];
@@ -502,6 +517,48 @@ export type GetCryptoPriceHistoryQueryHookResult = ReturnType<typeof useGetCrypt
 export type GetCryptoPriceHistoryLazyQueryHookResult = ReturnType<typeof useGetCryptoPriceHistoryLazyQuery>;
 export type GetCryptoPriceHistorySuspenseQueryHookResult = ReturnType<typeof useGetCryptoPriceHistorySuspenseQuery>;
 export type GetCryptoPriceHistoryQueryResult = Apollo.QueryResult<GetCryptoPriceHistoryQuery, GetCryptoPriceHistoryQueryVariables>;
+export const GetCryptoPriceHistoryByRangeDocument = gql`
+    query getCryptoPriceHistoryByRange($cryptoId: String!, $range: String!) {
+  getCryptoPriceHistoryByRange(cryptoId: $cryptoId, range: $range) {
+    price
+    recordedAt
+  }
+}
+    `;
+
+/**
+ * __useGetCryptoPriceHistoryByRangeQuery__
+ *
+ * To run a query within a React component, call `useGetCryptoPriceHistoryByRangeQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCryptoPriceHistoryByRangeQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetCryptoPriceHistoryByRangeQuery({
+ *   variables: {
+ *      cryptoId: // value for 'cryptoId'
+ *      range: // value for 'range'
+ *   },
+ * });
+ */
+export function useGetCryptoPriceHistoryByRangeQuery(baseOptions: Apollo.QueryHookOptions<GetCryptoPriceHistoryByRangeQuery, GetCryptoPriceHistoryByRangeQueryVariables> & ({ variables: GetCryptoPriceHistoryByRangeQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetCryptoPriceHistoryByRangeQuery, GetCryptoPriceHistoryByRangeQueryVariables>(GetCryptoPriceHistoryByRangeDocument, options);
+      }
+export function useGetCryptoPriceHistoryByRangeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetCryptoPriceHistoryByRangeQuery, GetCryptoPriceHistoryByRangeQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetCryptoPriceHistoryByRangeQuery, GetCryptoPriceHistoryByRangeQueryVariables>(GetCryptoPriceHistoryByRangeDocument, options);
+        }
+export function useGetCryptoPriceHistoryByRangeSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetCryptoPriceHistoryByRangeQuery, GetCryptoPriceHistoryByRangeQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetCryptoPriceHistoryByRangeQuery, GetCryptoPriceHistoryByRangeQueryVariables>(GetCryptoPriceHistoryByRangeDocument, options);
+        }
+export type GetCryptoPriceHistoryByRangeQueryHookResult = ReturnType<typeof useGetCryptoPriceHistoryByRangeQuery>;
+export type GetCryptoPriceHistoryByRangeLazyQueryHookResult = ReturnType<typeof useGetCryptoPriceHistoryByRangeLazyQuery>;
+export type GetCryptoPriceHistoryByRangeSuspenseQueryHookResult = ReturnType<typeof useGetCryptoPriceHistoryByRangeSuspenseQuery>;
+export type GetCryptoPriceHistoryByRangeQueryResult = Apollo.QueryResult<GetCryptoPriceHistoryByRangeQuery, GetCryptoPriceHistoryByRangeQueryVariables>;
 export const GetAlertByUserIdDocument = gql`
     query getAlertByUserId($userId: ID!) {
   getAlertByUserId(userId: $userId) {
