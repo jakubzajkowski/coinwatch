@@ -9,6 +9,7 @@ import CryptoCurrencyTableRow from '../components/cryptocurrency/CryptoCurrencyT
 import { ButtonSecondary } from '../components/styled';
 import QueryBoundary from '../components/QueryBoundary';
 import { useDebounce } from '../hooks/useBebounce';
+import FiltersModal from '../components/cryptocurrency/FiltersModal';
 
 const Container = styled.div`
     width: 100%;
@@ -110,6 +111,8 @@ const Cryptocurrency: React.FC = () => {
   const [search, setSearch] = useState('');
   const debouncedSearch = useDebounce(search, 300);
   const isSearching = debouncedSearch.trim().length > 1;
+  const [isFiltersOpen, setIsFiltersOpen] = React.useState(false);
+  const [filters, setFilters] = React.useState({ marketCap: '', priceChange: '' });
 
   const { data: paginateData, loading: paginateLoading, error: paginateError } = useQuery<PaginateCryptoCurrenciesQuery>(PAGINATE_CRYPTO_CURRENCIES, {
     variables: { page, size: 10, sort: "id" },
@@ -137,6 +140,9 @@ const Cryptocurrency: React.FC = () => {
     }
   };
 
+  const handleApplyFilters = (newFilters: typeof filters) => {
+    setFilters(newFilters);
+  };
 
   const cryptoData = isSearching
   ? searchData?.searchCryptoCurrencyByCryptoId ?? []
@@ -160,7 +166,9 @@ const Cryptocurrency: React.FC = () => {
 
             <FiltersSearch>
                 <SearchInput onChange={(e)=>handleSearch(e)} placeholder="Search for a cryptocurrency..." />
-                <Filter><IoMdOptions />Filters</Filter>
+                <Filter onClick={() => setIsFiltersOpen(true)}>
+                  <IoMdOptions /> Filters
+                </Filter>
             </FiltersSearch>
 
             <Table>
@@ -201,6 +209,12 @@ const Cryptocurrency: React.FC = () => {
                 </div>
               </PageButtonsContainer>
             )}
+
+        <FiltersModal
+          isOpen={isFiltersOpen}
+          onClose={() => setIsFiltersOpen(false)}
+          onApply={handleApplyFilters}
+        />
         </Container>
     );
 };
