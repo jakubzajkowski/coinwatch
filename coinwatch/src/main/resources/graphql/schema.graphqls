@@ -127,7 +127,16 @@ type Query {
     isCryptoFavorite(userId: ID!, cryptoCurrencyId: ID!): Boolean!
     getUserFavoriteCryptos(userId: ID): [UserFavoriteCrypto]
     getAlerts: [Alert]
-    paginateCryptoCurrencies(page: Int = 0, size: Int = 10, sort: String = "id"): CryptoCurrencyPage!
+    paginateCryptoCurrencies(
+        page: Int = 0,
+        size: Int = 10,
+        sort: String = "id",
+        order: String = "asc",
+        minPrice: Float,
+        maxPrice: Float,
+        minMarketCap: Float,
+        maxMarketCap: Float,
+    ): CryptoCurrencyPage!
     getGlobalMarket: GlobalMarket
     getAlertByUserId(userId: ID!): [Alert]
     getSubscriptionByUserId(userId: ID!): [Subscription]

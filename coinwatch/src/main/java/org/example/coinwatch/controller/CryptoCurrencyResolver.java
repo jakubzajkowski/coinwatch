@@ -58,9 +58,25 @@ public class CryptoCurrencyResolver {
     }
 
     @QueryMapping
-    public CryptoCurrencyPage paginateCryptoCurrencies(@Argument int page, @Argument int size, @Argument String sort) {
-        Pageable pageable = PageRequest.of(page, size, Sort.by(sort).ascending());
-        Page<CryptoCurrency> cryptoCurrencyPage = cryptoCurrencyRepository.findAll(pageable);
+    public CryptoCurrencyPage paginateCryptoCurrencies(
+            @Argument int page,
+            @Argument int size,
+            @Argument String sort,
+            @Argument String order,
+            @Argument Optional<Double> minPrice,
+            @Argument Optional<Double> maxPrice,
+            @Argument Optional<Double> minMarketCap,
+            @Argument Optional<Double> maxMarketCap,
+            @Argument Optional<String> name
+    ) {
+        Pageable pageable = PageRequest.of(page, size, "asc".equals(order) ? Sort.by(sort).ascending() : Sort.by(sort).descending());
+        Page<CryptoCurrency> cryptoCurrencyPage = cryptoCurrencyRepository.findAllWithFilters(
+                minPrice.orElse(null),
+                maxPrice.orElse(null),
+                minMarketCap.orElse(null),
+                maxMarketCap.orElse(null),
+                pageable
+        );
 
         return new CryptoCurrencyPage(
                 cryptoCurrencyPage.getContent(),
