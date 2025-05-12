@@ -7,6 +7,8 @@ import org.example.coinwatch.respository.CryptoCurrencyRepository;
 import org.example.coinwatch.respository.UserFavoriteCryptoRepository;
 import org.example.coinwatch.respository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,6 +28,7 @@ public class UserFavoriteCryptoService {
     @Autowired
     private UserRepository userRepository;
 
+    @CacheEvict(value = "userFavorites", key="#userId")
     @Transactional
     public UserFavoriteCrypto addFavoriteCrypto(Long userId, Long cryptoCurrencyId) {
         Optional<UserFavoriteCrypto> existingFavorite = userFavoriteCryptoRepository.findByUserIdAndCryptoCurrencyId(userId, cryptoCurrencyId);
@@ -47,6 +50,7 @@ public class UserFavoriteCryptoService {
         return userFavoriteCryptoRepository.save(favorite);
     }
 
+    @CacheEvict(value = "userFavorites", key="#userId")
     @Transactional
     public void removeFavoriteCrypto(Long userId, Long cryptoCurrencyId) {
         Optional<UserFavoriteCrypto> existingFavorite = userFavoriteCryptoRepository.findByUserIdAndCryptoCurrencyId(userId, cryptoCurrencyId);
@@ -56,10 +60,11 @@ public class UserFavoriteCryptoService {
         userFavoriteCryptoRepository.delete(existingFavorite.get());
     }
 
+    @Cacheable(value = "userFavorites", key="#userId")
     public List<UserFavoriteCrypto> getUserFavoriteCryptos(Long userId) {
         return userFavoriteCryptoRepository.findByUserId(userId);
     }
-    
+
     public boolean isCryptoFavorite(Long userId, Long cryptoCurrencyId) {
         return userFavoriteCryptoRepository.findByUserIdAndCryptoCurrencyId(userId, cryptoCurrencyId).isPresent();
     }

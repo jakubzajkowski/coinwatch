@@ -67,7 +67,12 @@ public class CryptoCurrencyResolver {
             @Argument Optional<Double> maxPrice,
             @Argument Optional<Double> minMarketCap,
             @Argument Optional<Double> maxMarketCap,
-            @Argument Optional<String> name
+            @Argument Optional<Double> minPriceChange24h,
+            @Argument Optional<Double> maxPriceChange24h,
+            @Argument Optional<Double> minHighestPrice24h,
+            @Argument Optional<Double> maxHighestPrice24h,
+            @Argument Optional<Double> minLowestPrice24h,
+            @Argument Optional<Double> maxLowestPrice24h
     ) {
         Pageable pageable = PageRequest.of(page, size, "asc".equals(order) ? Sort.by(sort).ascending() : Sort.by(sort).descending());
         Page<CryptoCurrency> cryptoCurrencyPage = cryptoCurrencyRepository.findAllWithFilters(
@@ -75,6 +80,12 @@ public class CryptoCurrencyResolver {
                 maxPrice.orElse(null),
                 minMarketCap.orElse(null),
                 maxMarketCap.orElse(null),
+                minPriceChange24h.orElse(null),
+                maxPriceChange24h.orElse(null),
+                minHighestPrice24h.orElse(null),
+                maxHighestPrice24h.orElse(null),
+                minLowestPrice24h.orElse(null),
+                maxLowestPrice24h.orElse(null),
                 pageable
         );
 

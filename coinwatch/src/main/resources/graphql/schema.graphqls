@@ -136,6 +136,12 @@ type Query {
         maxPrice: Float,
         minMarketCap: Float,
         maxMarketCap: Float,
+        minPriceChange24h: Float,
+        maxPriceChange24h: Float,
+        minHighestPrice24h: Float,
+        maxHighestPrice24h: Float,
+        minLowestPrice24h: Float,
+        maxLowestPrice24h: Float
     ): CryptoCurrencyPage!
     getGlobalMarket: GlobalMarket
     getAlertByUserId(userId: ID!): [Alert]
