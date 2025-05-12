@@ -165,42 +165,72 @@ export const GET_GLOBAL_MARKET = gql`
     }
 `
 export const PAGINATE_CRYPTO_CURRENCIES = gql`
-    query PaginateCryptoCurrencies($page: Int, $size: Int, $sort: String)  {
-        paginateCryptoCurrencies(page: $page, size: $size, sort: $sort) {
-            totalPages
-            totalElements
-            currentPage
-            content {
-                id
-                cryptoId
-                symbol
-                name
-                imageUrl
-                currentPrice
-                marketCap
-                marketCapRank
-                fullyDilutedValuation
-                totalVolume
-                high24h
-                low24h
-                priceChange24h
-                priceChangePercentage24h
-                marketCapChange24h
-                marketCapChangePercentage24h
-                circulatingSupply
-                totalSupply
-                maxSupply
-                ath
-                athChangePercentage
-                athDate
-                atl
-                atlChangePercentage
-                atlDate
-                lastUpdated
-            }
-        }
+  query PaginateCryptoCurrencies(
+    $page: Int,
+    $size: Int,
+    $sort: String,
+    $order: String,
+    $minPriceChange24h: Float,
+    $maxPriceChange24h: Float,
+    $minPrice: Float,
+    $maxPrice: Float,
+    $minMarketCap: Float,
+    $maxMarketCap: Float,
+    $minHighestPrice24h: Float,
+    $maxHighestPrice24h: Float,
+    $minLowestPrice24h: Float,
+    $maxLowestPrice24h: Float
+  ) {
+    paginateCryptoCurrencies(
+      page: $page,
+      size: $size,
+      sort: $sort,
+      order: $order,
+      minPriceChange24h: $minPriceChange24h,
+      maxPriceChange24h: $maxPriceChange24h,
+      minPrice: $minPrice,
+      maxPrice: $maxPrice,
+      minMarketCap: $minMarketCap,
+      maxMarketCap: $maxMarketCap,
+      minHighestPrice24h: $minHighestPrice24h,
+      maxHighestPrice24h: $maxHighestPrice24h,
+      minLowestPrice24h: $minLowestPrice24h,
+      maxLowestPrice24h: $maxLowestPrice24h
+    ) {
+      totalPages
+      totalElements
+      currentPage
+      content {
+        id
+        cryptoId
+        symbol
+        name
+        imageUrl
+        currentPrice
+        marketCap
+        marketCapRank
+        fullyDilutedValuation
+        totalVolume
+        high24h
+        low24h
+        priceChange24h
+        priceChangePercentage24h
+        marketCapChange24h
+        marketCapChangePercentage24h
+        circulatingSupply
+        totalSupply
+        maxSupply
+        ath
+        athChangePercentage
+        athDate
+        atl
+        atlChangePercentage
+        atlDate
+        lastUpdated
+      }
     }
-`
+  }
+`;
 
 export const IS_CRYPTO_FAVORITE = gql`
     query GetUserFavoriteCryptos($userId: ID!, $cryptoCurrencyId: ID!) {

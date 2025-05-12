@@ -1,11 +1,12 @@
 import React from 'react';
 import styled from 'styled-components';
 import { ButtonPrimary } from '../styled';
+import { CryptoCurrencyFiltersType } from '../../pages/CryptoCurrency';
 
 interface FiltersModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onApply: (filters: any) => void;
+  onApply: (filters: CryptoCurrencyFiltersType) => void;
 }
 
 const Overlay = styled.div<{ isOpen: boolean }>`
@@ -96,6 +97,26 @@ const ButtonsRow = styled.div`
 `;
 
 const FiltersModal: React.FC<FiltersModalProps> = ({ isOpen, onClose, onApply }) => {
+  const [formState, setFormState] = React.useState<CryptoCurrencyFiltersType>({
+      sort: "id",
+      minPriceChange24h: null,
+      maxPriceChange24h: null,
+      minPrice: null,
+      maxPrice: null,
+      minMarketCap: null,
+      maxMarketCap: null,
+      minHighestPrice24h: null,
+      maxHighestPrice24h: null,
+      minLowestPrice24h: null,
+      maxLowestPrice24h: null,
+  });
+
+const handleChange = (key: keyof CryptoCurrencyFiltersType, value: string) => {
+  const parsed = value === '' ? null : isNaN(Number(value)) ? value : Number(value);
+  setFormState(prev => ({ ...prev, [key]: parsed }));
+};
+
+
   return (
     <Overlay isOpen={isOpen}>
       <ModalContainer>
@@ -107,44 +128,44 @@ const FiltersModal: React.FC<FiltersModalProps> = ({ isOpen, onClose, onApply })
         <SectionTitle>Filter</SectionTitle>
         <Row>
           <Column>
-            <Label>Name</Label>
-            <Input placeholder="e.g. Bitcoin" />
-          </Column>
-          <Column>
             <Label>Price (min)</Label>
-            <Input type="number" placeholder="e.g. 1000" />
+            <Input onChange={(e) => handleChange('minPrice', e.target.value)} type="number" placeholder="e.g. 1000" />
           </Column>
           <Column>
             <Label>Price (max)</Label>
-            <Input type="number" placeholder="e.g. 50000" />
+            <Input onChange={(e) => handleChange('maxPrice', e.target.value)} type="number" placeholder="e.g. 50000" />
           </Column>
           <Column>
             <Label>Market Cap (min)</Label>
-            <Input type="number" placeholder="e.g. 10000000" />
+            <Input onChange={(e) => handleChange('minMarketCap', e.target.value)} type="number" placeholder="e.g. 10000000" />
           </Column>
           <Column>
             <Label>Market Cap (max)</Label>
-            <Input type="number" placeholder="e.g. 1000000000" />
+            <Input onChange={(e) => handleChange('maxMarketCap', e.target.value)} type="number" placeholder="e.g. 1000000000" />
           </Column>
           <Column>
-            <Label>Price Change 24h (%)</Label>
-            <Select>
-              <option value="">Any</option>
-              <option value="positive">Positive</option>
-              <option value="negative">Negative</option>
-            </Select>
+            <Label>Min Price Change 24h</Label>
+            <Input onChange={(e) => handleChange('minPriceChange24h', e.target.value)} type="number" placeholder="e.g. 15000" />
+          </Column>
+          <Column>
+            <Label>Max Price Change 24h</Label>
+            <Input onChange={(e) => handleChange('maxPriceChange24h', e.target.value)} type="number" placeholder="e.g. 15000" />
           </Column>
           <Column>
             <Label>Highest Price 24h (min)</Label>
-            <Input type="number" placeholder="e.g. 15000" />
+            <Input onChange={(e) => handleChange('maxHighestPrice24h', e.target.value)} type="number" placeholder="e.g. 15000" />
+          </Column>
+          <Column>
+            <Label>Highest Price 24h (max)</Label>
+            <Input onChange={(e) => handleChange('minHighestPrice24h', e.target.value)} type="number" placeholder="e.g. 8000" />
+          </Column>
+          <Column>
+            <Label>Lowest Price 24h (min)</Label>
+            <Input onChange={(e) => handleChange('minLowestPrice24h', e.target.value)} type="number" placeholder="e.g. 15000" />
           </Column>
           <Column>
             <Label>Lowest Price 24h (max)</Label>
-            <Input type="number" placeholder="e.g. 8000" />
-          </Column>
-          <Column>
-            <Label>MarketCap Rank (max)</Label>
-            <Input type="number" placeholder="e.g. 50" />
+            <Input onChange={(e) => handleChange('maxLowestPrice24h', e.target.value)} type="number" placeholder="e.g. 8000" />
           </Column>
         </Row>
 
@@ -173,7 +194,7 @@ const FiltersModal: React.FC<FiltersModalProps> = ({ isOpen, onClose, onApply })
 
         <ButtonsRow>
           <ButtonPrimary onClick={onClose}>Cancel</ButtonPrimary>
-          <ButtonPrimary onClick={() => onApply({})}>Apply</ButtonPrimary>
+          <ButtonPrimary onClick={() => onApply(formState)}>Apply</ButtonPrimary>
         </ButtonsRow>
       </ModalContainer>
     </Overlay>

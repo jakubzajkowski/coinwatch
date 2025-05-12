@@ -11,6 +11,20 @@ import QueryBoundary from '../components/QueryBoundary';
 import { useDebounce } from '../hooks/useBebounce';
 import FiltersModal from '../components/cryptocurrency/FiltersModal';
 
+export interface CryptoCurrencyFiltersType  {
+  sort: string;
+  minPriceChange24h: number | null;
+  maxPriceChange24h: number | null;
+  minPrice: number | null;
+  maxPrice: number | null;
+  minMarketCap: number | null;
+  maxMarketCap: number | null;
+  minHighestPrice24h: number | null;
+  maxHighestPrice24h: number | null;
+  minLowestPrice24h: number | null;
+  maxLowestPrice24h: number | null;
+};
+
 const Container = styled.div`
     width: 100%;
     min-height: 100vh;
@@ -112,9 +126,21 @@ const Cryptocurrency: React.FC = () => {
   const debouncedSearch = useDebounce(search, 300);
   const isSearching = debouncedSearch.trim().length > 1;
   const [isFiltersOpen, setIsFiltersOpen] = React.useState(false);
-  const [filters, setFilters] = React.useState({ marketCap: '', priceChange: '' });
+  const [filters, setFilters] = React.useState<CryptoCurrencyFiltersType>({
+      sort: "id",
+      minPriceChange24h: null,
+      maxPriceChange24h: null,
+      minPrice: null,
+      maxPrice: null,
+      minMarketCap: null,
+      maxMarketCap: null,
+      minHighestPrice24h: null,
+      maxHighestPrice24h: null,
+      minLowestPrice24h: null,
+      maxLowestPrice24h: null,
+  });
 
-  const { data: paginateData, loading: paginateLoading, error: paginateError } = useQuery<PaginateCryptoCurrenciesQuery>(PAGINATE_CRYPTO_CURRENCIES, {
+  const { data: paginateData, loading: paginateLoading, error: paginateError, refetch } = useQuery<PaginateCryptoCurrenciesQuery>(PAGINATE_CRYPTO_CURRENCIES, {
     variables: { page, size: 10, sort: "id" },
   });
 
@@ -125,6 +151,17 @@ const Cryptocurrency: React.FC = () => {
       fetchSearch({ variables: { cryptoId: debouncedSearch.trim() } });
     }
   }, [debouncedSearch]);
+
+  const handleFilters = (filtersFormState: CryptoCurrencyFiltersType) => {
+    setFilters(filtersFormState);
+    setPage(0);
+
+    refetch({
+      page,
+      size: 10,
+      ...filters,
+    });
+  }
 
   const handlePrevious = () => {
     if (page > 0) setPage(prev => prev - 1);
@@ -138,10 +175,6 @@ const Cryptocurrency: React.FC = () => {
     if (paginateData && page < paginateData.paginateCryptoCurrencies.totalPages) {
       setPage(prev => prev + 1);
     }
-  };
-
-  const handleApplyFilters = (newFilters: typeof filters) => {
-    setFilters(newFilters);
   };
 
   const cryptoData = isSearching
@@ -213,7 +246,7 @@ const Cryptocurrency: React.FC = () => {
         <FiltersModal
           isOpen={isFiltersOpen}
           onClose={() => setIsFiltersOpen(false)}
-          onApply={handleApplyFilters}
+          onApply={handleFilters}
         />
         </Container>
     );

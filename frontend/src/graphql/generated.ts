@@ -219,6 +219,17 @@ export type QueryIsCryptoFavoriteArgs = {
 
 
 export type QueryPaginateCryptoCurrenciesArgs = {
+  maxHighestPrice24h?: InputMaybe<Scalars['Float']['input']>;
+  maxLowestPrice24h?: InputMaybe<Scalars['Float']['input']>;
+  maxMarketCap?: InputMaybe<Scalars['Float']['input']>;
+  maxPrice?: InputMaybe<Scalars['Float']['input']>;
+  maxPriceChange24h?: InputMaybe<Scalars['Float']['input']>;
+  minHighestPrice24h?: InputMaybe<Scalars['Float']['input']>;
+  minLowestPrice24h?: InputMaybe<Scalars['Float']['input']>;
+  minMarketCap?: InputMaybe<Scalars['Float']['input']>;
+  minPrice?: InputMaybe<Scalars['Float']['input']>;
+  minPriceChange24h?: InputMaybe<Scalars['Float']['input']>;
+  order?: InputMaybe<Scalars['String']['input']>;
   page?: InputMaybe<Scalars['Int']['input']>;
   size?: InputMaybe<Scalars['Int']['input']>;
   sort?: InputMaybe<Scalars['String']['input']>;
@@ -346,6 +357,17 @@ export type PaginateCryptoCurrenciesQueryVariables = Exact<{
   page?: InputMaybe<Scalars['Int']['input']>;
   size?: InputMaybe<Scalars['Int']['input']>;
   sort?: InputMaybe<Scalars['String']['input']>;
+  order?: InputMaybe<Scalars['String']['input']>;
+  minPriceChange24h?: InputMaybe<Scalars['Float']['input']>;
+  maxPriceChange24h?: InputMaybe<Scalars['Float']['input']>;
+  minPrice?: InputMaybe<Scalars['Float']['input']>;
+  maxPrice?: InputMaybe<Scalars['Float']['input']>;
+  minMarketCap?: InputMaybe<Scalars['Float']['input']>;
+  maxMarketCap?: InputMaybe<Scalars['Float']['input']>;
+  minHighestPrice24h?: InputMaybe<Scalars['Float']['input']>;
+  maxHighestPrice24h?: InputMaybe<Scalars['Float']['input']>;
+  minLowestPrice24h?: InputMaybe<Scalars['Float']['input']>;
+  maxLowestPrice24h?: InputMaybe<Scalars['Float']['input']>;
 }>;
 
 
@@ -883,8 +905,23 @@ export type GetGlobalMarketLazyQueryHookResult = ReturnType<typeof useGetGlobalM
 export type GetGlobalMarketSuspenseQueryHookResult = ReturnType<typeof useGetGlobalMarketSuspenseQuery>;
 export type GetGlobalMarketQueryResult = Apollo.QueryResult<GetGlobalMarketQuery, GetGlobalMarketQueryVariables>;
 export const PaginateCryptoCurrenciesDocument = gql`
-    query PaginateCryptoCurrencies($page: Int, $size: Int, $sort: String) {
-  paginateCryptoCurrencies(page: $page, size: $size, sort: $sort) {
+    query PaginateCryptoCurrencies($page: Int, $size: Int, $sort: String, $order: String, $minPriceChange24h: Float, $maxPriceChange24h: Float, $minPrice: Float, $maxPrice: Float, $minMarketCap: Float, $maxMarketCap: Float, $minHighestPrice24h: Float, $maxHighestPrice24h: Float, $minLowestPrice24h: Float, $maxLowestPrice24h: Float) {
+  paginateCryptoCurrencies(
+    page: $page
+    size: $size
+    sort: $sort
+    order: $order
+    minPriceChange24h: $minPriceChange24h
+    maxPriceChange24h: $maxPriceChange24h
+    minPrice: $minPrice
+    maxPrice: $maxPrice
+    minMarketCap: $minMarketCap
+    maxMarketCap: $maxMarketCap
+    minHighestPrice24h: $minHighestPrice24h
+    maxHighestPrice24h: $maxHighestPrice24h
+    minLowestPrice24h: $minLowestPrice24h
+    maxLowestPrice24h: $maxLowestPrice24h
+  ) {
     totalPages
     totalElements
     currentPage
@@ -935,6 +972,17 @@ export const PaginateCryptoCurrenciesDocument = gql`
  *      page: // value for 'page'
  *      size: // value for 'size'
  *      sort: // value for 'sort'
+ *      order: // value for 'order'
+ *      minPriceChange24h: // value for 'minPriceChange24h'
+ *      maxPriceChange24h: // value for 'maxPriceChange24h'
+ *      minPrice: // value for 'minPrice'
+ *      maxPrice: // value for 'maxPrice'
+ *      minMarketCap: // value for 'minMarketCap'
+ *      maxMarketCap: // value for 'maxMarketCap'
+ *      minHighestPrice24h: // value for 'minHighestPrice24h'
+ *      maxHighestPrice24h: // value for 'maxHighestPrice24h'
+ *      minLowestPrice24h: // value for 'minLowestPrice24h'
+ *      maxLowestPrice24h: // value for 'maxLowestPrice24h'
  *   },
  * });
  */
