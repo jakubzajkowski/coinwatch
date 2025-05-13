@@ -98,7 +98,8 @@ const ButtonsRow = styled.div`
 
 const FiltersModal: React.FC<FiltersModalProps> = ({ isOpen, onClose, onApply }) => {
   const [formState, setFormState] = React.useState<CryptoCurrencyFiltersType>({
-      sort: "id",
+      order: 'asc',
+      sort: 'id',
       minPriceChange24h: null,
       maxPriceChange24h: null,
       minPrice: null,
@@ -173,19 +174,19 @@ const handleChange = (key: keyof CryptoCurrencyFiltersType, value: string) => {
         <Row>
           <Column>
             <Label>Sort By</Label>
-            <Select>
-              <option value="name">Name</option>
-              <option value="price">Price</option>
-              <option value="marketCap">Market Cap</option>
-              <option value="priceChange">Price Change 24h</option>
-              <option value="high24h">Highest Price 24h</option>
-              <option value="low24h">Lowest Price 24h</option>
-              <option value="rank">MarketCap Rank</option>
+            <Select value={formState.sort ?? ''} onChange={(e) => handleChange('sort', e.target.value)}>
+                <option value="">-- Select --</option>
+                <option value="cryptoId">Name</option>
+                <option value="currentPrice">Price</option>
+                <option value="marketCap">Market Cap</option>
+                <option value="priceChange24h">Price Change 24h</option>
+                <option value="high24h">Highest Price 24h</option>
+                <option value="low24h">Lowest Price 24h</option>
             </Select>
           </Column>
           <Column>
             <Label>Order</Label>
-            <Select>
+            <Select onChange={(e) => handleChange('order', e.target.value)}>
               <option value="asc">Ascending</option>
               <option value="desc">Descending</option>
             </Select>

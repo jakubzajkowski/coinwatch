@@ -12,7 +12,8 @@ import { useDebounce } from '../hooks/useBebounce';
 import FiltersModal from '../components/cryptocurrency/FiltersModal';
 
 export interface CryptoCurrencyFiltersType  {
-  sort: string;
+  sort: string | null;
+  order: string | null
   minPriceChange24h: number | null;
   maxPriceChange24h: number | null;
   minPrice: number | null;
@@ -127,7 +128,8 @@ const Cryptocurrency: React.FC = () => {
   const isSearching = debouncedSearch.trim().length > 1;
   const [isFiltersOpen, setIsFiltersOpen] = React.useState(false);
   const [filters, setFilters] = React.useState<CryptoCurrencyFiltersType>({
-      sort: "id",
+      sort: null,
+      order: null,
       minPriceChange24h: null,
       maxPriceChange24h: null,
       minPrice: null,
@@ -141,7 +143,7 @@ const Cryptocurrency: React.FC = () => {
   });
 
   const { data: paginateData, loading: paginateLoading, error: paginateError, refetch } = useQuery<PaginateCryptoCurrenciesQuery>(PAGINATE_CRYPTO_CURRENCIES, {
-    variables: { page, size: 10, sort: "id" },
+    variables: { page, size: 10 },
   });
 
   const [fetchSearch, { data: searchData, loading: searchLoading, error: searchError }] =useLazyQuery<SearchCryptoCurrencyByCryptoIdCryptoCurrenciesQuery>(SEARCH_CRYPTO_CURRENCIES_BY_CRYPTO_ID_CRYPTOCURRENCIES);
@@ -155,6 +157,8 @@ const Cryptocurrency: React.FC = () => {
   const handleFilters = (filtersFormState: CryptoCurrencyFiltersType) => {
     setFilters(filtersFormState);
     setPage(0);
+
+    console.log(filters);
 
     refetch({
       page,
