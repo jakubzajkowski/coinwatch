@@ -174,8 +174,7 @@ const handleChange = (key: keyof CryptoCurrencyFiltersType, value: string) => {
         <Row>
           <Column>
             <Label>Sort By</Label>
-            <Select value={formState.sort ?? ''} onChange={(e) => handleChange('sort', e.target.value)}>
-                <option value="">-- Select --</option>
+            <Select onChange={(e) => handleChange('sort', e.target.value)}>
                 <option value="cryptoId">Name</option>
                 <option value="currentPrice">Price</option>
                 <option value="marketCap">Market Cap</option>
@@ -195,7 +194,7 @@ const handleChange = (key: keyof CryptoCurrencyFiltersType, value: string) => {
 
         <ButtonsRow>
           <ButtonPrimary onClick={onClose}>Cancel</ButtonPrimary>
-          <ButtonPrimary onClick={() => onApply(formState)}>Apply</ButtonPrimary>
+          <ButtonPrimary onClick={() => {onApply(formState); onClose()}}>Apply</ButtonPrimary>
         </ButtonsRow>
       </ModalContainer>
     </Overlay>

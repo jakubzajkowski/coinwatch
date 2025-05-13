@@ -128,8 +128,8 @@ const Cryptocurrency: React.FC = () => {
   const isSearching = debouncedSearch.trim().length > 1;
   const [isFiltersOpen, setIsFiltersOpen] = React.useState(false);
   const [filters, setFilters] = React.useState<CryptoCurrencyFiltersType>({
-      sort: null,
-      order: null,
+      sort: 'id',
+      order: 'asc',
       minPriceChange24h: null,
       maxPriceChange24h: null,
       minPrice: null,
@@ -143,7 +143,7 @@ const Cryptocurrency: React.FC = () => {
   });
 
   const { data: paginateData, loading: paginateLoading, error: paginateError, refetch } = useQuery<PaginateCryptoCurrenciesQuery>(PAGINATE_CRYPTO_CURRENCIES, {
-    variables: { page, size: 10 },
+    variables: { page, size: 10, ...filters },
   });
 
   const [fetchSearch, { data: searchData, loading: searchLoading, error: searchError }] =useLazyQuery<SearchCryptoCurrencyByCryptoIdCryptoCurrenciesQuery>(SEARCH_CRYPTO_CURRENCIES_BY_CRYPTO_ID_CRYPTOCURRENCIES);
@@ -157,15 +157,16 @@ const Cryptocurrency: React.FC = () => {
   const handleFilters = (filtersFormState: CryptoCurrencyFiltersType) => {
     setFilters(filtersFormState);
     setPage(0);
-
-    console.log(filters);
-
-    refetch({
-      page,
-      size: 10,
-      ...filters,
-    });
   }
+
+  useEffect(() => {
+    refetch({
+      page: page,
+      size: 10,
+      ...filters 
+    });
+  }, [filters]);
+
 
   const handlePrevious = () => {
     if (page > 0) setPage(prev => prev - 1);
