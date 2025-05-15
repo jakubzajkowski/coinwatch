@@ -25,5 +25,26 @@
       "placeholder": "Enter your email",
       "button": "Subscribe"
     }
+  },
+  "cryptocurrencies": {
+    "header": "Cryptocurrency Markets",
+    "subHeader": "Track prices, market cap, volume, and performance of thousands of cryptocurrencies",
+    "sectionHeader": "All Cryptocurrencies",
+    "searchPlaceholder": "Search for a cryptocurrency...",
+    "filters": "Filters",
+    "table": {
+      "number": "#",
+      "favorites": "Add to Favorites",
+      "name": "Name",
+      "price": "Price",
+      "marketCap": "Market Cap",
+      "priceChange": "Price Change 24h",
+      "highestPrice": "Highest Price 24h",
+      "lowestPrice": "Lowest Price 24h",
+      "rank": "Market Cap Rank"
+    },
+    "previous": "Previous",
+    "next": "Next",
+    "pageInfo": "Showing 10 of {{total}} cryptocurrencies – page {{page}}"
   }
 }

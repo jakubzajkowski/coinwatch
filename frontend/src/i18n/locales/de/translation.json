@@ -25,5 +25,26 @@
       "placeholder": "Gib deine E-Mail-Adresse ein",
       "button": "Abonnieren"
     }
+  },
+  "cryptocurrencies": {
+    "header": "Kryptowährungsmärkte",
+    "subHeader": "Verfolge Preise, Marktkapitalisierung, Volumen und Performance von Tausenden Kryptowährungen",
+    "sectionHeader": "Alle Kryptowährungen",
+    "searchPlaceholder": "Suche nach einer Kryptowährung...",
+    "filters": "Filter",
+    "table": {
+      "number": "#",
+      "favorites": "Zu Favoriten hinzufügen",
+      "name": "Name",
+      "price": "Preis",
+      "marketCap": "Marktkapitalisierung",
+      "priceChange": "Preisänderung (24h)",
+      "highestPrice": "Höchstpreis (24h)",
+      "lowestPrice": "Tiefstpreis (24h)",
+      "rank": "Rang nach Marktkapitalisierung"
+    },
+    "previous": "Zurück",
+    "next": "Weiter",
+    "pageInfo": "Zeige 10 von {{total}} Kryptowährungen – Seite {{page}}"
   }
 }

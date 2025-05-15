@@ -25,5 +25,26 @@
       "placeholder": "Wprowadź swój e-mail",
       "button": "Zapisz się"
     }
+  },
+  "cryptocurrencies": {
+    "header": "Rynki Kryptowalut",
+    "subHeader": "Śledź ceny, kapitalizację rynkową, wolumen i wyniki tysięcy kryptowalut",
+    "sectionHeader": "Wszystkie Kryptowaluty",
+    "searchPlaceholder": "Szukaj kryptowaluty...",
+    "filters": "Filtry",
+    "table": {
+      "number": "#",
+      "favorites": "Dodaj do ulubionych",
+      "name": "Nazwa",
+      "price": "Cena",
+      "marketCap": "Kapitalizacja rynkowa",
+      "priceChange": "Zmiana ceny (24h)",
+      "highestPrice": "Najwyższa cena (24h)",
+      "lowestPrice": "Najniższa cena (24h)",
+      "rank": "Pozycja wg kapitalizacji"
+    },
+    "previous": "Poprzednia",
+    "next": "Następna",
+    "pageInfo": "Wyświetlono 10 z {{total}} kryptowalut – strona {{page}}"
   }
 }
