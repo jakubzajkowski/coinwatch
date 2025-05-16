@@ -46,5 +46,9 @@
     "previous": "Zurück",
     "next": "Weiter",
     "pageInfo": "Zeige 10 von {{total}} Kryptowährungen – Seite {{page}}"
+  },
+  "notFound": {
+    "title": "Seite nicht gefunden",
+    "description": "Diese Seite existiert nicht."
   }
 }

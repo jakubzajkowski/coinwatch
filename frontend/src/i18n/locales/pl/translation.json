@@ -46,5 +46,9 @@
     "previous": "Poprzednia",
     "next": "Następna",
     "pageInfo": "Wyświetlono 10 z {{total}} kryptowalut – strona {{page}}"
+  },
+  "notFound":{
+    "title": "Nie znaleziono strony",
+    "description": "Taka strona nie istnieje."
   }
 }

@@ -46,5 +46,9 @@
     "previous": "Previous",
     "next": "Next",
     "pageInfo": "Showing 10 of {{total}} cryptocurrencies – page {{page}}"
+  },
+  "notFound":{
+    "title": "Page Not Found",
+    "description": "There is no such a page found."
   }
 }
