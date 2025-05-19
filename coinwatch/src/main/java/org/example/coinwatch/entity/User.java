@@ -65,6 +65,10 @@ public class User implements Serializable {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true,fetch = FetchType.EAGER)
     private Set<Subscription> subscriptions = new HashSet<>();
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private Set<UserCryptoTrigger> priceTriggers = new HashSet<>();
+
     public Set<Subscription> getSubscriptions() {
         return subscriptions;
     }
