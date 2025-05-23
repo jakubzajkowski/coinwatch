@@ -9,6 +9,9 @@ import org.example.coinwatch.respository.CryptoCurrencyRepository;
 import org.example.coinwatch.respository.UserCryptoTriggerRepository;
 import org.example.coinwatch.respository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -23,6 +26,7 @@ public class UserCryptoTriggersService {
     @Autowired
     private UserRepository userRepository;
 
+    @CacheEvict(value = "cryptoTriggers", key = "#cryptoCurrencyId")
     public UserCryptoTrigger createTrigger(Long userId, Long cryptoCurrencyId, BigDecimal targetPrice, Direction direction) {
         User user = userRepository.findById(userId).orElseThrow();
         CryptoCurrency crypto = cryptoRepository.findById(cryptoCurrencyId).orElseThrow();
@@ -36,6 +40,7 @@ public class UserCryptoTriggersService {
 
         return userCryptoTriggerRepository.save(trigger);
     }
+
     public List<UserCryptoTrigger> getTriggersForUser(Long userId) {
         User user = userRepository.findById(userId).orElseThrow();
         return userCryptoTriggerRepository.findAllByUser(user).orElseThrow(()->new RuntimeException("No triggers for user"));
@@ -44,6 +49,14 @@ public class UserCryptoTriggersService {
     public void deleteTrigger(Long triggerId) {
         userCryptoTriggerRepository.deleteById(triggerId);
     }
+
+    @CacheEvict(value = "cryptoTriggers", key = "#trigger.cryptoCurrency.id")
+    public void markAsTriggered(UserCryptoTrigger trigger) {
+        trigger.setTriggered(true);
+        userCryptoTriggerRepository.save(trigger);
+    }
+
+    @Cacheable(value = "cryptoTriggers", key = "#cryptoCurrency.id")
     public List<UserCryptoTrigger> getByCryptoCurrencyAndTriggeredFalse(CryptoCurrency cryptoCurrency) {
         return userCryptoTriggerRepository.findByCryptoCurrencyAndTriggeredFalse(cryptoCurrency).orElseThrow(()->new RuntimeException("No triggers for crypto currency "));
     }

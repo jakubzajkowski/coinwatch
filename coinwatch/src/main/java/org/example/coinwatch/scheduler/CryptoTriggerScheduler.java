@@ -40,7 +40,7 @@ public class CryptoTriggerScheduler {
 
             for (UserCryptoTrigger trigger : triggers) {
                 if (shouldTrigger(trigger, currentPrice)) {
-                    trigger.setTriggered(true);
+                    userCryptoTriggersService.markAsTriggered(trigger);
                     logger.info("Trigger triggered: {}", trigger.getCryptoCurrency().getCryptoId());
                     userCryptoTriggerRepository.save(trigger);
                 }
