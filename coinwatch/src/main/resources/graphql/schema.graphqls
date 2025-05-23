@@ -6,6 +6,20 @@ enum Interest {
     BITCOIN, TRADING, ETHEREUM, MINING, DEFI, STAKING, NFTS, NEWS
 }
 
+enum Direction {
+    ABOVE,
+    BELOW
+}
+
+type UserCryptoTrigger {
+    id: ID!
+    user: User!
+    cryptoCurrency: CryptoCurrency!
+    targetPrice: Float!
+    direction: Direction!
+    triggered: Boolean!
+}
+
 type Subscription {
     id: ID
     user: User
@@ -121,6 +135,7 @@ type Mutation {
     deleteSubscription(userId: ID!, cryptoId: ID!): Boolean
     addFavoriteCrypto(userId: ID!, cryptoCurrencyId: ID!): UserFavoriteCrypto
     removeFavoriteCrypto(userId: ID!, cryptoCurrencyId: ID!): Boolean
+    createUserCryptoTrigger(userId: ID!, cryptoCurrencyId: ID!,targetPrice: Float!,direction: Direction!): UserCryptoTrigger!
 }
 
 type Query {

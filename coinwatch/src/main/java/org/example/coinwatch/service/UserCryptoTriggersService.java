@@ -1,6 +1,7 @@
 package org.example.coinwatch.service;
 
 
+import org.example.coinwatch.dto.Direction;
 import org.example.coinwatch.entity.CryptoCurrency;
 import org.example.coinwatch.entity.User;
 import org.example.coinwatch.entity.UserCryptoTrigger;
@@ -22,7 +23,7 @@ public class UserCryptoTriggersService {
     @Autowired
     private UserRepository userRepository;
 
-    public UserCryptoTrigger createTrigger(Long userId, Long cryptoCurrencyId, BigDecimal targetPrice, UserCryptoTrigger.Direction direction) {
+    public UserCryptoTrigger createTrigger(Long userId, Long cryptoCurrencyId, BigDecimal targetPrice, Direction direction) {
         User user = userRepository.findById(userId).orElseThrow();
         CryptoCurrency crypto = cryptoRepository.findById(cryptoCurrencyId).orElseThrow();
 
