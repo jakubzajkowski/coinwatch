@@ -1,7 +1,6 @@
 package org.example.coinwatch.controller;
 
 import org.example.coinwatch.entity.UserFavoriteCrypto;
-import org.example.coinwatch.respository.UserFavoriteCryptoRepository;
 import org.example.coinwatch.service.UserFavoriteCryptoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.graphql.data.method.annotation.Argument;
@@ -12,7 +11,7 @@ import org.springframework.stereotype.Controller;
 import java.util.List;
 
 @Controller
-public class UserFavoriteCryptoController {
+public class UserFavoriteCryptoResolver {
     @Autowired
     private UserFavoriteCryptoService userFavoriteCryptoService;
 

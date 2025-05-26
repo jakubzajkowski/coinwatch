@@ -131,6 +131,7 @@ type CryptoCurrencyPage {
 }
 
 type Mutation {
+    startAiAnalyse(cryptoId: String!): String!
     addSubscription(userId: ID!, cryptoId: ID!): Subscription
     deleteSubscription(userId: ID!, cryptoId: ID!): Boolean
     addFavoriteCrypto(userId: ID!, cryptoCurrencyId: ID!): UserFavoriteCrypto
