@@ -1,13 +1,10 @@
-package org.example.coinwatch.kafka;
+package org.example.coinwatch.kafka.comsumer;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.example.coinwatch.dto.PriceChangeAlert;
 import org.example.coinwatch.entity.CryptoCurrency;
-import org.example.coinwatch.entity.Subscription;
 import org.example.coinwatch.entity.User;
-import org.example.coinwatch.respository.CryptoCurrencyRepository;
-import org.example.coinwatch.respository.UserRepository;
 import org.example.coinwatch.service.AlertService;
 import org.example.coinwatch.service.CryptoCurrencyService;
 import org.example.coinwatch.service.SubscriptionService;
