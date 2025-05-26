@@ -1,22 +1,14 @@
 import express from 'express';
-import { gemini } from './config/gemini.js';
+import { startGeminiAnalyseConsumer } from './kafka/comsumers/consumer.js';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-app.get('/',async (_req, res) => {
-  async function main() {
-    const response = await gemini.models.generateContent({
-      model: "gemini-2.0-flash",
-      contents: "Explain how AI works in a few words",
-    });
-    console.log(response.text);
-  }
+async function initKafka() {
+  await startGeminiAnalyseConsumer();
+}
 
-  await main();
-  res.send('Hello from Express + TypeScript!');
-});
-
-app.listen(PORT, () => {
+app.listen(PORT,async () => {
   console.log(`Server running at http://localhost:${PORT}`);
+  await initKafka();
 });
