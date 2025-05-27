@@ -13,6 +13,6 @@ public class AiAnalyseConsumer {
 
     @KafkaListener(topics = "ai-response-topic", groupId = "spring-test-group", containerFactory = "kafkaListenerContainerFactory")
     public void consumeAiAnalyse(String message) {
-        System.out.println(message + "xd");
+        messagingTemplate.convertAndSend("/analyse/test", message);
     }
 }
