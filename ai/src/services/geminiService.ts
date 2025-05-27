@@ -1,10 +1,7 @@
-import kafka from "../config/kafka.js";
 import { gemini } from "../config/gemini.js";
-
+import { geminiAnalyseProducer } from "../kafka/producers/geminiAnalyseProducer.js";
 
 export const handleAnalyse = async (message: string) => {
-    const producer = kafka.producer();
-    await producer.connect();
 
     const response = await gemini.models.generateContent({
     model: "gemini-2.0-flash",
@@ -21,5 +18,9 @@ export const handleAnalyse = async (message: string) => {
         `,
         },
     });
-    console.log(response.text);
+
+    await geminiAnalyseProducer.send({
+        topic: 'ai-response-topic',
+        messages: [{ value: response.text as string}],
+    });
 }
