@@ -69,7 +69,6 @@ const SubPanel = styled.div`
 const Alerts = () =>{
     const { isAuthenticated } = useSelector((state: RootState) => state.auth);
     const [isConfigureAlertsModal, setIsConfigureAlertsModal] = useState<boolean>(false);
-
     if(isAuthenticated){
         return <Container>
             {isConfigureAlertsModal && <ConfigureAlertsModal setIsOpen={setIsConfigureAlertsModal}/>}

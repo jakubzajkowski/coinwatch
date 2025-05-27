@@ -22,6 +22,7 @@ import NotFound from "./pages/404.tsx";
 import SignIn from "./pages/SignIn.tsx";
 import Crypto from "./pages/Crypto.tsx";
 import Cryptocurrency from "./pages/CryptoCurrency.tsx";
+import Analyse from './pages/Analyse.tsx';
 
 function App() {
 
@@ -42,6 +43,7 @@ function App() {
                                 <Route path="/sign-in" element={<SignIn />} />
                                 <Route path="/alerts" element={<Alerts />} />
                                 <Route path="/crypto/:id" element={<Crypto />} />
+                                <Route path="/analyse" element={<Analyse />} />
 
                                 <Route path="*" element={<NotFound />} />
                             </Routes>
