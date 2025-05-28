@@ -28,7 +28,7 @@ const Notifications = () => {
             }
         };
     }, [connected, subscribe, unsubscribe]);
-
+    
     const sendNotification = () => {
         if (connected) {
             sendMessage('/app/notify', 'New notification from client!');
