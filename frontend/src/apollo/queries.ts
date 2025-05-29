@@ -252,3 +252,15 @@ export const REMOVE_FAVORITE_CRYPTO = gql`
         removeFavoriteCrypto(userId: $userId, cryptoCurrencyId: $cryptoCurrencyId)
     }
 `
+
+export const GET_USER_FAVORITE_CRYPTO_FOR_ANALYSE = gql`
+    query GetUserFavoriteCryptosForAnalyse($userId: ID!) {
+        getUserFavoriteCryptos(userId: $userId) {
+        cryptoCurrency {
+            cryptoId
+            symbol
+        }
+    }
+}
+
+`

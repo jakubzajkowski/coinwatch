@@ -1,11 +1,13 @@
 import { useState } from 'react';
 import ReactApexChart from 'react-apexcharts';
 import styled from 'styled-components';
+import { theme } from '../../theme/theme';
 
 const GraphContainer = styled.div`
     width: 100%;
     height: 400px;
-    background-color: ${({ theme }) => theme.colors.secondary};
+    padding: 1rem;
+    background-color: ${({ theme }) => theme.colors.fourth};
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 `;
@@ -23,8 +25,9 @@ const mockData = {
         chart: {
             type: 'bar' as const,
             height: 350,
+            background: theme.colors.fourth,  
             toolbar: {
-                show: true
+                show: false
             }
         },
         plotOptions: {

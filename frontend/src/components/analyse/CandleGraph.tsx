@@ -1,11 +1,13 @@
 import { useState } from 'react';
 import ReactApexChart from 'react-apexcharts';
 import styled from 'styled-components';
+import { theme } from '../../theme/theme';
 
 const GraphContainer = styled.div`
     width: 100%;
     height: 400px;
-    background-color: ${({ theme }) => theme.colors.secondary};
+    padding: 1rem;
+    background-color: ${({ theme }) => theme.colors.fourth};
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 `;
@@ -46,7 +48,7 @@ const mockData = {
             toolbar: {
                 show: false
             },
-            background: 'black',
+            background: theme.colors.fourth,
         },
         theme: {
             mode: 'dark' as const,
@@ -64,10 +66,6 @@ const mockData = {
         },
         grid: {
             borderColor: '#2d2d2d'
-        },
-        title: {
-            text: 'Candlestick Chart',
-            align: 'left' as const
         },
         xaxis: {
             type: 'datetime' as const

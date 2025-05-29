@@ -88,6 +88,11 @@ export type CurrencyValue = {
   currency: Scalars['String']['output'];
 };
 
+export enum Direction {
+  Above = 'ABOVE',
+  Below = 'BELOW'
+}
+
 export enum ExperienceLevel {
   Beginner = 'BEGINNER',
   Expert = 'EXPERT',
@@ -124,8 +129,10 @@ export type Mutation = {
   __typename?: 'Mutation';
   addFavoriteCrypto?: Maybe<UserFavoriteCrypto>;
   addSubscription?: Maybe<Subscription>;
+  createUserCryptoTrigger: UserCryptoTrigger;
   deleteSubscription?: Maybe<Scalars['Boolean']['output']>;
   removeFavoriteCrypto?: Maybe<Scalars['Boolean']['output']>;
+  startAiAnalyse: Scalars['String']['output'];
 };
 
 
@@ -141,6 +148,14 @@ export type MutationAddSubscriptionArgs = {
 };
 
 
+export type MutationCreateUserCryptoTriggerArgs = {
+  cryptoCurrencyId: Scalars['ID']['input'];
+  direction: Direction;
+  targetPrice: Scalars['Float']['input'];
+  userId: Scalars['ID']['input'];
+};
+
+
 export type MutationDeleteSubscriptionArgs = {
   cryptoId: Scalars['ID']['input'];
   userId: Scalars['ID']['input'];
@@ -150,6 +165,11 @@ export type MutationDeleteSubscriptionArgs = {
 export type MutationRemoveFavoriteCryptoArgs = {
   cryptoCurrencyId: Scalars['ID']['input'];
   userId: Scalars['ID']['input'];
+};
+
+
+export type MutationStartAiAnalyseArgs = {
+  cryptoId: Scalars['String']['input'];
 };
 
 export type Query = {
@@ -264,6 +284,16 @@ export type User = {
   preferredCurrency: Scalars['String']['output'];
   receiveUpdates: Scalars['Boolean']['output'];
   subscriptions: Array<Subscription>;
+};
+
+export type UserCryptoTrigger = {
+  __typename?: 'UserCryptoTrigger';
+  cryptoCurrency: CryptoCurrency;
+  direction: Direction;
+  id: Scalars['ID']['output'];
+  targetPrice: Scalars['Float']['output'];
+  triggered: Scalars['Boolean']['output'];
+  user: User;
 };
 
 export type UserFavoriteCrypto = {
@@ -396,6 +426,13 @@ export type RemoveFavoriteCryptoMutationVariables = Exact<{
 
 
 export type RemoveFavoriteCryptoMutation = { __typename?: 'Mutation', removeFavoriteCrypto?: boolean | null };
+
+export type GetUserFavoriteCryptosForAnalyseQueryVariables = Exact<{
+  userId: Scalars['ID']['input'];
+}>;
+
+
+export type GetUserFavoriteCryptosForAnalyseQuery = { __typename?: 'Query', getUserFavoriteCryptos?: Array<{ __typename?: 'UserFavoriteCrypto', cryptoCurrency: { __typename?: 'CryptoCurrency', cryptoId: string, symbol: string } } | null> | null };
 
 
 export const GetCryptoCurrenciesDocument = gql`
@@ -1108,3 +1145,46 @@ export function useRemoveFavoriteCryptoMutation(baseOptions?: Apollo.MutationHoo
 export type RemoveFavoriteCryptoMutationHookResult = ReturnType<typeof useRemoveFavoriteCryptoMutation>;
 export type RemoveFavoriteCryptoMutationResult = Apollo.MutationResult<RemoveFavoriteCryptoMutation>;
 export type RemoveFavoriteCryptoMutationOptions = Apollo.BaseMutationOptions<RemoveFavoriteCryptoMutation, RemoveFavoriteCryptoMutationVariables>;
+export const GetUserFavoriteCryptosForAnalyseDocument = gql`
+    query GetUserFavoriteCryptosForAnalyse($userId: ID!) {
+  getUserFavoriteCryptos(userId: $userId) {
+    cryptoCurrency {
+      cryptoId
+      symbol
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetUserFavoriteCryptosForAnalyseQuery__
+ *
+ * To run a query within a React component, call `useGetUserFavoriteCryptosForAnalyseQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetUserFavoriteCryptosForAnalyseQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetUserFavoriteCryptosForAnalyseQuery({
+ *   variables: {
+ *      userId: // value for 'userId'
+ *   },
+ * });
+ */
+export function useGetUserFavoriteCryptosForAnalyseQuery(baseOptions: Apollo.QueryHookOptions<GetUserFavoriteCryptosForAnalyseQuery, GetUserFavoriteCryptosForAnalyseQueryVariables> & ({ variables: GetUserFavoriteCryptosForAnalyseQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetUserFavoriteCryptosForAnalyseQuery, GetUserFavoriteCryptosForAnalyseQueryVariables>(GetUserFavoriteCryptosForAnalyseDocument, options);
+      }
+export function useGetUserFavoriteCryptosForAnalyseLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetUserFavoriteCryptosForAnalyseQuery, GetUserFavoriteCryptosForAnalyseQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetUserFavoriteCryptosForAnalyseQuery, GetUserFavoriteCryptosForAnalyseQueryVariables>(GetUserFavoriteCryptosForAnalyseDocument, options);
+        }
+export function useGetUserFavoriteCryptosForAnalyseSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetUserFavoriteCryptosForAnalyseQuery, GetUserFavoriteCryptosForAnalyseQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetUserFavoriteCryptosForAnalyseQuery, GetUserFavoriteCryptosForAnalyseQueryVariables>(GetUserFavoriteCryptosForAnalyseDocument, options);
+        }
+export type GetUserFavoriteCryptosForAnalyseQueryHookResult = ReturnType<typeof useGetUserFavoriteCryptosForAnalyseQuery>;
+export type GetUserFavoriteCryptosForAnalyseLazyQueryHookResult = ReturnType<typeof useGetUserFavoriteCryptosForAnalyseLazyQuery>;
+export type GetUserFavoriteCryptosForAnalyseSuspenseQueryHookResult = ReturnType<typeof useGetUserFavoriteCryptosForAnalyseSuspenseQuery>;
+export type GetUserFavoriteCryptosForAnalyseQueryResult = Apollo.QueryResult<GetUserFavoriteCryptosForAnalyseQuery, GetUserFavoriteCryptosForAnalyseQueryVariables>;
