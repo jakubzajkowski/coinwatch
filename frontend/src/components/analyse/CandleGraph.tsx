@@ -5,7 +5,6 @@ import styled from 'styled-components';
 const GraphContainer = styled.div`
     width: 100%;
     height: 400px;
-    padding: 20px;
     background-color: ${({ theme }) => theme.colors.secondary};
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -45,8 +44,26 @@ const mockData = {
             type: 'candlestick' as const,
             height: 350,
             toolbar: {
-                show: true
+                show: false
+            },
+            background: 'black',
+        },
+        theme: {
+            mode: 'dark' as const,
+        },
+        plotOptions: {
+            candlestick: {
+                colors: {
+                    upward: '#26A69A',
+                    downward: '#EF5350'
+                },
+                wick: {
+                    useFillColor: true,
+                }
             }
+        },
+        grid: {
+            borderColor: '#2d2d2d'
         },
         title: {
             text: 'Candlestick Chart',
@@ -59,9 +76,6 @@ const mockData = {
             tooltip: {
                 enabled: true
             }
-        },
-        theme: {
-            mode: 'dark' as const
         }
     }
 };

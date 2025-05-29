@@ -5,7 +5,6 @@ import styled from 'styled-components';
 const GraphContainer = styled.div`
     width: 100%;
     height: 400px;
-    padding: 20px;
     background-color: ${({ theme }) => theme.colors.secondary};
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -22,7 +21,7 @@ const mockData = {
     }],
     options: {
         chart: {
-            type: 'bar',
+            type: 'bar' as const,
             height: 350,
             toolbar: {
                 show: true
@@ -55,7 +54,7 @@ const mockData = {
             opacity: 1
         },
         theme: {
-            mode: 'dark'
+            mode: 'dark' as const
         }
     }
 };

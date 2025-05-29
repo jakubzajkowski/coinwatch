@@ -5,7 +5,6 @@ import styled from 'styled-components';
 const GraphContainer = styled.div`
     width: 100%;
     height: 400px;
-    padding: 20px;
     background-color: ${({ theme }) => theme.colors.secondary};
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -23,7 +22,7 @@ const mockData = {
     options: {
         chart: {
             height: 350,
-            type: 'line',
+            type: 'line' as const   ,
             zoom: {
                 enabled: true
             },
@@ -35,7 +34,7 @@ const mockData = {
             enabled: false
         },
         stroke: {
-            curve: 'straight',
+            curve: 'straight' as const,
             width: 2
         },
         grid: {
@@ -48,7 +47,7 @@ const mockData = {
             categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep'],
         },
         theme: {
-            mode: 'dark'
+            mode: 'dark' as const
         }
     }
 };
