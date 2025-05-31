@@ -9,6 +9,7 @@ import { useQuery } from '@apollo/client';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../redux/store';
 import { GetUserFavoriteCryptosForAnalyseQuery } from '../../graphql/generated';
+import AiAnalyseModal from './AiAnalyseModal';
 
 
 const OptionsContainer = styled.div`
@@ -91,6 +92,11 @@ interface GraphOptionsProps {
 
 const GraphOptions: React.FC<GraphOptionsProps> = ({ onOptionsChange }) => {
     const { user } = useSelector((state: RootState) => state.auth);
+    const [isAiAnalyseModalOpen, setIsAiAnalyseModalOpen] = useState(false);
+
+    const handleAiAnalyseModal = () => {
+        setIsAiAnalyseModalOpen(!isAiAnalyseModalOpen);
+    };
 
     const { data, loading, error } = useQuery<GetUserFavoriteCryptosForAnalyseQuery>(GET_USER_FAVORITE_CRYPTO_FOR_ANALYSE, {
         variables: {
@@ -189,10 +195,14 @@ const GraphOptions: React.FC<GraphOptionsProps> = ({ onOptionsChange }) => {
                         </IconContainer>
                 </SelectWrapper>
                 <ButtonContainer>
-                    <ButtonPrimary>Analyse with AI</ButtonPrimary>
+                    <ButtonPrimary onClick={handleAiAnalyseModal}>Analyse with AI</ButtonPrimary>
                     <ButtonPrimary>AI Predictions</ButtonPrimary>
                 </ButtonContainer>
             </Options>  
+            <AiAnalyseModal
+                isOpen={isAiAnalyseModalOpen}
+                onClose={handleAiAnalyseModal}
+            />
         </OptionsContainer>
     );
 };
