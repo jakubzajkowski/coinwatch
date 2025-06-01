@@ -1,7 +1,11 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { LuBrain } from "react-icons/lu";
 import { ButtonPrimary } from '../styled';
+import useWebSocketClient from '../../ws/useWebSocketClient';
+import { RootState } from '../../redux/store';
+import { useSelector } from 'react-redux';
+import { StompSubscription } from '@stomp/stompjs';
 
 const ModalOverlay = styled.div`
     position: fixed;
@@ -58,6 +62,25 @@ interface AiAnalyseModalProps {
 }
 
 const AiAnalyseModal: React.FC<AiAnalyseModalProps> = ({ isOpen, onClose, crypto }) => {
+    const [messages, setMessages] = useState<string[]>([]);
+    const { subscribe, unsubscribe, sendMessage, connected } = useWebSocketClient(import.meta.env.VITE_WS_API_URL);
+    const { user } = useSelector((state: RootState) => state.auth);
+
+    useEffect(() => {
+        let subscription: StompSubscription | null = null;
+        if (connected) {
+            subscription = subscribe(`/analyse/${user?.id}/${crypto.id}`, (message: string) => {
+                setMessages(prevMessages => [...prevMessages, message]);
+            }) as StompSubscription;
+        }
+
+        return () => {
+            if (subscription) {
+                unsubscribe(subscription);
+            }
+        };
+    }, [connected, subscribe, unsubscribe]);
+
     if (!isOpen) return null;
 
     return (
@@ -68,7 +91,7 @@ const AiAnalyseModal: React.FC<AiAnalyseModalProps> = ({ isOpen, onClose, crypto
                     <CloseButton onClick={onClose}>&times;</CloseButton>
                 </ModalHeader>
                 <ModalBody>
-                    <p>Based on current technical indicators, BTC shows strong bullish momentum with RSI approaching overbought levels. The price is trading above both 50 and 200-day moving averages, indicating a healthy uptrend.</p>
+                    <p>{messages.join("\n")}</p>
                 </ModalBody>
                 <ButtonPrimary onClick={onClose}>Close</ButtonPrimary>
             </ModalContent>
