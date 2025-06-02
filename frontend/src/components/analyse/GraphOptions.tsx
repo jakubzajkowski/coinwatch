@@ -202,6 +202,7 @@ const GraphOptions: React.FC<GraphOptionsProps> = ({ onOptionsChange }) => {
             <AiAnalyseModal
                 isOpen={isAiAnalyseModalOpen}
                 onClose={handleAiAnalyseModal}
+                cryptoId={"bitcoin"}
             />
         </OptionsContainer>
     );

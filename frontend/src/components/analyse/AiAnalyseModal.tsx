@@ -6,6 +6,8 @@ import useWebSocketClient from '../../ws/useWebSocketClient';
 import { RootState } from '../../redux/store';
 import { useSelector } from 'react-redux';
 import { StompSubscription } from '@stomp/stompjs';
+import { useMutation } from '@apollo/client';
+import { START_AI_ANALYSE } from '../../apollo/queries';
 
 const ModalOverlay = styled.div`
     position: fixed;
@@ -58,18 +60,28 @@ const ModalBody = styled.div`
 interface AiAnalyseModalProps {
     isOpen: boolean;
     onClose: () => void;
-    crypto?: any;
+    cryptoId?: string;
 }
 
-const AiAnalyseModal: React.FC<AiAnalyseModalProps> = ({ isOpen, onClose, crypto }) => {
+const AiAnalyseModal: React.FC<AiAnalyseModalProps> = ({ isOpen, onClose, cryptoId }) => {
     const [messages, setMessages] = useState<string[]>([]);
     const { subscribe, unsubscribe, sendMessage, connected } = useWebSocketClient(import.meta.env.VITE_WS_API_URL);
+    const [startAiAnalyse] = useMutation(START_AI_ANALYSE);
     const { user } = useSelector((state: RootState) => state.auth);
+
+    useEffect(() => {
+        startAiAnalyse({
+            variables: {
+                cryptoId: cryptoId,
+                userId: user?.id
+            }
+        });
+    }, [cryptoId, user?.id]);
 
     useEffect(() => {
         let subscription: StompSubscription | null = null;
         if (connected) {
-            subscription = subscribe(`/analyse/${user?.id}/${crypto.id}`, (message: string) => {
+            subscription = subscribe(`/analyse/${user?.id}/${cryptoId}`, (message: string) => {
                 setMessages(prevMessages => [...prevMessages, message]);
             }) as StompSubscription;
         }

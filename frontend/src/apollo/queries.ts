@@ -262,5 +262,10 @@ export const GET_USER_FAVORITE_CRYPTO_FOR_ANALYSE = gql`
         }
     }
 }
+`
 
+export const START_AI_ANALYSE = gql`
+    mutation StartAiAnalyse($cryptoId: String!, $userId: ID!) {
+        startAiAnalyse(cryptoId: $cryptoId, userId: $userId)
+    }
 `

@@ -170,6 +170,7 @@ export type MutationRemoveFavoriteCryptoArgs = {
 
 export type MutationStartAiAnalyseArgs = {
   cryptoId: Scalars['String']['input'];
+  userId: Scalars['ID']['input'];
 };
 
 export type Query = {
@@ -433,6 +434,14 @@ export type GetUserFavoriteCryptosForAnalyseQueryVariables = Exact<{
 
 
 export type GetUserFavoriteCryptosForAnalyseQuery = { __typename?: 'Query', getUserFavoriteCryptos?: Array<{ __typename?: 'UserFavoriteCrypto', cryptoCurrency: { __typename?: 'CryptoCurrency', cryptoId: string, symbol: string } } | null> | null };
+
+export type StartAiAnalyseMutationVariables = Exact<{
+  cryptoId: Scalars['String']['input'];
+  userId: Scalars['ID']['input'];
+}>;
+
+
+export type StartAiAnalyseMutation = { __typename?: 'Mutation', startAiAnalyse: string };
 
 
 export const GetCryptoCurrenciesDocument = gql`
@@ -1188,3 +1197,35 @@ export type GetUserFavoriteCryptosForAnalyseQueryHookResult = ReturnType<typeof 
 export type GetUserFavoriteCryptosForAnalyseLazyQueryHookResult = ReturnType<typeof useGetUserFavoriteCryptosForAnalyseLazyQuery>;
 export type GetUserFavoriteCryptosForAnalyseSuspenseQueryHookResult = ReturnType<typeof useGetUserFavoriteCryptosForAnalyseSuspenseQuery>;
 export type GetUserFavoriteCryptosForAnalyseQueryResult = Apollo.QueryResult<GetUserFavoriteCryptosForAnalyseQuery, GetUserFavoriteCryptosForAnalyseQueryVariables>;
+export const StartAiAnalyseDocument = gql`
+    mutation StartAiAnalyse($cryptoId: String!, $userId: ID!) {
+  startAiAnalyse(cryptoId: $cryptoId, userId: $userId)
+}
+    `;
+export type StartAiAnalyseMutationFn = Apollo.MutationFunction<StartAiAnalyseMutation, StartAiAnalyseMutationVariables>;
+
+/**
+ * __useStartAiAnalyseMutation__
+ *
+ * To run a mutation, you first call `useStartAiAnalyseMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useStartAiAnalyseMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [startAiAnalyseMutation, { data, loading, error }] = useStartAiAnalyseMutation({
+ *   variables: {
+ *      cryptoId: // value for 'cryptoId'
+ *      userId: // value for 'userId'
+ *   },
+ * });
+ */
+export function useStartAiAnalyseMutation(baseOptions?: Apollo.MutationHookOptions<StartAiAnalyseMutation, StartAiAnalyseMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<StartAiAnalyseMutation, StartAiAnalyseMutationVariables>(StartAiAnalyseDocument, options);
+      }
+export type StartAiAnalyseMutationHookResult = ReturnType<typeof useStartAiAnalyseMutation>;
+export type StartAiAnalyseMutationResult = Apollo.MutationResult<StartAiAnalyseMutation>;
+export type StartAiAnalyseMutationOptions = Apollo.BaseMutationOptions<StartAiAnalyseMutation, StartAiAnalyseMutationVariables>;
