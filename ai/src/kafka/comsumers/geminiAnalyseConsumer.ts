@@ -15,8 +15,9 @@ export async function startGeminiAnalyseConsumer() {
 
   await geminiAnalyseConsumer.run({
     eachMessage: async ({ topic,  message }) => {
-      console.log(message.value?.toString());
-      handleAnalyse(message.value?.toString() as string);
+      const userId = JSON.parse(message.value?.toString() as string).userId;
+      const cryptoId = JSON.parse(message.value?.toString() as string).symbol;
+      handleAnalyse(message.value?.toString() as string,userId, cryptoId);
     },
   });
 }

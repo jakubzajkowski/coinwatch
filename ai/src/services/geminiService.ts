@@ -1,7 +1,13 @@
 import { gemini } from "../config/gemini.js";
 import { geminiAnalyseProducer } from "../kafka/producers/geminiAnalyseProducer.js";
 
-export const handleAnalyse = async (message: string) => {
+interface AnalyseMessage {
+    text: string
+    userId: number
+    cryptoId: string
+}
+
+export const handleAnalyse = async (message: string, userId: number, cryptoId: string) => {
 
     const response = await gemini.models.generateContent({
     model: "gemini-2.0-flash",
@@ -14,13 +20,20 @@ export const handleAnalyse = async (message: string) => {
             - A brief recommendation for investors (e.g., observe, buy, hold, or stay cautious)
 
             Use a professional tone, like a financial advisor or crypto analyst at a fintech company.
-            Avoid hype. Stick to data and logical interpretation.
+            Avoid hype. Stick to data and logical interpretation write plain text.
         `,
         },
     });
 
+    const analyseMessage : AnalyseMessage = {
+        text: response.text as string,
+        userId: userId,
+        cryptoId: cryptoId
+    }
+
+
     await geminiAnalyseProducer.send({
         topic: 'ai-response-topic',
-        messages: [{ value: response.text as string}],
+        messages: [{ value: JSON.stringify(analyseMessage)}],
     });
 }
