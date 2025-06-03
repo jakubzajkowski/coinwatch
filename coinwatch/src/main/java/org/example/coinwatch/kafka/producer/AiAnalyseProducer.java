@@ -22,14 +22,14 @@ public class AiAnalyseProducer {
     @Autowired
     ObjectMapper objectMapper;
 
-    public void sendCryptoPriceDataToAnalyse(String cryptoId) throws JsonProcessingException {
+    public void sendCryptoPriceDataToAnalyse(String cryptoId,Long userId) throws JsonProcessingException {
         List<AggregatedPricesForAnalyseDTO> aggregatedPricesForAnalyseDTO = cryptoPriceHistoryRepository.findByCryptoIdAggregatedPricesForAnalyse("bitcoin");
 
         List<AiAnalyseMessageDTO.PricePoint> pricePoints = aggregatedPricesForAnalyseDTO.stream().map(
                 prices -> new AiAnalyseMessageDTO.PricePoint(prices.getAvgPrice(),prices.getBucket())
         ).toList();
 
-        AiAnalyseMessageDTO aiAnalyseMessageDTO = new AiAnalyseMessageDTO(cryptoId,pricePoints);
+        AiAnalyseMessageDTO aiAnalyseMessageDTO = new AiAnalyseMessageDTO(cryptoId,pricePoints,userId);
         var json = objectMapper.writeValueAsString(aiAnalyseMessageDTO);
         kafkaTemplate.send("ai-test-topic", cryptoId, json);
     }

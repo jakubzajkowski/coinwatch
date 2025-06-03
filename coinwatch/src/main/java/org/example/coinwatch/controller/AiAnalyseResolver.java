@@ -14,8 +14,8 @@ public class AiAnalyseResolver {
     AiAnalyseProducer aiAnalyseProducer;
 
     @MutationMapping
-    public String startAiAnalyse(@Argument String cryptoId) throws JsonProcessingException {
-        aiAnalyseProducer.sendCryptoPriceDataToAnalyse(cryptoId);
+    public String startAiAnalyse(@Argument String cryptoId, @Argument Long userId) throws JsonProcessingException {
+        aiAnalyseProducer.sendCryptoPriceDataToAnalyse(cryptoId,userId);
         return "Pending";
     }
 }

@@ -8,7 +8,7 @@ import java.util.List;
 public class AiAnalyseMessageDTO {
     private String symbol;
     private List<PricePoint> data;
-
+    private Long userId;
 
     public static class PricePoint {
         private BigDecimal price;
@@ -36,9 +36,18 @@ public class AiAnalyseMessageDTO {
         }
     }
 
-    public AiAnalyseMessageDTO(String symbol, List<PricePoint> data) {
+    public AiAnalyseMessageDTO(String symbol, List<PricePoint> data, Long userId) {
         this.symbol = symbol;
         this.data = data;
+        this.userId = userId;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
     public String getSymbol() {
