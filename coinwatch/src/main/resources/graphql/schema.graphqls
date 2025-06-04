@@ -11,6 +11,12 @@ enum Direction {
     BELOW
 }
 
+enum ChartType {
+    CANDLE,
+    LINE,
+    BAR
+}
+
 type UserCryptoTrigger {
     id: ID!
     user: User!
@@ -139,9 +145,31 @@ type Mutation {
     createUserCryptoTrigger(userId: ID!, cryptoCurrencyId: ID!,targetPrice: Float!,direction: Direction!): UserCryptoTrigger!
 }
 
+type CandleChartDTO {
+    bucket: String!
+    open: Float!
+    close: Float!
+    high: Float!
+    low: Float!
+}
+
+type AveragePricesDTO {
+    bucket: String!
+    average: Float!
+}
+
+union ChartPoint = CandleChartDTO | AveragePricesDTO
+
 type Query {
     isCryptoFavorite(userId: ID!, cryptoCurrencyId: ID!): Boolean!
     getUserFavoriteCryptos(userId: ID): [UserFavoriteCrypto]
+    getCryptoChartData(
+        cryptoId: String,
+        interval: String,
+        from: String,
+        to: String,
+        chartType: ChartType
+    ): [ChartPoint]
     getAlerts: [Alert]
     paginateCryptoCurrencies(
         page: Int = 0,
