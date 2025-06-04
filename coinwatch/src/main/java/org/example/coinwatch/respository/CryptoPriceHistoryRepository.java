@@ -1,6 +1,7 @@
 package org.example.coinwatch.respository;
 
 import org.example.coinwatch.dto.AggregatedPricesForAnalyseDTO;
+import org.example.coinwatch.dto.AveragePricesDTO;
 import org.example.coinwatch.dto.CandleChartDTO;
 import org.example.coinwatch.entity.CryptoPriceHistory;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -39,6 +40,21 @@ public interface CryptoPriceHistoryRepository extends JpaRepository<CryptoPriceH
     ORDER BY bucket
     """, nativeQuery = true)
     Optional<List<CandleChartDTO>> findCandleChart(
+            @Param("interval") String interval,
+            @Param("cryptoId") String cryptoId,
+            @Param("from") ZonedDateTime from,
+            @Param("to") ZonedDateTime to
+    );
+
+    @Query(value = """
+    SELECT time_bucket(CAST(:interval AS interval), recorded_at) AS bucket,
+           AVG(price) AS average
+    FROM crypto_price_history
+    WHERE crypto_id = :cryptoId AND recorded_at BETWEEN :from AND :to
+    GROUP BY bucket
+    ORDER BY bucket
+    """, nativeQuery = true)
+    Optional<List<AveragePricesDTO>> findAveragePrices(
             @Param("interval") String interval,
             @Param("cryptoId") String cryptoId,
             @Param("from") ZonedDateTime from,
