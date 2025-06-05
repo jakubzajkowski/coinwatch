@@ -4,6 +4,9 @@ import LineGraph from './LineGraph';
 import BarGraph from './BarGraph';
 import CandleGraph from './CandleGraph';
 import GraphOptions from './GraphOptions';
+import { GET_CRYPTO_CHART_DATA } from '../../apollo/queries';
+import { useQuery } from '@apollo/client';
+import QueryBoundary from '../QueryBoundary';
 
 export interface GraphOptions {
     graphType: string;
@@ -23,12 +26,33 @@ const GraphContainer = styled.div`
 interface AnalyseGraphProps {
 }
 
+const getChartType = (graphType: string) => {
+    switch (graphType) {
+        case 'candle':
+            return 'CANDLE';
+        case 'bar':
+            return 'BAR';
+        case 'line':
+            return 'LINE';
+    }   
+}
+
 const AnalyseGraph: React.FC<AnalyseGraphProps> = () => {
     const [graphOptions, setGraphOptions] = useState<GraphOptions>({
-        graphType: 'candle',
+        graphType: 'bar',
         dataType: 'price',
-        cryptocurrency: 'BTC',
+        cryptocurrency: 'bitcoin',
         timeRange: '1D'
+    });
+
+    const { data, loading, error } = useQuery(GET_CRYPTO_CHART_DATA, {
+        variables: {
+            cryptoId: graphOptions.cryptocurrency,
+            interval: '1h',
+            from: '2025-05-03T15:30:00.000+02:00',
+            to: '2025-06-04T15:30:00.000+02:00',
+            chartType: getChartType(graphOptions.graphType)
+        }
     });
 
     const handleOptionsChange = (options: {
@@ -42,10 +66,16 @@ const AnalyseGraph: React.FC<AnalyseGraphProps> = () => {
 
     return (
         <GraphContainer>
-            <GraphOptions onOptionsChange={handleOptionsChange} />
-            {graphOptions.graphType === 'candle' && <CandleGraph />}
-            {graphOptions.graphType === 'line' && <LineGraph />}
-            {graphOptions.graphType === 'bar' && <BarGraph />}
+            <GraphOptions onOptionsChange={handleOptionsChange} options={graphOptions} />
+            <QueryBoundary loading={loading} error={error}>
+                {data && (
+                    <>
+                        {graphOptions.graphType === 'candle' && <CandleGraph />}
+                        {graphOptions.graphType === 'line' && <LineGraph series={data.getCryptoChartData.map((item: any) => item.average.toFixed(2))} xaxis={data.getCryptoChartData.map((item: any) => item.bucket)} />}
+                        {graphOptions.graphType === 'bar' && <BarGraph series={data.getCryptoChartData.map((item: any) => item.average.toFixed(2))} xaxis={data.getCryptoChartData.map((item: any) => item.bucket)} />}
+                    </>
+                )}
+            </QueryBoundary>
         </GraphContainer>
     );
 };

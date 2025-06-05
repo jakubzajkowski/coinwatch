@@ -13,13 +13,14 @@ const GraphContainer = styled.div`
 `;
 
 interface LineGraphProps {
-    // Add any props if needed
+    series: number[];
+    xaxis: string[];
 }
 
-const mockData = {
-    series: [{
+const mockData = (series: number[], xaxis: string[]) => {
+    return {series: [{
         name: "Value",
-        data: [10, 41, 35, 51, 49, 62, 69, 91, 148]
+        data: series
     }],
     options: {
         chart: {
@@ -47,16 +48,16 @@ const mockData = {
             },
         },
         xaxis: {
-            categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep'],
+            categories: xaxis,
         },
         theme: {
             mode: 'dark' as const
         }
-    }
+    }}; 
 };
 
-const LineGraph: React.FC<LineGraphProps> = () => {
-    const [chartData] = useState(mockData);
+const LineGraph: React.FC<LineGraphProps> = ({ series, xaxis }) => {
+    const [chartData] = useState(mockData(series, xaxis));
 
     return (
         <GraphContainer>

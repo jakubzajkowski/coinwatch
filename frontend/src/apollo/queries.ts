@@ -269,3 +269,27 @@ export const START_AI_ANALYSE = gql`
         startAiAnalyse(cryptoId: $cryptoId, userId: $userId)
     }
 `
+
+export const GET_CRYPTO_CHART_DATA = gql`
+    query GetCryptoChartData($cryptoId: String!, $interval: String!, $from: String!, $to: String!, $chartType: ChartType!) {
+        getCryptoChartData(
+            cryptoId: $cryptoId
+            interval: $interval
+            from: $from
+            to: $to
+            chartType: $chartType
+        ) {
+            ... on CandleChartDTO {
+                bucket
+                open
+                close
+                high
+                low
+            }
+            ... on AveragePricesDTO {
+                bucket
+                average
+            }
+        }
+    }
+`

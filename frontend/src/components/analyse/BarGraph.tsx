@@ -13,13 +13,14 @@ const GraphContainer = styled.div`
 `;
 
 interface BarGraphProps {
-    // Add any props if needed
+    series: number[];
+    xaxis: string[];
 }
 
-const mockData = {
-    series: [{
+const mockData = (series: number[], xaxis: string[]) => {
+    return {series: [{
         name: 'Value',
-        data: [44, 55, 57, 56, 61, 58, 63, 60, 66]
+        data: series
     }],
     options: {
         chart: {
@@ -46,7 +47,7 @@ const mockData = {
             colors: ['transparent']
         },
         xaxis: {
-            categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep'],
+            categories: xaxis,
         },
         yaxis: {
             title: {
@@ -59,11 +60,12 @@ const mockData = {
         theme: {
             mode: 'dark' as const
         }
-    }
+    }};
 };
 
-const BarGraph: React.FC<BarGraphProps> = () => {
-    const [chartData] = useState(mockData);
+const BarGraph: React.FC<BarGraphProps> = ({ series, xaxis }) => {
+    console.log(series, xaxis);
+    const [chartData] = useState(mockData(series, xaxis));
 
     return (
         <GraphContainer>

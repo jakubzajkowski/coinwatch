@@ -29,6 +29,29 @@ export type Alert = {
   user: User;
 };
 
+export type AveragePricesDto = {
+  __typename?: 'AveragePricesDTO';
+  average: Scalars['Float']['output'];
+  bucket: Scalars['String']['output'];
+};
+
+export type CandleChartDto = {
+  __typename?: 'CandleChartDTO';
+  bucket: Scalars['String']['output'];
+  close: Scalars['Float']['output'];
+  high: Scalars['Float']['output'];
+  low: Scalars['Float']['output'];
+  open: Scalars['Float']['output'];
+};
+
+export type ChartPoint = AveragePricesDto | CandleChartDto;
+
+export enum ChartType {
+  Bar = 'BAR',
+  Candle = 'CANDLE',
+  Line = 'LINE'
+}
+
 export type CryptoCurrency = {
   __typename?: 'CryptoCurrency';
   ath?: Maybe<Scalars['Float']['output']>;
@@ -177,6 +200,7 @@ export type Query = {
   __typename?: 'Query';
   getAlertByUserId?: Maybe<Array<Maybe<Alert>>>;
   getAlerts?: Maybe<Array<Maybe<Alert>>>;
+  getCryptoChartData?: Maybe<Array<Maybe<ChartPoint>>>;
   getCryptoCurrencies?: Maybe<Array<Maybe<CryptoCurrency>>>;
   getCryptoCurrencyByCryptoId?: Maybe<CryptoCurrency>;
   getCryptoPriceHistory?: Maybe<Array<Maybe<CryptoPriceHistory>>>;
@@ -193,6 +217,15 @@ export type Query = {
 
 export type QueryGetAlertByUserIdArgs = {
   userId: Scalars['ID']['input'];
+};
+
+
+export type QueryGetCryptoChartDataArgs = {
+  chartType?: InputMaybe<ChartType>;
+  cryptoId?: InputMaybe<Scalars['String']['input']>;
+  from?: InputMaybe<Scalars['String']['input']>;
+  interval?: InputMaybe<Scalars['String']['input']>;
+  to?: InputMaybe<Scalars['String']['input']>;
 };
 
 
@@ -442,6 +475,17 @@ export type StartAiAnalyseMutationVariables = Exact<{
 
 
 export type StartAiAnalyseMutation = { __typename?: 'Mutation', startAiAnalyse: string };
+
+export type GetCryptoChartDataQueryVariables = Exact<{
+  cryptoId: Scalars['String']['input'];
+  interval: Scalars['String']['input'];
+  from: Scalars['String']['input'];
+  to: Scalars['String']['input'];
+  chartType: ChartType;
+}>;
+
+
+export type GetCryptoChartDataQuery = { __typename?: 'Query', getCryptoChartData?: Array<{ __typename?: 'AveragePricesDTO', bucket: string, average: number } | { __typename?: 'CandleChartDTO', bucket: string, open: number, close: number, high: number, low: number } | null> | null };
 
 
 export const GetCryptoCurrenciesDocument = gql`
@@ -1229,3 +1273,63 @@ export function useStartAiAnalyseMutation(baseOptions?: Apollo.MutationHookOptio
 export type StartAiAnalyseMutationHookResult = ReturnType<typeof useStartAiAnalyseMutation>;
 export type StartAiAnalyseMutationResult = Apollo.MutationResult<StartAiAnalyseMutation>;
 export type StartAiAnalyseMutationOptions = Apollo.BaseMutationOptions<StartAiAnalyseMutation, StartAiAnalyseMutationVariables>;
+export const GetCryptoChartDataDocument = gql`
+    query GetCryptoChartData($cryptoId: String!, $interval: String!, $from: String!, $to: String!, $chartType: ChartType!) {
+  getCryptoChartData(
+    cryptoId: $cryptoId
+    interval: $interval
+    from: $from
+    to: $to
+    chartType: $chartType
+  ) {
+    ... on CandleChartDTO {
+      bucket
+      open
+      close
+      high
+      low
+    }
+    ... on AveragePricesDTO {
+      bucket
+      average
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetCryptoChartDataQuery__
+ *
+ * To run a query within a React component, call `useGetCryptoChartDataQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCryptoChartDataQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetCryptoChartDataQuery({
+ *   variables: {
+ *      cryptoId: // value for 'cryptoId'
+ *      interval: // value for 'interval'
+ *      from: // value for 'from'
+ *      to: // value for 'to'
+ *      chartType: // value for 'chartType'
+ *   },
+ * });
+ */
+export function useGetCryptoChartDataQuery(baseOptions: Apollo.QueryHookOptions<GetCryptoChartDataQuery, GetCryptoChartDataQueryVariables> & ({ variables: GetCryptoChartDataQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetCryptoChartDataQuery, GetCryptoChartDataQueryVariables>(GetCryptoChartDataDocument, options);
+      }
+export function useGetCryptoChartDataLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetCryptoChartDataQuery, GetCryptoChartDataQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetCryptoChartDataQuery, GetCryptoChartDataQueryVariables>(GetCryptoChartDataDocument, options);
+        }
+export function useGetCryptoChartDataSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetCryptoChartDataQuery, GetCryptoChartDataQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetCryptoChartDataQuery, GetCryptoChartDataQueryVariables>(GetCryptoChartDataDocument, options);
+        }
+export type GetCryptoChartDataQueryHookResult = ReturnType<typeof useGetCryptoChartDataQuery>;
+export type GetCryptoChartDataLazyQueryHookResult = ReturnType<typeof useGetCryptoChartDataLazyQuery>;
+export type GetCryptoChartDataSuspenseQueryHookResult = ReturnType<typeof useGetCryptoChartDataSuspenseQuery>;
+export type GetCryptoChartDataQueryResult = Apollo.QueryResult<GetCryptoChartDataQuery, GetCryptoChartDataQueryVariables>;
