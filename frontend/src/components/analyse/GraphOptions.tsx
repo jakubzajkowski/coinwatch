@@ -168,6 +168,18 @@ const GraphOptions: React.FC<GraphOptionsProps> = ({ onOptionsChange, options })
                 <SelectWrapper>
                     <Label>Time Range</Label>
                         <IconContainer>
+                            <IconButton active={optionsState.timeRange === '1H'} 
+                            onClick={() => handleChange({ target: { name: 'timeRange', value: '1H' } } as any)}>
+                                1H
+                            </IconButton>
+                            <IconButton active={optionsState.timeRange === '4H'} 
+                            onClick={() => handleChange({ target: { name: 'timeRange', value: '4H' } } as any)}>
+                                4H
+                            </IconButton>
+                            <IconButton active={optionsState.timeRange === '12H'} 
+                            onClick={() => handleChange({ target: { name: 'timeRange', value: '12H' } } as any)}>
+                                12H
+                            </IconButton>
                             <IconButton active={optionsState.timeRange === '1D'} 
                             onClick={() => handleChange({ target: { name: 'timeRange', value: '1D' } } as any)}>
                                 1D

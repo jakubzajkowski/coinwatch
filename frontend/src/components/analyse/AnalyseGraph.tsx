@@ -7,6 +7,7 @@ import GraphOptions from './GraphOptions';
 import { GET_CRYPTO_CHART_DATA } from '../../apollo/queries';
 import { useQuery } from '@apollo/client';
 import QueryBoundary from '../QueryBoundary';
+import analyseChartRange from '../../utils/analyseChartRange';
 
 export interface GraphOptions {
     graphType: string;
@@ -45,12 +46,18 @@ const AnalyseGraph: React.FC<AnalyseGraphProps> = () => {
         timeRange: '1D'
     });
 
+    const [now, setNow] = useState(new Date());
+
+    const { from, to } = analyseChartRange(graphOptions.timeRange, now);
+
+    console.log(from, to);
+
     const { data, loading, error } = useQuery(GET_CRYPTO_CHART_DATA, {
         variables: {
             cryptoId: graphOptions.cryptocurrency,
             interval: '1h',
-            from: '2025-05-03T15:30:00.000+02:00',
-            to: '2025-06-04T15:30:00.000+02:00',
+            from: from,
+            to: to,
             chartType: getChartType(graphOptions.graphType)
         }
     });
@@ -70,7 +77,7 @@ const AnalyseGraph: React.FC<AnalyseGraphProps> = () => {
             <QueryBoundary loading={loading} error={error}>
                 {data && (
                     <>
-                        {graphOptions.graphType === 'candle' && <CandleGraph />}
+                        {graphOptions.graphType === 'candle' && <CandleGraph data={data.getCryptoChartData} />}
                         {graphOptions.graphType === 'line' && <LineGraph series={data.getCryptoChartData.map((item: any) => item.average.toFixed(2))} xaxis={data.getCryptoChartData.map((item: any) => item.bucket)} />}
                         {graphOptions.graphType === 'bar' && <BarGraph series={data.getCryptoChartData.map((item: any) => item.average.toFixed(2))} xaxis={data.getCryptoChartData.map((item: any) => item.bucket)} />}
                     </>
