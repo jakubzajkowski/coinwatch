@@ -61,38 +61,10 @@ interface AiAnalyseModalProps {
     isOpen: boolean;
     onClose: () => void;
     cryptoId?: string;
+    messages: string[];
 }
 
-const AiAnalyseModal: React.FC<AiAnalyseModalProps> = ({ isOpen, onClose, cryptoId }) => {
-    const [messages, setMessages] = useState<string[]>([]);
-    const { subscribe, unsubscribe, sendMessage, connected } = useWebSocketClient(import.meta.env.VITE_WS_API_URL);
-    const [startAiAnalyse] = useMutation(START_AI_ANALYSE);
-    const { user } = useSelector((state: RootState) => state.auth);
-
-    useEffect(() => {
-        startAiAnalyse({
-            variables: {
-                cryptoId: cryptoId,
-                userId: user?.id
-            }
-        });
-    }, [cryptoId, user?.id]);
-
-    useEffect(() => {
-        let subscription: StompSubscription | null = null;
-        if (connected) {
-            subscription = subscribe(`/analyse/${user?.id}/${cryptoId}`, (message: string) => {
-                setMessages(prevMessages => [...prevMessages, message]);
-            }) as StompSubscription;
-        }
-
-        return () => {
-            if (subscription) {
-                unsubscribe(subscription);
-            }
-        };
-    }, [connected, subscribe, unsubscribe]);
-
+const AiAnalyseModal: React.FC<AiAnalyseModalProps> = ({ isOpen, onClose, cryptoId, messages }) => {
     if (!isOpen) return null;
 
     return (

@@ -1,15 +1,17 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { ButtonPrimary } from '../styled';
 import { LuChartLine } from 'react-icons/lu';
 import { LuChartColumn } from "react-icons/lu";
 import { LuChartCandlestick } from "react-icons/lu";
-import { GET_USER_FAVORITE_CRYPTO_FOR_ANALYSE } from '../../apollo/queries';
-import { useQuery } from '@apollo/client';
+import { GET_USER_FAVORITE_CRYPTO_FOR_ANALYSE, START_AI_ANALYSE } from '../../apollo/queries';
+import { useMutation, useQuery } from '@apollo/client';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../redux/store';
 import { GetUserFavoriteCryptosForAnalyseQuery } from '../../graphql/generated';
 import AiAnalyseModal from './AiAnalyseModal';
+import useWebSocketClient from '../../ws/useWebSocketClient';
+import { StompSubscription } from '@stomp/stompjs';
 
 
 const OptionsContainer = styled.div`
@@ -100,9 +102,34 @@ const GraphOptions: React.FC<GraphOptionsProps> = ({ onOptionsChange, options })
     const [optionsState, setOptionsState] = useState(options);
     const { user } = useSelector((state: RootState) => state.auth);
     const [isAiAnalyseModalOpen, setIsAiAnalyseModalOpen] = useState(false);
+    const [startAiAnalyse] = useMutation(START_AI_ANALYSE);
+    const [messages, setMessages] = useState<string[]>([]);
+    const { subscribe, unsubscribe, sendMessage, connected } = useWebSocketClient(import.meta.env.VITE_WS_API_URL); 
 
-    const handleAiAnalyseModal = () => {
+    useEffect(() => {
+        let subscription: StompSubscription | null = null;
+        if (connected) {
+            subscription = subscribe(`/analyse/${user?.id}`, (message: string) => {
+                setMessages(prevMessages => [...prevMessages, message]);
+            }) as StompSubscription;
+        }
+
+        return () => {
+            if (subscription) { 
+                unsubscribe(subscription);
+            }
+        };
+    }, [connected, subscribe, unsubscribe]);
+
+    const handleAiAnalyseModal = async () => {
+        console.log("startAiAnalyse", optionsState.cryptocurrency, user?.id);
         setIsAiAnalyseModalOpen(!isAiAnalyseModalOpen);
+        await startAiAnalyse({
+            variables: {
+                cryptoId: optionsState.cryptocurrency,
+                userId: user?.id
+            }
+        });
     };
 
     const { data, loading, error } = useQuery<GetUserFavoriteCryptosForAnalyseQuery>(GET_USER_FAVORITE_CRYPTO_FOR_ANALYSE, {
@@ -214,7 +241,8 @@ const GraphOptions: React.FC<GraphOptionsProps> = ({ onOptionsChange, options })
             <AiAnalyseModal
                 isOpen={isAiAnalyseModalOpen}
                 onClose={handleAiAnalyseModal}
-                cryptoId={"bitcoin"}
+                cryptoId={optionsState.cryptocurrency}
+                messages={messages}
             />
         </OptionsContainer>
     );

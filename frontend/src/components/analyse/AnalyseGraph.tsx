@@ -50,7 +50,6 @@ const AnalyseGraph: React.FC<AnalyseGraphProps> = () => {
 
     const { from, to } = analyseChartRange(graphOptions.timeRange, now);
 
-    console.log(from, to);
 
     const { data, loading, error } = useQuery(GET_CRYPTO_CHART_DATA, {
         variables: {
