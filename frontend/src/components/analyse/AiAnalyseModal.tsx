@@ -1,13 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import { LuBrain } from "react-icons/lu";
 import { ButtonPrimary } from '../styled';
-import useWebSocketClient from '../../ws/useWebSocketClient';
-import { RootState } from '../../redux/store';
-import { useSelector } from 'react-redux';
-import { StompSubscription } from '@stomp/stompjs';
-import { useMutation } from '@apollo/client';
-import { START_AI_ANALYSE } from '../../apollo/queries';
 
 const ModalOverlay = styled.div`
     position: fixed;
@@ -55,16 +49,25 @@ const CloseButton = styled.button`
 const ModalBody = styled.div`
     color: ${props => props.theme.colors.primary};
     margin-bottom: 1.5rem;
+    max-height: 400px;
+    overflow-y: auto;
+    padding: 0.5rem;
+`;
+
+const Message = styled.p`
+    margin-bottom: 0.5rem;
+    border: 1px solid rgb(255, 255, 255, 0.1);
+    border-radius: 0.5rem;
+    padding: 1rem;
 `;
 
 interface AiAnalyseModalProps {
     isOpen: boolean;
     onClose: () => void;
-    cryptoId?: string;
     messages: string[];
 }
 
-const AiAnalyseModal: React.FC<AiAnalyseModalProps> = ({ isOpen, onClose, cryptoId, messages }) => {
+const AiAnalyseModal: React.FC<AiAnalyseModalProps> = ({ isOpen, onClose, messages }) => {
     if (!isOpen) return null;
 
     return (
@@ -75,7 +78,11 @@ const AiAnalyseModal: React.FC<AiAnalyseModalProps> = ({ isOpen, onClose, crypto
                     <CloseButton onClick={onClose}>&times;</CloseButton>
                 </ModalHeader>
                 <ModalBody>
-                    <p>{messages.join("\n")}</p>
+                    {messages.length > 0 ? messages.map((message, index) => {
+                        return (
+                            <Message key={index}>{message}</Message>
+                        )
+                    }) : <p>Loading...</p>}
                 </ModalBody>
                 <ButtonPrimary onClick={onClose}>Close</ButtonPrimary>
             </ModalContent>

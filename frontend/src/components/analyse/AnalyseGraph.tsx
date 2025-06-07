@@ -4,10 +4,8 @@ import LineGraph from './LineGraph';
 import BarGraph from './BarGraph';
 import CandleGraph from './CandleGraph';
 import GraphOptions from './GraphOptions';
-import { GET_CRYPTO_CHART_DATA } from '../../apollo/queries';
-import { useQuery } from '@apollo/client';
 import QueryBoundary from '../QueryBoundary';
-import analyseChartRange from '../../utils/analyseChartRange';
+import useAnalyseCryptoChartData from '../../hooks/useAnalyseCryptoChartData';
 
 export interface GraphOptions {
     graphType: string;
@@ -27,16 +25,6 @@ const GraphContainer = styled.div`
 interface AnalyseGraphProps {
 }
 
-const getChartType = (graphType: string) => {
-    switch (graphType) {
-        case 'candle':
-            return 'CANDLE';
-        case 'bar':
-            return 'BAR';
-        case 'line':
-            return 'LINE';
-    }   
-}
 
 const AnalyseGraph: React.FC<AnalyseGraphProps> = () => {
     const [graphOptions, setGraphOptions] = useState<GraphOptions>({
@@ -46,20 +34,7 @@ const AnalyseGraph: React.FC<AnalyseGraphProps> = () => {
         timeRange: '1D'
     });
 
-    const [now, setNow] = useState(new Date());
-
-    const { from, to } = analyseChartRange(graphOptions.timeRange, now);
-
-
-    const { data, loading, error } = useQuery(GET_CRYPTO_CHART_DATA, {
-        variables: {
-            cryptoId: graphOptions.cryptocurrency,
-            interval: '1h',
-            from: from,
-            to: to,
-            chartType: getChartType(graphOptions.graphType)
-        }
-    });
+    const { data, loading, error } = useAnalyseCryptoChartData(graphOptions);
 
     const handleOptionsChange = (options: {
         graphType: string;
