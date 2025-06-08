@@ -6,11 +6,12 @@ import { LuChartColumn } from "react-icons/lu";
 import { LuChartCandlestick } from "react-icons/lu";
 import { GET_USER_FAVORITE_CRYPTO_FOR_ANALYSE, START_AI_ANALYSE } from '../../apollo/queries';
 import { useMutation, useQuery } from '@apollo/client';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../redux/store';
 import { GetUserFavoriteCryptosForAnalyseQuery } from '../../graphql/generated';
 import AiAnalyseModal from './AiAnalyseModal';
 import useWebSocket from '../../ws/useWebSocket';
+import { setGraphOptions } from '../../redux/chartSlice';
 
 
 const OptionsContainer = styled.div`
@@ -89,16 +90,11 @@ interface GraphOptionsProps {
         cryptocurrency: string;
         timeRange: string;
     }) => void;
-    options: {
-        graphType: string;
-        dataType: string;
-        cryptocurrency: string;
-        timeRange: string;
-    };
 }
 
-const GraphOptions: React.FC<GraphOptionsProps> = ({ onOptionsChange, options }) => {
-    const [optionsState, setOptionsState] = useState(options);
+const GraphOptions: React.FC<GraphOptionsProps> = ({ onOptionsChange}) => {
+    const graphOptions = useSelector((state: RootState) => state.chart.graphOptions);
+    const dispatch = useDispatch();
     const { user } = useSelector((state: RootState) => state.auth);
     const [isAiAnalyseModalOpen, setIsAiAnalyseModalOpen] = useState(false);
     const [startAiAnalyse] = useMutation(START_AI_ANALYSE);
@@ -108,7 +104,7 @@ const GraphOptions: React.FC<GraphOptionsProps> = ({ onOptionsChange, options })
         setIsAiAnalyseModalOpen(!isAiAnalyseModalOpen);
         await startAiAnalyse({
             variables: {
-                cryptoId: optionsState.cryptocurrency,
+                cryptoId: graphOptions.cryptocurrency,
                 userId: user?.id
             }
         });
@@ -122,10 +118,10 @@ const GraphOptions: React.FC<GraphOptionsProps> = ({ onOptionsChange, options })
 
     const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const newOptions = {
-            ...optionsState,
+            ...graphOptions,
             [e.target.name]: e.target.value
         };
-        setOptionsState(newOptions);
+        dispatch(setGraphOptions(newOptions));
         onOptionsChange?.(newOptions);
     };
 
@@ -136,19 +132,19 @@ const GraphOptions: React.FC<GraphOptionsProps> = ({ onOptionsChange, options })
                     <Label>Graph Type</Label>
                     <IconContainer>
                         <IconButton 
-                            active={optionsState.graphType === 'line'} 
+                            active={graphOptions.graphType === 'line'} 
                             onClick={() => handleChange({ target: { name: 'graphType', value: 'line' } } as any)}
                         >
                             <LuChartLine />
                         </IconButton>
                         <IconButton
-                            active={optionsState.graphType === 'bar'}
+                            active={graphOptions.graphType === 'bar'}
                             onClick={() => handleChange({ target: { name: 'graphType', value: 'bar' } } as any)} 
                         >
                             <LuChartColumn />
                         </IconButton>
                         <IconButton
-                            active={optionsState.graphType === 'candle'}
+                            active={graphOptions.graphType === 'candle'}
                             onClick={() => handleChange({ target: { name: 'graphType', value: 'candle' } } as any)}
                         >
                             <LuChartCandlestick />
@@ -158,7 +154,7 @@ const GraphOptions: React.FC<GraphOptionsProps> = ({ onOptionsChange, options })
 
                 <SelectWrapper>
                     <Label>Data Type</Label>
-                    <Select name="dataType" value={optionsState.dataType} onChange={handleChange}>
+                    <Select name="dataType" value={graphOptions.dataType} onChange={handleChange}>
                         <option value="price">Price</option>
                         <option value="volume">Volume</option>
                         <option value="market_cap">Market Cap</option>
@@ -167,7 +163,7 @@ const GraphOptions: React.FC<GraphOptionsProps> = ({ onOptionsChange, options })
 
                 <SelectWrapper>
                     <Label>Cryptocurrency</Label>
-                    <Select name="cryptocurrency" value={optionsState.cryptocurrency} onChange={handleChange}>
+                    <Select name="cryptocurrency" value={graphOptions.cryptocurrency} onChange={handleChange}>
                         {data?.getUserFavoriteCryptos?.map((crypto: any) => (
                             <option key={crypto.cryptoCurrency.cryptoId} value={crypto.cryptoCurrency.cryptoId}>{crypto.cryptoCurrency.symbol.toUpperCase()}</option>
                         ))}
@@ -177,39 +173,39 @@ const GraphOptions: React.FC<GraphOptionsProps> = ({ onOptionsChange, options })
                 <SelectWrapper>
                     <Label>Time Range</Label>
                         <IconContainer>
-                            <IconButton active={optionsState.timeRange === '1H'} 
+                            <IconButton active={graphOptions.timeRange === '1H'} 
                             onClick={() => handleChange({ target: { name: 'timeRange', value: '1H' } } as any)}>
                                 1H
                             </IconButton>
-                            <IconButton active={optionsState.timeRange === '4H'} 
+                            <IconButton active={graphOptions.timeRange === '4H'} 
                             onClick={() => handleChange({ target: { name: 'timeRange', value: '4H' } } as any)}>
                                 4H
                             </IconButton>
-                            <IconButton active={optionsState.timeRange === '12H'} 
+                            <IconButton active={graphOptions.timeRange === '12H'} 
                             onClick={() => handleChange({ target: { name: 'timeRange', value: '12H' } } as any)}>
                                 12H
                             </IconButton>
-                            <IconButton active={optionsState.timeRange === '1D'} 
+                            <IconButton active={graphOptions.timeRange === '1D'} 
                             onClick={() => handleChange({ target: { name: 'timeRange', value: '1D' } } as any)}>
                                 1D
                             </IconButton>
-                            <IconButton active={optionsState.timeRange === '1W'} 
+                            <IconButton active={graphOptions.timeRange === '1W'} 
                             onClick={() => handleChange({ target: { name: 'timeRange', value: '1W' } } as any)}>
                                 1W
                             </IconButton>
-                            <IconButton active={optionsState.timeRange === '1M'} 
+                            <IconButton active={graphOptions.timeRange === '1M'} 
                             onClick={() => handleChange({ target: { name: 'timeRange', value: '1M' } } as any)}>
                                 1M
                             </IconButton>
-                            <IconButton active={optionsState.timeRange === '3M'} 
+                            <IconButton active={graphOptions.timeRange === '3M'} 
                             onClick={() => handleChange({ target: { name: 'timeRange', value: '3M' } } as any)}>
                                 3M
                             </IconButton>
-                            <IconButton active={optionsState.timeRange === '1Y'} 
+                            <IconButton active={graphOptions.timeRange === '1Y'} 
                             onClick={() => handleChange({ target: { name: 'timeRange', value: '1Y' } } as any)}>
                                 1Y
                             </IconButton>
-                            <IconButton active={optionsState.timeRange === 'ALL'} 
+                            <IconButton active={graphOptions.timeRange === 'ALL'} 
                             onClick={() => handleChange({ target: { name: 'timeRange', value: 'ALL' } } as any)}>
                                 ALL
                             </IconButton>

@@ -64,7 +64,6 @@ const mockData = (series: number[], xaxis: string[]) => {
 };
 
 const BarGraph: React.FC<BarGraphProps> = ({ series, xaxis }) => {
-    console.log(series, xaxis);
     const [chartData] = useState(mockData(series, xaxis));
 
     return (

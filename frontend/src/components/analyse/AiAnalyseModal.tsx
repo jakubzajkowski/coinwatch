@@ -69,7 +69,7 @@ interface AiAnalyseModalProps {
 
 const AiAnalyseModal: React.FC<AiAnalyseModalProps> = ({ isOpen, onClose, messages }) => {
     if (!isOpen) return null;
-
+    
     return (
         <ModalOverlay onClick={onClose}>
             <ModalContent onClick={e => e.stopPropagation()}>

@@ -1,11 +1,12 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
-import LineGraph from './LineGraph';
-import BarGraph from './BarGraph';
-import CandleGraph from './CandleGraph';
 import GraphOptions from './GraphOptions';
 import QueryBoundary from '../QueryBoundary';
 import useAnalyseCryptoChartData from '../../hooks/useAnalyseCryptoChartData';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../redux/store';
+import { setGraphOptions } from '../../redux/chartSlice';
+import ChartRenderer from './ChartRenderer';
 
 export interface GraphOptions {
     graphType: string;
@@ -27,13 +28,8 @@ interface AnalyseGraphProps {
 
 
 const AnalyseGraph: React.FC<AnalyseGraphProps> = () => {
-    const [graphOptions, setGraphOptions] = useState<GraphOptions>({
-        graphType: 'bar',
-        dataType: 'price',
-        cryptocurrency: 'bitcoin',
-        timeRange: '1D'
-    });
-
+    const graphOptions = useSelector((state: RootState) => state.chart.graphOptions);
+    const dispatch = useDispatch();
     const { data, loading, error } = useAnalyseCryptoChartData(graphOptions);
 
     const handleOptionsChange = (options: {
@@ -42,20 +38,14 @@ const AnalyseGraph: React.FC<AnalyseGraphProps> = () => {
         cryptocurrency: string;
         timeRange: string;
     }) => {
-        setGraphOptions(options);
+        dispatch(setGraphOptions(options)); 
     };
 
     return (
         <GraphContainer>
-            <GraphOptions onOptionsChange={handleOptionsChange} options={graphOptions} />
+            <GraphOptions onOptionsChange={handleOptionsChange} />
             <QueryBoundary loading={loading} error={error}>
-                {data && (
-                    <>
-                        {graphOptions.graphType === 'candle' && <CandleGraph data={data.getCryptoChartData} />}
-                        {graphOptions.graphType === 'line' && <LineGraph series={data.getCryptoChartData.map((item: any) => item.average.toFixed(2))} xaxis={data.getCryptoChartData.map((item: any) => item.bucket)} />}
-                        {graphOptions.graphType === 'bar' && <BarGraph series={data.getCryptoChartData.map((item: any) => item.average.toFixed(2))} xaxis={data.getCryptoChartData.map((item: any) => item.bucket)} />}
-                    </>
-                )}
+                {data && <ChartRenderer data={data} />}
             </QueryBoundary>
         </GraphContainer>
     );
