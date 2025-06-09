@@ -5,6 +5,7 @@ export interface GraphOptions {
     dataType: string;
     cryptocurrency: string;
     timeRange: string;
+    interval: string
 }
 
 interface ChartState {
@@ -16,7 +17,8 @@ const initialState: ChartState = {
         graphType: 'bar',
         dataType: 'price',
         cryptocurrency: 'bitcoin',
-        timeRange: '1D'
+        timeRange: '1D',
+        interval: '1h'
     }
 };
 

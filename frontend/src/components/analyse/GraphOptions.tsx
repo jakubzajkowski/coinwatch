@@ -89,6 +89,7 @@ interface GraphOptionsProps {
         dataType: string;
         cryptocurrency: string;
         timeRange: string;
+        interval: string;
     }) => void;
 }
 
@@ -171,13 +172,47 @@ const GraphOptions: React.FC<GraphOptionsProps> = ({ onOptionsChange}) => {
                 </SelectWrapper>
 
                 <SelectWrapper>
+                    <Label>Interval</Label>
+                    <IconContainer>
+                        <IconButton active={graphOptions.interval === '1m'} 
+                        onClick={() => handleChange({ target: { name: 'interval', value: '1m' } } as any)}>
+                            1m
+                        </IconButton>
+                        <IconButton active={graphOptions.interval === '15m'} 
+                        onClick={() => handleChange({ target: { name: 'interval', value: '15m' } } as any)}>
+                            15 min
+                        </IconButton>
+                        <IconButton active={graphOptions.interval === '1H'} 
+                        onClick={() => handleChange({ target: { name: 'interval', value: '1H' } } as any)}>
+                            1H
+                        </IconButton>
+                        <IconButton active={graphOptions.interval === '4H'} 
+                        onClick={() => handleChange({ target: { name: 'interval', value: '4H' } } as any)}>
+                            4H
+                        </IconButton>
+                        <IconButton active={graphOptions.interval === '12H'} 
+                        onClick={() => handleChange({ target: { name: 'interval', value: '12H' } } as any)}>
+                            12H
+                        </IconButton>
+                        <IconButton active={graphOptions.interval === '1D'} 
+                        onClick={() => handleChange({ target: { name: 'interval', value: '1D' } } as any)}>
+                            1D
+                        </IconButton>
+                        <IconButton active={graphOptions.interval === '1W'} 
+                        onClick={() => handleChange({ target: { name: 'interval', value: '1W' } } as any)}>
+                            1W
+                        </IconButton>
+                    </IconContainer>
+                </SelectWrapper>
+
+                <SelectWrapper>
                     <Label>Time Range</Label>
                         <IconContainer>
-                            <IconButton active={graphOptions.timeRange === '1H'} 
+                            <IconButton active={graphOptions.timeRange === '1h'} 
                             onClick={() => handleChange({ target: { name: 'timeRange', value: '1H' } } as any)}>
                                 1H
                             </IconButton>
-                            <IconButton active={graphOptions.timeRange === '4H'} 
+                            <IconButton active={graphOptions.timeRange === '4h'} 
                             onClick={() => handleChange({ target: { name: 'timeRange', value: '4H' } } as any)}>
                                 4H
                             </IconButton>

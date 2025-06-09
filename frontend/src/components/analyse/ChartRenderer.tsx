@@ -13,34 +13,36 @@ interface ChartRendererProps {
 const ChartRenderer: React.FC<ChartRendererProps> = ({ data }) => {
     const graphOptions = useSelector((state: RootState) => state.chart.graphOptions);
 
-    const series = useMemo(() => {
-        return data?.getCryptoChartData?.map((item: any) => item.average.toFixed(2));
-    }, [data]);
-    const xaxis = useMemo(() => {
-        return data?.getCryptoChartData?.map((item: any) => item.bucket);
-    }, [data]);
-    const candleData = useMemo(() => {
-        return data?.getCryptoChartData?.map((item: any) => ({
-            ...item,
-            bucket: item.bucket,
-            open: item.open,
-            close: item.close,
-            high: item.high,
-            low: item.low
-        })) as any;
-    }, [data]);
+    if(graphOptions.graphType === 'candle') {
+        const candleData = useMemo(() => {
+            return data?.getCryptoChartData;
+        }, [data]);
 
-    console.log(candleData);
+        return <CandleGraph data={candleData as any} />
+    }
+    if(graphOptions.graphType === 'line') {
 
-    return (
-        data && (
-            <div>
-                {graphOptions.graphType === 'candle' && <CandleGraph data={candleData as any} />}
-                {graphOptions.graphType === 'line' && <LineGraph series={series as any} xaxis={xaxis as any} />}
-                {graphOptions.graphType === 'bar' && <BarGraph series={series as any} xaxis={xaxis as any} />}    
-            </div>
-        )
-    )
+        const series = useMemo(() => {
+            return data?.getCryptoChartData?.map((item: any) => item.average.toFixed(2));
+        }, [data]);
+        const xaxis = useMemo(() => {
+            return data?.getCryptoChartData?.map((item: any) => item.bucket);
+        }, [data]);
+
+    return <LineGraph series={series as any} xaxis={xaxis as any} />
+    }
+    if(graphOptions.graphType === 'bar') {
+        const series = useMemo(() => {
+            return data?.getCryptoChartData?.map((item: any) => item.average.toFixed(2));
+        }, [data]);
+        const xaxis = useMemo(() => {
+            return data?.getCryptoChartData?.map((item: any) => item.bucket);
+        }, [data]);
+
+        return <BarGraph series={series as any} xaxis={xaxis as any} />
+    }
+
+    return null;
 }
 
 export default ChartRenderer;

@@ -2,7 +2,7 @@ import { useQuery } from "@apollo/client";
 import { useState } from "react";
 import analyseChartRange from "../utils/analyseChartRange";
 import { GET_CRYPTO_CHART_DATA } from "../apollo/queries";
-import { GraphOptions } from "../components/analyse/AnalyseGraph";
+import { GraphOptions } from "../redux/chartSlice";
 
 const getChartType = (graphType: string) => {
     switch (graphType) {
@@ -24,7 +24,7 @@ const useAnalyseCryptoChartData = (graphOptions: GraphOptions) => {
     const { data, loading, error } = useQuery(GET_CRYPTO_CHART_DATA, {
         variables: {
             cryptoId: graphOptions.cryptocurrency,
-            interval: '1h',
+            interval: graphOptions.interval,
             from: from,
             to: to,
             chartType: getChartType(graphOptions.graphType)

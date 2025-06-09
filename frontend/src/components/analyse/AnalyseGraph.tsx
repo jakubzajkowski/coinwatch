@@ -8,13 +8,6 @@ import { RootState } from '../../redux/store';
 import { setGraphOptions } from '../../redux/chartSlice';
 import ChartRenderer from './ChartRenderer';
 
-export interface GraphOptions {
-    graphType: string;
-    dataType: string;
-    cryptocurrency: string;
-    timeRange: string;
-}
-
 const GraphContainer = styled.div`
     width: 75%;
     height: 400px;
@@ -37,6 +30,7 @@ const AnalyseGraph: React.FC<AnalyseGraphProps> = () => {
         dataType: string;
         cryptocurrency: string;
         timeRange: string;
+        interval: string;
     }) => {
         dispatch(setGraphOptions(options)); 
     };
