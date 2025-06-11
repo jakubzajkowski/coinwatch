@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import ReactApexChart from 'react-apexcharts';
 import styled from 'styled-components';
 import { theme } from '../../theme/theme';
@@ -13,15 +13,12 @@ const GraphContainer = styled.div`
 `;
 
 interface LineGraphProps {
-    series: number[];
+    series: { name: string; data: number[] }[];
     xaxis: string[];
 }
 
-const mockData = (series: number[], xaxis: string[]) => {
-    return {series: [{
-        name: "Value",
-        data: series
-    }],
+const mockData = (series: LineGraphProps['series'], xaxis: string[]) => {
+    return {series: series,
     options: {
         chart: {
             height: 350,
@@ -57,7 +54,7 @@ const mockData = (series: number[], xaxis: string[]) => {
 };
 
 const LineGraph: React.FC<LineGraphProps> = ({ series, xaxis }) => {
-    const [chartData] = useState(mockData(series, xaxis));
+    const chartData = useMemo(() => mockData(series, xaxis), [series, xaxis]);
 
     return (
         <GraphContainer>

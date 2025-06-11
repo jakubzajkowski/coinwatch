@@ -84,16 +84,10 @@ const ButtonContainer = styled.div`
 `;
 
 interface GraphOptionsProps {
-    onOptionsChange?: (options: {
-        graphType: string;
-        dataType: string;
-        cryptocurrency: string;
-        timeRange: string;
-        interval: string;
-    }) => void;
+
 }
 
-const GraphOptions: React.FC<GraphOptionsProps> = ({ onOptionsChange}) => {
+const GraphOptions: React.FC<GraphOptionsProps> = ({ }) => {
     const graphOptions = useSelector((state: RootState) => state.chart.graphOptions);
     const dispatch = useDispatch();
     const { user } = useSelector((state: RootState) => state.auth);
@@ -118,12 +112,20 @@ const GraphOptions: React.FC<GraphOptionsProps> = ({ onOptionsChange}) => {
     });
 
     const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        const newOptions = {
+        const { name, value } = e.target;
+
+        let updatedOptions = {
             ...graphOptions,
-            [e.target.name]: e.target.value
+            [name]: value,
         };
-        dispatch(setGraphOptions(newOptions));
-        onOptionsChange?.(newOptions);
+
+        if (name === 'compareWith') {
+            console.log(value)
+            updatedOptions.compare = value !== 'None';
+            console.log(updatedOptions)
+        }
+
+        dispatch(setGraphOptions(updatedOptions));
     };
 
     return (
@@ -161,7 +163,7 @@ const GraphOptions: React.FC<GraphOptionsProps> = ({ onOptionsChange}) => {
                         <option value="market_cap">Market Cap</option>
                     </Select>
                 </SelectWrapper>
-
+                
                 <SelectWrapper>
                     <Label>Cryptocurrency</Label>
                     <Select name="cryptocurrency" value={graphOptions.cryptocurrency} onChange={handleChange}>
@@ -170,6 +172,18 @@ const GraphOptions: React.FC<GraphOptionsProps> = ({ onOptionsChange}) => {
                         ))}
                     </Select>
                 </SelectWrapper>
+
+                {graphOptions.graphType=='line' &&
+                <SelectWrapper>
+                    <Label>Compare</Label>
+                    <Select name="compareWith" value={graphOptions.compare ? graphOptions.compareWith : 'None'} onChange={handleChange}>
+                        <option value={"None"}>None</option>
+                        {data?.getUserFavoriteCryptos?.map((crypto: any) => (
+                            <option key={crypto.cryptoCurrency.cryptoId} value={crypto.cryptoCurrency.cryptoId}>{crypto.cryptoCurrency.symbol.toUpperCase()}</option>
+                        ))}
+                    </Select>
+                </SelectWrapper>
+                }
 
                 <SelectWrapper>
                     <Label>Interval</Label>
@@ -208,11 +222,11 @@ const GraphOptions: React.FC<GraphOptionsProps> = ({ onOptionsChange}) => {
                 <SelectWrapper>
                     <Label>Time Range</Label>
                         <IconContainer>
-                            <IconButton active={graphOptions.timeRange === '1h'} 
+                            <IconButton active={graphOptions.timeRange === '1H'} 
                             onClick={() => handleChange({ target: { name: 'timeRange', value: '1H' } } as any)}>
                                 1H
                             </IconButton>
-                            <IconButton active={graphOptions.timeRange === '4h'} 
+                            <IconButton active={graphOptions.timeRange === '4H'} 
                             onClick={() => handleChange({ target: { name: 'timeRange', value: '4H' } } as any)}>
                                 4H
                             </IconButton>

@@ -5,7 +5,7 @@ import QueryBoundary from '../QueryBoundary';
 import useAnalyseCryptoChartData from '../../hooks/useAnalyseCryptoChartData';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../redux/store';
-import { setGraphOptions } from '../../redux/chartSlice';
+import { GraphOptionsType, setGraphOptions } from '../../redux/chartSlice';
 import ChartRenderer from './ChartRenderer';
 
 const GraphContainer = styled.div`
@@ -21,23 +21,12 @@ interface AnalyseGraphProps {
 
 
 const AnalyseGraph: React.FC<AnalyseGraphProps> = () => {
-    const graphOptions = useSelector((state: RootState) => state.chart.graphOptions);
-    const dispatch = useDispatch();
-    const { data, loading, error } = useAnalyseCryptoChartData(graphOptions);
-
-    const handleOptionsChange = (options: {
-        graphType: string;
-        dataType: string;
-        cryptocurrency: string;
-        timeRange: string;
-        interval: string;
-    }) => {
-        dispatch(setGraphOptions(options)); 
-    };
+    const graphOptionsState = useSelector((state: RootState) => state.chart.graphOptions);
+    const { data, loading, error } = useAnalyseCryptoChartData(graphOptionsState);
 
     return (
         <GraphContainer>
-            <GraphOptions onOptionsChange={handleOptionsChange} />
+            <GraphOptions />
             <QueryBoundary loading={loading} error={error}>
                 {data && <ChartRenderer data={data} />}
             </QueryBoundary>

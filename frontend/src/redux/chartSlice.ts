@@ -1,28 +1,32 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 
-export interface GraphOptions {
+export interface GraphOptionsType {
     graphType: string;
     dataType: string;
     cryptocurrency: string;
     timeRange: string;
-    interval: string
+    interval: string;
+    compare: boolean
+    compareWith: string
 }
 
 interface ChartState {
-    graphOptions: GraphOptions;
+    graphOptions: GraphOptionsType;
 }
 
-const getInitialGraphOptions = (): GraphOptions => {
+const getInitialGraphOptions = (): GraphOptionsType => {
     try {
         const stored = localStorage.getItem('chart');
         if (stored) {
             const parsed = JSON.parse(stored);
             return {
-                graphType: parsed.graphType || 'bar',
+                graphType: parsed.graphType || 'line',
                 dataType: parsed.dataType || 'price',
                 cryptocurrency: parsed.cryptocurrency || 'bitcoin',
                 timeRange: parsed.timeRange || '1D',
-                interval: parsed.interval || '1H'
+                interval: parsed.interval || '1H',
+                compare: false,
+                compareWith: 'bitcoin'
             };
         }
     } catch (e) {
@@ -30,11 +34,13 @@ const getInitialGraphOptions = (): GraphOptions => {
     }
 
     return {
-        graphType: 'bar',
+        graphType: 'line',
         dataType: 'price',
         cryptocurrency: 'bitcoin',
         timeRange: '1D',
-        interval: '1H'
+        interval: '1H',
+        compare: true,
+        compareWith: 'bitcoin'
     };
 };
 
@@ -46,7 +52,7 @@ const chartSlice = createSlice({
     name: 'chart',
     initialState,
     reducers: {
-        setGraphOptions: (state, action: PayloadAction<GraphOptions>) => {
+        setGraphOptions: (state, action: PayloadAction<GraphOptionsType>) => {
             localStorage.setItem('chart', JSON.stringify(action.payload))
             state.graphOptions = action.payload;
         },
