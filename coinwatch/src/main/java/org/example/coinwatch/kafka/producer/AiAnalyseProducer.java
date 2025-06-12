@@ -23,7 +23,7 @@ public class AiAnalyseProducer {
     ObjectMapper objectMapper;
 
     public void sendCryptoPriceDataToAnalyse(String cryptoId,Long userId) throws JsonProcessingException {
-        List<AggregatedPricesForAnalyseDTO> aggregatedPricesForAnalyseDTO = cryptoPriceHistoryRepository.findByCryptoIdAggregatedPricesForAnalyse("bitcoin");
+        List<AggregatedPricesForAnalyseDTO> aggregatedPricesForAnalyseDTO = cryptoPriceHistoryRepository.findByCryptoIdAggregatedPricesForAnalyse(cryptoId);
 
         List<AiAnalyseMessageDTO.PricePoint> pricePoints = aggregatedPricesForAnalyseDTO.stream().map(
                 prices -> new AiAnalyseMessageDTO.PricePoint(prices.getAvgPrice(),prices.getBucket())

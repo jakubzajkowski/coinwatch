@@ -20,6 +20,6 @@ public class AiAnalyseConsumer {
     @KafkaListener(topics = "ai-response-topic", groupId = "spring-test-group", containerFactory = "kafkaListenerContainerFactory")
     public void consumeAiAnalyse(String message) throws JsonProcessingException {
         AiAnalyseResponseDTO aiAnalyseResponseDTO = objectMapper.readValue(message, AiAnalyseResponseDTO.class);
-        messagingTemplate.convertAndSend("/analyse/"+aiAnalyseResponseDTO.getUserId()+"/"+aiAnalyseResponseDTO.getCryptoId(), aiAnalyseResponseDTO.getText());
+        messagingTemplate.convertAndSend("/analyse/"+aiAnalyseResponseDTO.getUserId(), aiAnalyseResponseDTO.getText());
     }
 }

@@ -12,6 +12,7 @@ import java.util.Optional;
 
 public interface CryptoCurrencyRepository extends JpaRepository<CryptoCurrency,Long> {
     Optional<CryptoCurrency> findByCryptoId(String cryptoId);
+    Optional<List<CryptoCurrency>> findAllBy
     Optional<List<CryptoCurrency>> findByCryptoIdContainingIgnoreCase(String name);
     Page<CryptoCurrency> findAll(Pageable pageable);
     @Query("SELECT c FROM CryptoCurrency c WHERE " +
