@@ -346,6 +346,14 @@ export type GetCryptoCurrenciesQueryVariables = Exact<{
 
 export type GetCryptoCurrenciesQuery = { __typename?: 'Query', getCryptoCurrencies?: Array<{ __typename?: 'CryptoCurrency', id: string, name: string, symbol: string, cryptoId: string, currentPrice?: number | null, priceChangePercentage24h?: number | null, marketCap?: number | null, totalVolume?: number | null, imageUrl?: string | null } | null> | null };
 
+export type GetCryptoCurrenciesForTrendingCoinsQueryVariables = Exact<{
+  limit: Scalars['Int']['input'];
+  orderBy: Scalars['String']['input'];
+}>;
+
+
+export type GetCryptoCurrenciesForTrendingCoinsQuery = { __typename?: 'Query', getCryptoCurrencies?: Array<{ __typename?: 'CryptoCurrency', id: string, symbol: string, cryptoId: string, priceChangePercentage24h?: number | null, imageUrl?: string | null } | null> | null };
+
 export type GetCryptoCurrencyByCryptoIdQueryVariables = Exact<{
   cryptoId: Scalars['String']['input'];
 }>;
@@ -537,6 +545,51 @@ export type GetCryptoCurrenciesQueryHookResult = ReturnType<typeof useGetCryptoC
 export type GetCryptoCurrenciesLazyQueryHookResult = ReturnType<typeof useGetCryptoCurrenciesLazyQuery>;
 export type GetCryptoCurrenciesSuspenseQueryHookResult = ReturnType<typeof useGetCryptoCurrenciesSuspenseQuery>;
 export type GetCryptoCurrenciesQueryResult = Apollo.QueryResult<GetCryptoCurrenciesQuery, GetCryptoCurrenciesQueryVariables>;
+export const GetCryptoCurrenciesForTrendingCoinsDocument = gql`
+    query getCryptoCurrenciesForTrendingCoins($limit: Int!, $orderBy: String!) {
+  getCryptoCurrencies(limit: $limit, orderBy: $orderBy) {
+    id
+    symbol
+    cryptoId
+    priceChangePercentage24h
+    imageUrl
+  }
+}
+    `;
+
+/**
+ * __useGetCryptoCurrenciesForTrendingCoinsQuery__
+ *
+ * To run a query within a React component, call `useGetCryptoCurrenciesForTrendingCoinsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCryptoCurrenciesForTrendingCoinsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetCryptoCurrenciesForTrendingCoinsQuery({
+ *   variables: {
+ *      limit: // value for 'limit'
+ *      orderBy: // value for 'orderBy'
+ *   },
+ * });
+ */
+export function useGetCryptoCurrenciesForTrendingCoinsQuery(baseOptions: Apollo.QueryHookOptions<GetCryptoCurrenciesForTrendingCoinsQuery, GetCryptoCurrenciesForTrendingCoinsQueryVariables> & ({ variables: GetCryptoCurrenciesForTrendingCoinsQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetCryptoCurrenciesForTrendingCoinsQuery, GetCryptoCurrenciesForTrendingCoinsQueryVariables>(GetCryptoCurrenciesForTrendingCoinsDocument, options);
+      }
+export function useGetCryptoCurrenciesForTrendingCoinsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetCryptoCurrenciesForTrendingCoinsQuery, GetCryptoCurrenciesForTrendingCoinsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetCryptoCurrenciesForTrendingCoinsQuery, GetCryptoCurrenciesForTrendingCoinsQueryVariables>(GetCryptoCurrenciesForTrendingCoinsDocument, options);
+        }
+export function useGetCryptoCurrenciesForTrendingCoinsSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetCryptoCurrenciesForTrendingCoinsQuery, GetCryptoCurrenciesForTrendingCoinsQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetCryptoCurrenciesForTrendingCoinsQuery, GetCryptoCurrenciesForTrendingCoinsQueryVariables>(GetCryptoCurrenciesForTrendingCoinsDocument, options);
+        }
+export type GetCryptoCurrenciesForTrendingCoinsQueryHookResult = ReturnType<typeof useGetCryptoCurrenciesForTrendingCoinsQuery>;
+export type GetCryptoCurrenciesForTrendingCoinsLazyQueryHookResult = ReturnType<typeof useGetCryptoCurrenciesForTrendingCoinsLazyQuery>;
+export type GetCryptoCurrenciesForTrendingCoinsSuspenseQueryHookResult = ReturnType<typeof useGetCryptoCurrenciesForTrendingCoinsSuspenseQuery>;
+export type GetCryptoCurrenciesForTrendingCoinsQueryResult = Apollo.QueryResult<GetCryptoCurrenciesForTrendingCoinsQuery, GetCryptoCurrenciesForTrendingCoinsQueryVariables>;
 export const GetCryptoCurrencyByCryptoIdDocument = gql`
     query getCryptoCurrencyByCryptoId($cryptoId: String!) {
   getCryptoCurrencyByCryptoId(cryptoId: $cryptoId) {

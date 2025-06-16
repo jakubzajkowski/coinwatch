@@ -1,5 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
+import { GET_CURRENCIES_FOR_TRENDING_COINS } from '../../apollo/queries';
+import { useQuery } from '@apollo/client';
+import QueryBoundary from '../QueryBoundary';
 
 const TrendingContainer = styled.div`
     width: 24%;
@@ -36,10 +39,9 @@ const CoinInfo = styled.div`
     gap: 0.5rem;
 `;
 
-const CoinIcon = styled.div`
+const CoinIcon = styled.img`
     width: 24px;
     height: 24px;
-    background-color: #666;
     border-radius: 50%;
 `;
 
@@ -52,32 +54,40 @@ const Percentage = styled.span<{ isPositive: boolean }>`
     font-weight: 500;
 `;
 
-const mockTrendingCoins = [
-    { name: 'Bitcoin', symbol: 'BTC', percentage: 2.45 },
-    { name: 'Ethereum', symbol: 'ETH', percentage: -1.23 },
-    { name: 'Cardano', symbol: 'ADA', percentage: 5.67 },
-    { name: 'Solana', symbol: 'SOL', percentage: -0.89 },
-    { name: 'Polkadot', symbol: 'DOT', percentage: 3.21 }
-];
-
 const TrendingCoins: React.FC = () => {
+    const {data,error,loading} = useQuery(GET_CURRENCIES_FOR_TRENDING_COINS,{
+        variables: {
+            limit: 10,
+            orderBy: "priceChangePercentage24h",
+            order: "desc"
+        }
+    });
+
     return (
         <TrendingContainer>
             <Title>Trending Coins</Title>
-            <CoinList>
-                {mockTrendingCoins.map((coin, index) => (
-                    <CoinItem key={index}>
-                        <CoinInfo>
-                            <CoinIcon />
-                            <CoinName>{coin.name}</CoinName>
-                            <span>({coin.symbol})</span>
-                        </CoinInfo>
-                        <Percentage isPositive={coin.percentage > 0}>
-                            {coin.percentage > 0 ? '+' : ''}{coin.percentage}%
-                        </Percentage>
-                    </CoinItem>
-                ))}
-            </CoinList>
+            <QueryBoundary error={error} loading={loading}>
+                <CoinList>
+                    {data && (data.getCryptoCurrencies as Array<{
+                        imageUrl: string;
+                        name: string;
+                        symbol: string;
+                        cryptoId: string;
+                        priceChangePercentage24h: number;
+                    }>).map((coin, index) => (
+                        <CoinItem key={index}>
+                            <CoinInfo>
+                                <CoinIcon src={coin.imageUrl} alt={`${coin.name} icon`} />
+                                <CoinName>({coin.symbol})</CoinName>
+                                <span>{coin.cryptoId}</span>
+                            </CoinInfo>
+                            <Percentage isPositive={coin.priceChangePercentage24h > 0}>
+                                {coin.priceChangePercentage24h > 0 ? '+' : ''}{coin.priceChangePercentage24h}%
+                            </Percentage>
+                        </CoinItem>
+                    ))}
+                </CoinList>
+            </QueryBoundary>
         </TrendingContainer>
     );
 };

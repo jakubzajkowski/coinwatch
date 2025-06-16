@@ -15,6 +15,17 @@ export const GET_CURRENCIES_FOR_MARKETOVERVIEW =  gql`
     }
   }
 `
+export const GET_CURRENCIES_FOR_TRENDING_COINS =  gql`
+  query getCryptoCurrenciesForTrendingCoins($limit: Int!, $orderBy: String!, $order: String) {
+    getCryptoCurrencies(limit: $limit, orderBy: $orderBy, order: $order) {
+      id
+      symbol
+      cryptoId
+      priceChangePercentage24h
+      imageUrl
+    }
+  }
+`
 
 export const GET_CURRENCIES_BY_ID_FOR_CRYPTO = gql`
   query getCryptoCurrencyByCryptoId($cryptoId: String!){

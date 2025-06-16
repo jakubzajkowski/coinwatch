@@ -8,6 +8,7 @@ const FooterMenu = styled.ul`
         list-style: none;
     }
 `
+            
 
 const FooterContainer = styled.div`
     width: 100%;
