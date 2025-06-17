@@ -1,7 +1,7 @@
 package org.example.coinwatch.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import org.example.coinwatch.kafka.KafkaProducer;
+import org.example.coinwatch.kafka.producer.KafkaProducer;
 import org.example.coinwatch.entity.CryptoCurrency;
 import org.example.coinwatch.entity.CryptoPriceHistory;
 import org.example.coinwatch.respository.CryptoCurrencyRepository;

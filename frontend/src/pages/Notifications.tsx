@@ -9,13 +9,15 @@ import {RootState} from "../redux/store.ts";
 const Notifications = () => {
     const [messages, setMessages] = useState<string[]>([]);
     const { subscribe, unsubscribe, sendMessage, connected } = useWebSocketClient(import.meta.env.VITE_WS_API_URL);
-    const { user} = useSelector((state: RootState) => state.auth);
+    const { user } = useSelector((state: RootState) => state.auth);
 
     useEffect(() => {
         let subscription: StompSubscription | null = null;
-
+        console.log("connected xd");
         if (connected) {
-            subscription = subscribe(`/user/${user?.id}/topic/crypto-alerts`, (message: string) => {
+            console.log("connected xd");
+            subscription = subscribe(`/analyse/test`, (message: string) => {
+                console.log("message", message);
                 setMessages(prevMessages => [...prevMessages, message]);
             }) as StompSubscription;
         }
@@ -26,7 +28,7 @@ const Notifications = () => {
             }
         };
     }, [connected, subscribe, unsubscribe]);
-
+    
     const sendNotification = () => {
         if (connected) {
             sendMessage('/app/notify', 'New notification from client!');

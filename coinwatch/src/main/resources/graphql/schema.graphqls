@@ -6,6 +6,26 @@ enum Interest {
     BITCOIN, TRADING, ETHEREUM, MINING, DEFI, STAKING, NFTS, NEWS
 }
 
+enum Direction {
+    ABOVE,
+    BELOW
+}
+
+enum ChartType {
+    CANDLE,
+    LINE,
+    BAR
+}
+
+type UserCryptoTrigger {
+    id: ID!
+    user: User!
+    cryptoCurrency: CryptoCurrency!
+    targetPrice: Float!
+    direction: Direction!
+    triggered: Boolean!
+}
+
 type Subscription {
     id: ID
     user: User
@@ -117,15 +137,39 @@ type CryptoCurrencyPage {
 }
 
 type Mutation {
+    startAiAnalyse(cryptoId: String!,userId: ID!): String!
     addSubscription(userId: ID!, cryptoId: ID!): Subscription
     deleteSubscription(userId: ID!, cryptoId: ID!): Boolean
     addFavoriteCrypto(userId: ID!, cryptoCurrencyId: ID!): UserFavoriteCrypto
     removeFavoriteCrypto(userId: ID!, cryptoCurrencyId: ID!): Boolean
+    createUserCryptoTrigger(userId: ID!, cryptoCurrencyId: ID!,targetPrice: Float!,direction: Direction!): UserCryptoTrigger!
 }
+
+type CandleChartDTO {
+    bucket: String!
+    open: Float!
+    close: Float!
+    high: Float!
+    low: Float!
+}
+
+type AveragePricesDTO {
+    bucket: String!
+    average: Float!
+}
+
+union ChartPoint = CandleChartDTO | AveragePricesDTO
 
 type Query {
     isCryptoFavorite(userId: ID!, cryptoCurrencyId: ID!): Boolean!
     getUserFavoriteCryptos(userId: ID): [UserFavoriteCrypto]
+    getCryptoChartData(
+        cryptoId: String,
+        interval: String,
+        from: String,
+        to: String,
+        chartType: ChartType
+    ): [ChartPoint]
     getAlerts: [Alert]
     paginateCryptoCurrencies(
         page: Int = 0,
@@ -149,7 +193,7 @@ type Query {
     getUserById(id: ID!): User
     getCryptoCurrencyByCryptoId(cryptoId: String!): CryptoCurrency
     searchCryptoCurrencyByCryptoId(cryptoId: String!): [CryptoCurrency]
-    getCryptoCurrencies(limit: Int, orderBy: String): [CryptoCurrency]
+    getCryptoCurrencies(limit: Int, orderBy: String, order: String): [CryptoCurrency]
     getCryptoPriceHistory(cryptoId: String!): [CryptoPriceHistory]
     getCryptoPriceHistoryByRange(cryptoId: String!, range: String!): [CryptoPriceHistory]
 }

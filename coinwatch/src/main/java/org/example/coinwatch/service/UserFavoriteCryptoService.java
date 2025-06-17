@@ -27,8 +27,7 @@ public class UserFavoriteCryptoService {
 
     @Autowired
     private UserRepository userRepository;
-
-    @CacheEvict(value = "userFavorites", key="#userId")
+    
     @Transactional
     public UserFavoriteCrypto addFavoriteCrypto(Long userId, Long cryptoCurrencyId) {
         Optional<UserFavoriteCrypto> existingFavorite = userFavoriteCryptoRepository.findByUserIdAndCryptoCurrencyId(userId, cryptoCurrencyId);
@@ -50,7 +49,6 @@ public class UserFavoriteCryptoService {
         return userFavoriteCryptoRepository.save(favorite);
     }
 
-    @CacheEvict(value = "userFavorites", key="#userId")
     @Transactional
     public void removeFavoriteCrypto(Long userId, Long cryptoCurrencyId) {
         Optional<UserFavoriteCrypto> existingFavorite = userFavoriteCryptoRepository.findByUserIdAndCryptoCurrencyId(userId, cryptoCurrencyId);
@@ -60,7 +58,6 @@ public class UserFavoriteCryptoService {
         userFavoriteCryptoRepository.delete(existingFavorite.get());
     }
 
-    @Cacheable(value = "userFavorites", key="#userId")
     public List<UserFavoriteCrypto> getUserFavoriteCryptos(Long userId) {
         return userFavoriteCryptoRepository.findByUserId(userId);
     }

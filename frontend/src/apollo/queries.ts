@@ -15,6 +15,17 @@ export const GET_CURRENCIES_FOR_MARKETOVERVIEW =  gql`
     }
   }
 `
+export const GET_CURRENCIES_FOR_TRENDING_COINS =  gql`
+  query getCryptoCurrenciesForTrendingCoins($limit: Int!, $orderBy: String!, $order: String) {
+    getCryptoCurrencies(limit: $limit, orderBy: $orderBy, order: $order) {
+      id
+      symbol
+      cryptoId
+      priceChangePercentage24h
+      imageUrl
+    }
+  }
+`
 
 export const GET_CURRENCIES_BY_ID_FOR_CRYPTO = gql`
   query getCryptoCurrencyByCryptoId($cryptoId: String!){
@@ -250,5 +261,46 @@ export const ADD_FAVORITE_CRYPTO = gql`
 export const REMOVE_FAVORITE_CRYPTO = gql`
     mutation RemoveFavoriteCrypto($userId: ID!, $cryptoCurrencyId: ID!) {
         removeFavoriteCrypto(userId: $userId, cryptoCurrencyId: $cryptoCurrencyId)
+    }
+`
+
+export const GET_USER_FAVORITE_CRYPTO_FOR_ANALYSE = gql`
+    query GetUserFavoriteCryptosForAnalyse($userId: ID!) {
+        getUserFavoriteCryptos(userId: $userId) {
+        cryptoCurrency {
+            cryptoId
+            symbol
+        }
+    }
+}
+`
+
+export const START_AI_ANALYSE = gql`
+    mutation StartAiAnalyse($cryptoId: String!, $userId: ID!) {
+        startAiAnalyse(cryptoId: $cryptoId, userId: $userId)
+    }
+`
+
+export const GET_CRYPTO_CHART_DATA = gql`
+    query GetCryptoChartData($cryptoId: String!, $interval: String!, $from: String!, $to: String!, $chartType: ChartType!) {
+        getCryptoChartData(
+            cryptoId: $cryptoId
+            interval: $interval
+            from: $from
+            to: $to
+            chartType: $chartType
+        ) {
+            ... on CandleChartDTO {
+                bucket
+                open
+                close
+                high
+                low
+            }
+            ... on AveragePricesDTO {
+                bucket
+                average
+            }
+        }
     }
 `

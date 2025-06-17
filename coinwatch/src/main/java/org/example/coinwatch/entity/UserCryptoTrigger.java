@@ -1,6 +1,7 @@
 package org.example.coinwatch.entity;
 
 import jakarta.persistence.*;
+import org.example.coinwatch.dto.Direction;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -33,11 +34,6 @@ public class UserCryptoTrigger implements Serializable {
 
     @Column(name = "created_at", nullable = false)
     private ZonedDateTime createdAt = ZonedDateTime.now();
-
-    public enum Direction {
-        ABOVE,
-        BELOW
-    }
 
     public Long getId() {
         return id;

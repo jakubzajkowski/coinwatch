@@ -36,10 +36,11 @@ public class CryptoCurrencyResolver {
     @QueryMapping
     public List<CryptoCurrency> getCryptoCurrencies(
             @Argument Optional<Integer> limit,
-            @Argument Optional<String> orderBy
+            @Argument Optional<String> orderBy,
+            @Argument Optional<String> order
     ){
         int finalLimit = limit.orElse(Integer.MAX_VALUE);
-      return cryptoCurrencyService.getCryptoCurrencies(orderBy.orElse(null),finalLimit);
+      return cryptoCurrencyService.getCryptoCurrencies(orderBy.orElse(null),finalLimit,order.orElse("asc"));
     }
 
     @QueryMapping

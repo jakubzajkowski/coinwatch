@@ -1,4 +1,4 @@
-package org.example.coinwatch.kafka;
+package org.example.coinwatch.kafka.producer;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
