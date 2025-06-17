@@ -105,7 +105,7 @@ public class CryptoCurrencyService {
         }
     }
 
-    public List<CryptoCurrency> getCryptoCurrencies(String orderBy, int limit){
+    public List<CryptoCurrency> getCryptoCurrencies(String orderBy, int limit, String order) {
         List<String> allowedFields = List.of("currentPrice", "marketCap", "priceChangePercentage24h","cryptoId","id");
         if (orderBy == null || orderBy.isBlank()) {
             logger.warn("orderBy is null or empty, using default sorting field: 'cryptoId'");
@@ -117,7 +117,8 @@ public class CryptoCurrencyService {
             throw new IllegalArgumentException("Invalid sorting field: " + orderBy);
         }
 
-        Sort sort = Sort.by(Sort.Order.asc(orderBy));
+
+        Sort sort = Sort.by(order.equals("desc") ? Sort.Order.desc(orderBy) : Sort.Order.asc(orderBy));
         Pageable pageable = PageRequest.of(0, limit, sort);
 
         return cryptoCurrencyRepository.findAll(pageable).getContent();

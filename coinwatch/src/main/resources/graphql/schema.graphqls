@@ -193,7 +193,7 @@ type Query {
     getUserById(id: ID!): User
     getCryptoCurrencyByCryptoId(cryptoId: String!): CryptoCurrency
     searchCryptoCurrencyByCryptoId(cryptoId: String!): [CryptoCurrency]
-    getCryptoCurrencies(limit: Int, orderBy: String): [CryptoCurrency]
+    getCryptoCurrencies(limit: Int, orderBy: String, order: String): [CryptoCurrency]
     getCryptoPriceHistory(cryptoId: String!): [CryptoPriceHistory]
     getCryptoPriceHistoryByRange(cryptoId: String!, range: String!): [CryptoPriceHistory]
 }

@@ -7,4 +7,6 @@ const kafka = new Kafka({
   brokers: [`${process.env.KAFKA_URL}:9092`],
 });
 
+
+
 export default kafka;
